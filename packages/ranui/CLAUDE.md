@@ -53,8 +53,8 @@ packages/ranui/
 │   ├── theme.ts          # setTheme, setThemeToken(s), initTheme (light/dark/system)
 │   ├── style.ts          # adoptStyles (ranuts, with ranui's marker) + replaceSheetText (the `sheet` slot)
 │   ├── placement.ts      # re-export of ranuts/utils computePlacement (the algorithm itself lives in ranuts)
-│   ├── floating.ts       # FloatingController — the open/close state machine, portalling, positioning,
-│   │                     # anchor-following and enter/exit animation behind r-select and r-popover
+│   ├── floating.ts       # FloatingController — open intent + placing|open|closing paint presence
+│   │                     # (Floating UI isPositioned), portalling, positioning, enter/exit animation
 │   └── dom.ts            # falseList, isDisabled
 ├── theme/                # tokens.less (Geist base+semantic) + dark.less (dark mixin)
 ├── docs/DESIGN.md        # ⭐ AI-facing design standard — follow it for ANY UI work

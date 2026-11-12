@@ -1123,11 +1123,11 @@ r-dropdown.ran-chrome-menu r-dropdown-item {
   opacity: 0;
   pointer-events: none;
   z-index: 0;
+  /* Transform/size only — opacity snaps (same contract as menubar / select wash). */
   transition:
     transform var(--ran-motion-duration-slow) var(--ran-motion-ease-standard),
     width var(--ran-motion-duration-slow) var(--ran-motion-ease-standard),
-    height var(--ran-motion-duration-slow) var(--ran-motion-ease-standard),
-    opacity var(--ran-motion-duration-fast) linear;
+    height var(--ran-motion-duration-slow) var(--ran-motion-ease-standard);
 }
 .hu__hover[data-instant] {
   transition: none;
@@ -1876,11 +1876,11 @@ body:has(.drawer__toggle:checked) .drawer__scrim {
   background: var(--bg-soft);
   opacity: 0;
   pointer-events: none;
+  /* Transform/size only — opacity snaps (same contract as header / select wash). */
   transition:
     transform var(--ran-motion-duration-slow) var(--ran-motion-ease-standard),
     width var(--ran-motion-duration-slow) var(--ran-motion-ease-standard),
-    height var(--ran-motion-duration-slow) var(--ran-motion-ease-standard),
-    opacity var(--ran-motion-duration-fast) linear;
+    height var(--ran-motion-duration-slow) var(--ran-motion-ease-standard);
 }
 .sb__hover[data-instant] {
   transition: none;

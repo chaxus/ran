@@ -1,10 +1,13 @@
 /**
  * Hover menubar handoff for chrome selects (language / theme / surface).
  *
- * Industry pattern for smooth peer hops (Stripe / Radix NavigationMenu):
- * one shared viewport shell morphs position + size; content layers cross-slide
- * with directional `data-motion`. Independent select portals stay open for
- * state/a11y but are visually suppressed while the viewport is showing.
+ * Industry pattern for peer hops (Stripe / Radix NavigationMenu viewport):
+ * one shared shell morphs position + size; incoming content fades/slides by
+ * direction. Outgoing content is dropped immediately (no dual-layer residual).
+ * Hop end snaps the shell to the new trigger so mid-flight travel cannot leave
+ * a settled miss. First open paints wash with the first layout (no content fade).
+ * Independent select portals stay open for state/a11y but are visually
+ * suppressed while the viewport is showing.
  *
  * Used by `<r-menubar>` and available as `mountMenubarHandoff`.
  */
@@ -36,8 +39,8 @@ const VIEWPORT_CLASS = 'ran-menubar-viewport';
 const DEFAULT_LEAVE = 180;
 const DEFAULT_DURATION = 280;
 const DEFAULT_EASE = 'cubic-bezier(0.22, 1, 0.36, 1)';
-/** Content slide distance — GodUI ~3rem is carousel-like; 24px reads as direction. */
-const SLIDE_DX = 24;
+/** Content enter slide — short enough to read as direction, not a stranded panel. */
+const SLIDE_DX = 16;
 
 type Harvest = {
   items: Array<{ value: string; label: string; active: boolean }>;
@@ -79,28 +82,23 @@ html[${VIEWPORT_ATTR}] ${panelSelector}{opacity:0!important;pointer-events:none!
   -webkit-backdrop-filter:blur(var(--ran-surface-glass-blur,16px));
 }
 .${VIEWPORT_CLASS}__clip{position:relative;width:100%;height:100%;overflow:hidden}
-.${VIEWPORT_CLASS}__layer{position:absolute;inset:0;display:flex;flex-direction:column;gap:0}
+.${VIEWPORT_CLASS}__layer{position:absolute;inset:0;display:flex;flex-direction:column;gap:0;opacity:1}
 .${VIEWPORT_CLASS}__layer[data-motion=from-start]{animation:ran-menubar-from-start ${duration}ms ${easing} both}
 .${VIEWPORT_CLASS}__layer[data-motion=from-end]{animation:ran-menubar-from-end ${duration}ms ${easing} both}
-.${VIEWPORT_CLASS}__layer[data-motion=to-start]{animation:ran-menubar-to-start ${duration}ms ${easing} both}
-.${VIEWPORT_CLASS}__layer[data-motion=to-end]{animation:ran-menubar-to-end ${duration}ms ${easing} both}
-.${VIEWPORT_CLASS}__layer[data-motion=fade]{animation:ran-menubar-fade-in ${Math.min(180, duration)}ms ${easing} both}
+/* Incoming only — outgoing is removed, so opacity here cannot stack two menus. */
 @keyframes ran-menubar-from-start{from{opacity:0;transform:translateX(-${SLIDE_DX}px)}to{opacity:1;transform:translateX(0)}}
 @keyframes ran-menubar-from-end{from{opacity:0;transform:translateX(${SLIDE_DX}px)}to{opacity:1;transform:translateX(0)}}
-@keyframes ran-menubar-to-start{from{opacity:1;transform:translateX(0)}50%{opacity:0}to{opacity:0;transform:translateX(-${SLIDE_DX}px)}}
-@keyframes ran-menubar-to-end{from{opacity:1;transform:translateX(0)}50%{opacity:0}to{opacity:0;transform:translateX(${SLIDE_DX}px)}}
-@keyframes ran-menubar-fade-in{from{opacity:0}to{opacity:1}}
 /* One wash slides between rows — same motion as docs .sb__hover / r-select glass fill. */
 .${VIEWPORT_CLASS}__hover{
   position:absolute;top:0;left:0;z-index:0;width:0;height:0;
   border-radius:var(--ran-radius-sm,8px);
   background:var(--ran-color-bg-hover,var(--ran-color-fill-secondary,rgba(0,0,0,.06)));
   opacity:0;pointer-events:none;
+  /* Transform/size only — never ease opacity (open/hop must not read as a late fill). */
   transition:
     transform ${duration}ms ${easing},
     width ${duration}ms ${easing},
-    height ${duration}ms ${easing},
-    opacity ${Math.min(180, duration)}ms linear;
+    height ${duration}ms ${easing};
 }
 :root[data-ran-surface=glass] .${VIEWPORT_CLASS}__hover{
   background:var(--ran-surface-glass-hover,color-mix(in srgb,var(--ran-gray-1000,#111113) 8%,transparent));
@@ -109,7 +107,7 @@ html[${VIEWPORT_ATTR}] ${panelSelector}{opacity:0!important;pointer-events:none!
 .${VIEWPORT_CLASS}__option{
   appearance:none;border:0;background:transparent;margin:0;cursor:pointer;text-align:start;
   position:relative;z-index:1;
-  display:block;width:100%;box-sizing:border-box;
+  display:block;width:100%;min-width:100%;box-sizing:border-box;align-self:stretch;
   padding:6px 12px;border-radius:var(--ran-radius-sm,8px);
   color:var(--ran-color-text,rgba(0,0,0,.88));
   font:inherit;font-size:var(--ran-text-label-1,14px);font-weight:var(--ran-text-label-weight,500);
@@ -270,6 +268,7 @@ export const mountMenubarHandoff = (options: MenubarHandoffOptions): (() => void
 
   const SHELL_PAD = 4;
   let hoverTarget: HTMLElement | null = null;
+  let hoverSettleTimer: number | undefined;
   let hoverGen = 0;
 
   const ensureHoverInClip = (): void => {
@@ -277,27 +276,24 @@ export const mountMenubarHandoff = (options: MenubarHandoffOptions): (() => void
   };
 
   /**
-   * Place in clip-local layout space. Strip the option layer's slide transform so the
-   * wash sits on the resting row immediately — waiting for shell/layer motion made the
-   * selected row look unselected for ~300ms after hover.
+   * Place in clip-local coordinates — stable while the shell itself translates.
+   * Width uses the **target** shell row (CSS var), not the in-flight box: during a
+   * hop morph `clientWidth` is still the previous menu’s width, so a measured wash
+   * looked fit-content until settle. Overflow clips until the shell catches up.
    */
-  const placeHover = (option: HTMLElement, instant = false): void => {
+  const placeHover = (option: HTMLElement): void => {
     ensureHoverInClip();
     const clipBox = clip.getBoundingClientRect();
     const box = option.getBoundingClientRect();
-    const layer = option.closest<HTMLElement>(`.${VIEWPORT_CLASS}__layer`);
-    let slideX = 0;
-    let slideY = 0;
-    if (layer) {
-      const Matrix = typeof DOMMatrixReadOnly !== 'undefined' ? DOMMatrixReadOnly : undefined;
-      const shift = Matrix ? new Matrix(getComputedStyle(layer).transform) : { e: 0, f: 0 };
-      slideX = shift.e;
-      slideY = shift.f;
-    }
-    // Instant when first shown, or when correcting after shell morph (peer hop).
-    hover.toggleAttribute('data-instant', instant || hoverTarget === null);
-    hover.style.transform = `translate(${box.left - clipBox.left - slideX}px, ${box.top - clipBox.top - slideY}px)`;
-    hover.style.width = `${box.width}px`;
+    const targetShellW = parseFloat(shell.style.getPropertyValue('--ran-menubar-w')) || 0;
+    const rowW = Math.max(
+      clip.clientWidth,
+      box.width,
+      targetShellW > 0 ? Math.max(0, targetShellW - SHELL_PAD * 2) : 0,
+    );
+    hover.toggleAttribute('data-instant', hoverTarget === null);
+    hover.style.transform = `translate(0px, ${box.top - clipBox.top}px)`;
+    hover.style.width = `${rowW}px`;
     hover.style.height = `${box.height}px`;
     hover.style.opacity = '1';
     hoverTarget = option;
@@ -317,23 +313,40 @@ export const mountMenubarHandoff = (options: MenubarHandoffOptions): (() => void
     return h;
   };
 
-  const setShellBox = (x: number, y: number, w: number, h: number, opacity: number, instant: boolean): void => {
+  const setShellBox = (
+    x: number,
+    y: number,
+    w: number,
+    h: number,
+    opacity: number,
+    instant: boolean,
+    /** When false, leave `transition: none` applied so callers can paint wash before flush. */
+    flush = true,
+  ): void => {
     if (instant) shell.style.transition = 'none';
     shell.style.setProperty('--ran-menubar-x', `${Math.round(x)}px`);
     shell.style.setProperty('--ran-menubar-y', `${Math.round(y)}px`);
     shell.style.setProperty('--ran-menubar-w', `${Math.ceil(w)}px`);
     shell.style.setProperty('--ran-menubar-h', `${Math.ceil(h)}px`);
     shell.style.setProperty('--ran-menubar-opacity', String(opacity));
-    if (instant) {
+    if (instant && flush) {
       void shell.offsetWidth;
       shell.style.transition = '';
     }
+  };
+
+  const flushShellTransition = (): void => {
+    void shell.offsetWidth;
+    shell.style.transition = '';
   };
 
   /**
    * Fit height to the rebuilt rows (native harvest height was often taller —
    * empty gap under the last option). Keep harvest width as the floor so labels
    * match the measured chrome panel.
+   *
+   * `afterLayout` runs after size is written but **before** the instant flush —
+   * place the selected wash there so the first painted frame already has it.
    */
   const fitAndShow = (
     layer: HTMLElement,
@@ -342,42 +355,33 @@ export const mountMenubarHandoff = (options: MenubarHandoffOptions): (() => void
     minWidth: number,
     opacity: number,
     instant: boolean,
+    afterLayout?: () => void,
   ): void => {
     ensureHoverInClip();
-    // Width first so nowrap labels lay out; height follows content.
-    setShellBox(x, y, minWidth, Math.max(layerContentHeight(layer) + SHELL_PAD * 2, SHELL_PAD * 2 + 1), opacity, true);
+    // Width first so nowrap labels lay out; height follows content. No flush yet.
+    setShellBox(
+      x,
+      y,
+      minWidth,
+      Math.max(layerContentHeight(layer) + SHELL_PAD * 2, SHELL_PAD * 2 + 1),
+      opacity,
+      true,
+      false,
+    );
     const h = layerContentHeight(layer) + SHELL_PAD * 2;
     const w = Math.max(minWidth, layer.scrollWidth + SHELL_PAD * 2);
-    setShellBox(x, y, w, h, opacity, instant);
+    setShellBox(x, y, w, h, opacity, instant, false);
+    afterLayout?.();
+    if (instant) flushShellTransition();
+    else shell.style.transition = '';
   };
 
   const syncHoverToLayer = (layer: HTMLElement): void => {
-    const gen = ++hoverGen;
+    window.clearTimeout(hoverSettleTimer);
+    hoverGen += 1;
     const selected = layer.querySelector<HTMLElement>(`.${VIEWPORT_CLASS}__option[aria-selected="true"]`);
-    // Place on this frame so the selected row is marked as soon as the panel exists.
-    // A double-rAF / transitionend wait was the "hover then wait for selection" lag.
-    const retarget = (instant: boolean): void => {
-      if (gen !== hoverGen) return;
-      if (selected?.isConnected) placeHover(selected, instant);
-      else hideHover();
-    };
-    retarget(false);
-    // Peer hops morph shell width/height over `duration`. One rAF left the wash
-    // size stuck mid-morph (dx/dw never settled). Retarget when morph ends.
-    requestAnimationFrame(() => retarget(false));
-    const onShellEnd = (event: TransitionEvent): void => {
-      if (event.target !== shell) return;
-      if (event.propertyName !== 'width' && event.propertyName !== 'height' && event.propertyName !== 'transform') {
-        return;
-      }
-      shell.removeEventListener('transitionend', onShellEnd);
-      retarget(true);
-    };
-    shell.addEventListener('transitionend', onShellEnd);
-    window.setTimeout(() => {
-      shell.removeEventListener('transitionend', onShellEnd);
-      retarget(true);
-    }, duration + 80);
+    if (selected?.isConnected) placeHover(selected);
+    else hideHover();
   };
 
   const hideViewport = (): void => {
@@ -439,38 +443,50 @@ export const mountMenubarHandoff = (options: MenubarHandoffOptions): (() => void
     };
 
     if (!hopping || reduceMotion()) {
-      const layer = buildLayer(harvest, hopping ? null : 'fade', onPick);
+      // First open: no content fade — a fade reads as “selected wash arrived late”.
+      const layer = buildLayer(harvest, null, onPick);
       clip.replaceChildren(hover, layer);
-      fitAndShow(layer, x, y, w, 1, !hopping);
-      syncHoverToLayer(layer);
+      fitAndShow(layer, x, y, w, 1, true, () => {
+        hoverTarget = null;
+        syncHoverToLayer(layer);
+      });
       return;
     }
 
     const enterMotion = direction === 'right' ? 'from-end' : 'from-start';
-    const leaveMotion = direction === 'right' ? 'to-start' : 'to-end';
     const incoming = buildLayer(harvest, enterMotion, onPick);
-    // Drop any prior leaving layer so a clipped label cannot linger as a chip.
-    for (const stale of [...clip.querySelectorAll<HTMLElement>(`.${VIEWPORT_CLASS}__layer[data-leaving]`)]) {
+    // Drop every prior layer before paint — no dual-menu residual.
+    for (const stale of [...clip.querySelectorAll<HTMLElement>(`.${VIEWPORT_CLASS}__layer`)]) {
       stale.remove();
-    }
-    const outgoing = clip.querySelector<HTMLElement>(`.${VIEWPORT_CLASS}__layer:not([data-leaving])`);
-    if (outgoing) {
-      outgoing.setAttribute('data-leaving', '');
-      outgoing.setAttribute('data-motion', leaveMotion);
-      const drop = (): void => {
-        outgoing.remove();
-      };
-      outgoing.addEventListener('animationend', drop, { once: true });
-      // animationend can miss (interrupted morph / reduced motion mid-flight).
-      window.setTimeout(drop, duration + 80);
     }
     ensureHoverInClip();
     clip.appendChild(incoming);
-    // Morph shell toward the new trigger; height follows rebuilt rows, not a tall harvest.
     const nextH = layerContentHeight(incoming) + SHELL_PAD * 2;
     const nextW = Math.max(w, incoming.scrollWidth + SHELL_PAD * 2);
+    // Morph shell toward the new trigger (Stripe / Radix viewport travel).
     setShellBox(x, y, nextW, nextH, 1, false);
+    hoverTarget = null;
     syncHoverToLayer(incoming);
+    // Settle exactly on the trigger — mid-flight travel must not leave a miss.
+    const settle = (): void => {
+      setShellBox(x, y, nextW, nextH, 1, true);
+      hoverTarget = null;
+      syncHoverToLayer(incoming);
+    };
+    const onEnd = (event: TransitionEvent): void => {
+      if (event.target !== shell) return;
+      if (event.propertyName !== 'transform' && event.propertyName !== 'width' && event.propertyName !== 'height') {
+        return;
+      }
+      shell.removeEventListener('transitionend', onEnd);
+      settle();
+    };
+    shell.addEventListener('transitionend', onEnd);
+    window.clearTimeout(hoverSettleTimer);
+    hoverSettleTimer = window.setTimeout(() => {
+      shell.removeEventListener('transitionend', onEnd);
+      settle();
+    }, duration + 50);
   };
 
   const setOpen = (item: MenubarItem, open: boolean): void => {
@@ -499,8 +515,10 @@ export const mountMenubarHandoff = (options: MenubarHandoffOptions): (() => void
       }
       showViewport(item, harvested, hopping, direction);
     };
-    // Two frames so select measurePanel can lock px width before harvest.
-    requestAnimationFrame(() => requestAnimationFrame(() => tryHarvest(0)));
+    // One frame so select measurePanel can lock px width before harvest.
+    // A second rAF left the shared viewport empty after the native portal was
+    // already suppressed — that gap reads as a late wash / blank menu.
+    requestAnimationFrame(() => tryHarvest(0));
   };
 
   const arm = (item: MenubarItem): void => {

@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { FloatingController, floatingPanelsWithin } from '@/utils/floating';
+import { FLOATING_PRESENCE_ATTR, FloatingController, floatingPanelsWithin } from '@/utils/floating';
 
 /**
  * The controller r-select and r-popover both position through.
@@ -272,6 +272,84 @@ describe('FloatingController', () => {
     const position = afterPosition.mock.calls.at(-1)?.[0];
     expect(position.side).toBe('top');
     expect(position.align).toBe('center');
+  });
+
+  it('keeps placing until afterPosition, then opens (Floating UI isPositioned)', async () => {
+    const { host, panel } = mount();
+    const order: string[] = [];
+    const afterPosition = vi.fn(() => {
+      order.push(`afterPosition:presence=${panel.getAttribute(FLOATING_PRESENCE_ATTR)}`);
+    });
+    const write = panel.setAttribute.bind(panel);
+    vi.spyOn(panel, 'setAttribute').mockImplementation((name, value) => {
+      if (name === 'transit') {
+        order.push(`transit:${value}:presence=${panel.getAttribute(FLOATING_PRESENCE_ATTR)}`);
+      }
+      write(name, value);
+    });
+    const controller = controllerFor(host, panel, { afterPosition });
+
+    controller.apply(true);
+    expect(panel.style.display).toBe('block');
+    expect(panel.getAttribute(FLOATING_PRESENCE_ATTR)).toBe('placing');
+    expect(panel.style.visibility).toBe('hidden');
+    expect(controller.isPositioned).toBe(false);
+    expect(afterPosition).not.toHaveBeenCalled();
+
+    await nextFrame();
+    expect(afterPosition).toHaveBeenCalled();
+    expect(panel.getAttribute(FLOATING_PRESENCE_ATTR)).toBe('open');
+    expect(panel.style.visibility).toBe('');
+    expect(controller.isPositioned).toBe(true);
+    expect(order[0]).toBe('afterPosition:presence=placing');
+    expect(order[1]).toBe('transit:ran-dropdown-down-in:presence=open');
+  });
+
+  it('clears presence after close settle and on destroy', async () => {
+    const { host, panel } = mount();
+    const presenceWrites: string[] = [];
+    const write = panel.setAttribute.bind(panel);
+    vi.spyOn(panel, 'setAttribute').mockImplementation((name, value) => {
+      if (name === FLOATING_PRESENCE_ATTR) presenceWrites.push(value);
+      write(name, value);
+    });
+    const remove = panel.removeAttribute.bind(panel);
+    vi.spyOn(panel, 'removeAttribute').mockImplementation((name) => {
+      if (name === FLOATING_PRESENCE_ATTR) presenceWrites.push('∅');
+      remove(name);
+    });
+    const controller = controllerFor(host, panel);
+    controller.apply(true);
+    expect(presenceWrites).toContain('placing');
+    await nextFrame();
+    expect(controller.isPositioned).toBe(true);
+
+    controller.apply(false);
+    await nextFrame();
+    expect(presenceWrites).toContain('closing');
+    expect(panel.getAttribute(FLOATING_PRESENCE_ATTR)).toBe(null);
+    expect(controller.floatingPresence).toBe(null);
+
+    controller.apply(true);
+    await nextFrame();
+    controller.destroy();
+    expect(panel.hasAttribute(FLOATING_PRESENCE_ATTR)).toBe(false);
+    expect(controller.isPositioned).toBe(false);
+  });
+
+  it('does not paint when closed before the placing write lands', async () => {
+    const { host, panel } = mount();
+    const afterPosition = vi.fn();
+    const controller = controllerFor(host, panel, { afterPosition });
+    controller.apply(true);
+    expect(panel.getAttribute(FLOATING_PRESENCE_ATTR)).toBe('placing');
+    expect(panel.style.visibility).toBe('hidden');
+    controller.apply(false);
+    await nextFrame();
+    expect(afterPosition).not.toHaveBeenCalled();
+    expect(panel.style.display).toBe('none');
+    expect(controller.isPositioned).toBe(false);
+    expect(panel.hasAttribute('transit')).toBe(false);
   });
   it('closes toward the resolved side after automatic flipping', async () => {
     const { host, panel } = mount();

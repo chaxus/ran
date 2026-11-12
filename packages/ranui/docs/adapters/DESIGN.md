@@ -257,9 +257,11 @@ chosen by the host, and are never a component's default.
   navigates on `change`; theme/surface stay persisted values. Prefer one menu family in the
   header so hover open and shared-layout handoff stay consistent across Graphite and glass.
 - **MUST** Under glass, the sliding wash is already on the selected option when the menu first
-  paints (`r-select` after floating position; `r-menubar` viewport on open). Travel between
-  rows may ease; open / reopen snaps. The same contract applies to `r-tabs` header fill and
-  host sidebar washes — one fill, not a delayed second paint.
+  paints. `FloatingController` keeps `data-ran-floating="placing"` until `afterPosition` writes
+  that chrome, then flips to `open` (Floating UI `isPositioned`) — do not add a second opacity
+  hold in the component. `r-menubar` viewport places wash on open. Travel between rows may ease;
+  open / reopen snaps. The same contract applies to `r-tabs` header fill and host sidebar
+  washes — one fill, not a delayed second paint.
 - **SHOULD** Host sidebar / nav sliding washes span the **full row width**, not `fit-content`
   around the label — short copy (e.g. "i18n") still needs a hittable target.
 - **SHOULD** See [Examples · Glass chrome motion](https://ran.chaxus.com/examples/glass-chrome)

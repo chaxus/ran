@@ -5,12 +5,28 @@ import { collectMatches } from './selectors';
 /**
  * A minimal mock of DocumentFragment for SSR environments.
  */
+/** Insert `node` before `reference` in a mock children list (DOM `insertBefore`). */
+function insertBeforeInList(list: any[], node: any, reference: any): any {
+  if (reference == null) {
+    list.push(node);
+    return node;
+  }
+  const idx = list.indexOf(reference);
+  if (idx === -1) list.push(node);
+  else list.splice(idx, 0, node);
+  return node;
+}
+
 export class DocumentFragmentMock {
   public childrenList: (HTMLElementMock | string)[] = [];
 
   appendChild(node: any): any {
     this.childrenList.push(node);
     return node;
+  }
+
+  insertBefore(node: any, reference: any): any {
+    return insertBeforeInList(this.childrenList, node, reference);
   }
 
   serialize(): string {
@@ -189,6 +205,10 @@ export class HTMLElementMock {
     return node;
   }
 
+  insertBefore(node: any, reference: any): any {
+    return insertBeforeInList(this.childrenList, node, reference);
+  }
+
   attachShadow(options: ShadowRootInit): ShadowRoot {
     this.shadowRoot = new ShadowRootMock(this, options);
     return this.shadowRoot as unknown as ShadowRoot;
@@ -314,6 +334,11 @@ export class ShadowRootMock {
   appendChild(node: any): any {
     this.childrenList.push(node);
     return node;
+  }
+
+  /** Match DOM `Node.insertBefore` so SSR `_preSerialize` can place labels before the wrap. */
+  insertBefore(node: any, reference: any): any {
+    return insertBeforeInList(this.childrenList, node, reference);
   }
 
   /** Match DOM `ShadowRoot.replaceChildren` so mountShadowTree works under SSR. */

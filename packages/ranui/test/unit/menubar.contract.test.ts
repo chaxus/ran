@@ -249,6 +249,13 @@ describe('mountMenubarHandoff', () => {
     expect(css).toMatch(/transform\s+\d+ms/);
     expect(css).toContain('data-hover-fill');
     expect(css).toMatch(/__hover\[data-instant\]\{transition:none\}/);
+    // Options stretch; wash width is resolved from the target shell row at place time.
+    expect(css).toContain('min-width:100%');
+    // Hop: incoming fade+slide only — no outgoing cross-fade residual.
+    expect(css).toContain('ran-menubar-from-start');
+    expect(css).toContain('ran-menubar-from-end');
+    expect(css).not.toContain('ran-menubar-to-start');
+    expect(css).not.toContain('ran-menubar-fade-in');
     stop();
   });
 });
