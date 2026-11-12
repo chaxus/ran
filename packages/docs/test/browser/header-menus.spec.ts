@@ -83,23 +83,27 @@ test('selected wash paints with the first open frame', async ({ page, browserNam
   test.skip(browserName === 'firefox', 'hover menus need a fine pointer hover path');
   await page.locator('.lang-switch').hover();
   await expect(page.locator('.ran-menubar-viewport__option', { hasText: 'English' })).toBeVisible();
-  // No settle wait — selected wash must already sit on English.
+  // No settle wait — selected wash must already sit on English, full clip row.
   const snap = await page.evaluate(() => {
     const fill = document.querySelector('.ran-menubar-viewport__hover') as HTMLElement | null;
     const selected = document.querySelector('.ran-menubar-viewport__option[aria-selected="true"]');
-    if (!fill || !selected) return null;
+    const clip = document.querySelector('.ran-menubar-viewport__clip');
+    if (!fill || !selected || !clip) return null;
     const a = fill.getBoundingClientRect();
     const b = selected.getBoundingClientRect();
+    const row = clip.getBoundingClientRect();
     return {
       opacity: fill.style.opacity,
       dy: Math.abs(a.top - b.top),
-      dw: Math.abs(a.width - b.width),
-      transition: getComputedStyle(fill).transitionDuration,
+      // Wash spans the clip row (not fit-content); option width can lag a frame.
+      dx: Math.abs(a.left - row.left),
+      dw: Math.abs(a.width - row.width),
     };
   });
   expect(snap).not.toBeNull();
   expect(snap!.opacity).toBe('1');
   expect(snap!.dy).toBeLessThan(2);
+  expect(snap!.dx).toBeLessThan(2);
   expect(snap!.dw).toBeLessThan(2);
 });
 
@@ -187,14 +191,16 @@ test('after a peer hop the option wash settles on the selected row', async ({ pa
       const selected = document.querySelector(
         '.ran-menubar-viewport__layer:not([data-leaving]) .ran-menubar-viewport__option[aria-selected="true"]',
       );
-      if (!fillEl || !selected) return null;
+      const clip = document.querySelector('.ran-menubar-viewport__clip');
+      if (!fillEl || !selected || !clip) return null;
       const a = fillEl.getBoundingClientRect();
       const b = selected.getBoundingClientRect();
+      const row = clip.getBoundingClientRect();
       return {
         opacity: fillEl.style.opacity,
-        dx: Math.abs(a.left - b.left),
+        dx: Math.abs(a.left - row.left),
         dy: Math.abs(a.top - b.top),
-        dw: Math.abs(a.width - b.width),
+        dw: Math.abs(a.width - row.width),
         emptyGap: (() => {
           const shell = document.querySelector('.ran-menubar-viewport__shell');
           const options = [
