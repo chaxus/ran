@@ -466,8 +466,8 @@ chosen by the host, and are never a component's default.
 - **MUST** Under glass, the sliding wash is already on the selected option when the menu first
   paints. `FloatingController` keeps `data-ran-floating="placing"` until `afterPosition` writes
   that chrome, then flips to `open` (Floating UI `isPositioned`) — do not add a second opacity
-  hold in the component (presence CSS keeps host/container transitions off so reduced-motion
-  cannot invent a visibility `CSSTransition`). `r-menubar` viewport places wash on open. Travel between rows may ease;
+  hold in the component (`placing` uses opacity + pointer-events; presence CSS keeps
+  host/container transitions off under reduced-motion). `r-menubar` viewport places wash on open. Travel between rows may ease;
   open / reopen snaps. The same contract applies to `r-tabs` header fill and host sidebar
   washes — one fill, not a delayed second paint.
 - **SHOULD** Host sidebar / nav sliding washes span the **full row width**, not `fit-content`

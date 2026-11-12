@@ -285,12 +285,13 @@ export const mountMenubarHandoff = (options: MenubarHandoffOptions): (() => void
     ensureHoverInClip();
     const clipBox = clip.getBoundingClientRect();
     const box = option.getBoundingClientRect();
+    // Shell is border-box; clip is the content box (padding inset). During hop morph
+    // clientWidth can still be the previous menu — derive the *target* content width.
     const targetShellW = parseFloat(shell.style.getPropertyValue('--ran-menubar-w')) || 0;
-    const rowW = Math.max(
-      clip.clientWidth,
-      box.width,
-      targetShellW > 0 ? Math.max(0, targetShellW - SHELL_PAD * 2) : 0,
-    );
+    const shellCs = getComputedStyle(shell);
+    const borderX = (parseFloat(shellCs.borderLeftWidth) || 0) + (parseFloat(shellCs.borderRightWidth) || 0);
+    const targetRowW = targetShellW > 0 ? Math.max(0, targetShellW - SHELL_PAD * 2 - borderX) : 0;
+    const rowW = Math.max(clip.clientWidth, box.width, targetRowW);
     hover.toggleAttribute('data-instant', hoverTarget === null);
     hover.style.transform = `translate(0px, ${box.top - clipBox.top}px)`;
     hover.style.width = `${rowW}px`;

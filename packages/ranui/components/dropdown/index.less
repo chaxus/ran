@@ -153,16 +153,19 @@
 }
 
 /* Floating UI isPositioned: measure under display:block, paint only after write.
-   Visibility inherits into the animation target; reduced-motion's
-   transition-duration:.01ms would invent a CSSTransition on placing→open and
-   fail “no animation to wait for”. Enter/exit use animation classes, not
-   transitions on the host/container. */
+   Opacity + pointer-events (not visibility on the host — that inherits). When
+   popover moves nodes out of `r-content` (`visibility: hidden`), reduced-motion’s
+   tiny transition-duration would animate inherited visibility on slotted
+   controls and leave them hidden for focus()/Escape — same modal autofocus fix. */
 :host([data-ran-floating]),
-:host([data-ran-floating]) .ranui-dropdown-container {
+:host([data-ran-floating]) .ranui-dropdown-container,
+:host([data-ran-floating]) ::slotted(*) {
   transition-property: none !important;
+  transition-delay: 0s;
 }
 :host([data-ran-floating='placing']) {
-  visibility: hidden;
+  opacity: 0;
+  pointer-events: none;
 }
 
 .ranui-dropdown {

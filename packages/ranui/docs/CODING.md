@@ -107,12 +107,13 @@ rules it encodes:
   read option boxes must run in `FloatingController`'s `afterPosition` (or the equivalent
   settled shell), not in the same turn as `open = true`. The controller keeps
   `data-ran-floating="placing"` (Floating UI `isPositioned`) until that write finishes, then
-  flips to `open` and starts enter transit — do not add a second opacity/visibility hold in
-  the component. Presence CSS disables host/container *transitions* so reduced-motion’s
-  `transition-duration:.01ms` cannot turn the inherited visibility flip into a
-  `CSSTransition` that `getAnimations()` would wait on; enter/exit stay on animation classes.
-  First place snaps (`data-instant` / `transition: none`); later moves may ease. Placing chrome
-  before the panel is positioned paints a 0×0 wash that fades in late.
+  flips to `open` and starts enter transit — do not add a second opacity hold in the
+  component (`placing` uses opacity + pointer-events, not host visibility). Presence CSS
+  disables host/container/slotted _transitions_ so reduced-motion’s tiny
+  `transition-duration` cannot stick inherited visibility on moved popover content or
+  invent a `CSSTransition` that `getAnimations()` waits on; enter/exit stay on animation
+  classes. First place snaps (`data-instant` / `transition: none`); later moves may ease.
+  Placing chrome before the panel is positioned paints a 0×0 wash that fades in late.
 
 **Async work belongs to an intent and a lifecycle.** If a component starts asynchronous work,
 associate completion with the initiating input/context and current connection. Cancel obsolete work

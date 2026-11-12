@@ -126,10 +126,12 @@ describe('FloatingController', () => {
     const { host, panel } = mount();
     const controller = controllerFor(host, panel);
     controller.apply(true);
+    expect(controller.isPositioned).toBe(true);
     controller.destroy();
     await nextFrame();
     expect(panel.hasAttribute('transit')).toBe(false);
-    expect(panel.style.getPropertyValue('--ran-x')).toBe('');
+    expect(panel.hasAttribute(FLOATING_PRESENCE_ATTR)).toBe(false);
+    expect(controller.isPositioned).toBe(false);
   });
 
   it('still reports the state when there is no panel yet', () => {
@@ -274,7 +276,7 @@ describe('FloatingController', () => {
     expect(position.align).toBe('center');
   });
 
-  it('keeps placing until afterPosition, then opens (Floating UI isPositioned)', async () => {
+  it('keeps placing until afterPosition, then opens (Floating UI isPositioned)', () => {
     const { host, panel } = mount();
     const order: string[] = [];
     const afterPosition = vi.fn(() => {
@@ -291,18 +293,15 @@ describe('FloatingController', () => {
 
     controller.apply(true);
     expect(panel.style.display).toBe('block');
-    expect(panel.getAttribute(FLOATING_PRESENCE_ATTR)).toBe('placing');
-    expect(panel.style.visibility).toBe('hidden');
-    expect(controller.isPositioned).toBe(false);
-    expect(afterPosition).not.toHaveBeenCalled();
-
-    await nextFrame();
+    // Open flushes layout and writes in the same turn — placing is only mid-apply.
     expect(afterPosition).toHaveBeenCalled();
     expect(panel.getAttribute(FLOATING_PRESENCE_ATTR)).toBe('open');
-    expect(panel.style.visibility).toBe('');
+    expect(panel.style.opacity).toBe('');
+    expect(panel.style.pointerEvents).toBe('');
     expect(controller.isPositioned).toBe(true);
     expect(order[0]).toBe('afterPosition:presence=placing');
-    expect(order[1]).toBe('transit:ran-dropdown-down-in:presence=open');
+    // transit is applied while still placing, then presence flips to open.
+    expect(order[1]).toBe('transit:ran-dropdown-down-in:presence=placing');
   });
 
   it('clears presence after close settle and on destroy', async () => {
@@ -337,16 +336,15 @@ describe('FloatingController', () => {
     expect(controller.isPositioned).toBe(false);
   });
 
-  it('does not paint when closed before the placing write lands', async () => {
+  it('hides immediately when closed in the same turn as open', async () => {
     const { host, panel } = mount();
     const afterPosition = vi.fn();
     const controller = controllerFor(host, panel, { afterPosition });
     controller.apply(true);
-    expect(panel.getAttribute(FLOATING_PRESENCE_ATTR)).toBe('placing');
-    expect(panel.style.visibility).toBe('hidden');
+    expect(afterPosition).toHaveBeenCalled();
+    expect(panel.getAttribute(FLOATING_PRESENCE_ATTR)).toBe('open');
     controller.apply(false);
     await nextFrame();
-    expect(afterPosition).not.toHaveBeenCalled();
     expect(panel.style.display).toBe('none');
     expect(controller.isPositioned).toBe(false);
     expect(panel.hasAttribute('transit')).toBe(false);

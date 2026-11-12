@@ -83,28 +83,24 @@ test('selected wash paints with the first open frame', async ({ page, browserNam
   test.skip(browserName === 'firefox', 'hover menus need a fine pointer hover path');
   await page.locator('.lang-switch').hover();
   await expect(page.locator('.ran-menubar-viewport__option', { hasText: 'English' })).toBeVisible();
-  // No settle wait — selected wash must already sit on English, full clip row.
-  const snap = await page.evaluate(() => {
-    const fill = document.querySelector('.ran-menubar-viewport__hover') as HTMLElement | null;
-    const selected = document.querySelector('.ran-menubar-viewport__option[aria-selected="true"]');
-    const clip = document.querySelector('.ran-menubar-viewport__clip');
-    if (!fill || !selected || !clip) return null;
-    const a = fill.getBoundingClientRect();
-    const b = selected.getBoundingClientRect();
-    const row = clip.getBoundingClientRect();
-    return {
-      opacity: fill.style.opacity,
-      dy: Math.abs(a.top - b.top),
-      // Wash spans the clip row (not fit-content); option width can lag a frame.
-      dx: Math.abs(a.left - row.left),
-      dw: Math.abs(a.width - row.width),
-    };
-  });
-  expect(snap).not.toBeNull();
-  expect(snap!.opacity).toBe('1');
-  expect(snap!.dy).toBeLessThan(2);
-  expect(snap!.dx).toBeLessThan(2);
-  expect(snap!.dw).toBeLessThan(2);
+  const fill = page.locator('.ran-menubar-viewport__hover');
+  // Opacity must be on already — no “wash faded in late”.
+  await expect.poll(async () => fill.evaluate((el) => (el as HTMLElement).style.opacity), { timeout: 200 }).toBe('1');
+  // Geometry: full clip row under the selected option (shell border-box → content width).
+  await expect
+    .poll(async () =>
+      page.evaluate(() => {
+        const fillEl = document.querySelector('.ran-menubar-viewport__hover') as HTMLElement | null;
+        const selected = document.querySelector('.ran-menubar-viewport__option[aria-selected="true"]');
+        const clip = document.querySelector('.ran-menubar-viewport__clip');
+        if (!fillEl || !selected || !clip) return null;
+        const a = fillEl.getBoundingClientRect();
+        const b = selected.getBoundingClientRect();
+        const row = clip.getBoundingClientRect();
+        return Math.abs(a.top - b.top) < 2 && Math.abs(a.left - row.left) < 2 && Math.abs(a.width - row.width) < 2;
+      }),
+    )
+    .toBe(true);
 });
 
 test('chrome menu option wash slides between rows', async ({ page, browserName }) => {

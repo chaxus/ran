@@ -32,9 +32,9 @@ import { settlePresence } from '@/utils/presence';
  * and how `aria-expanded` drifted from what was on screen.
  *
  * Paint presence is a separate ladder (Floating UI's `isPositioned` pattern):
- * `placing` → measureable but hidden → `afterPosition` (wash, arrows) → `open`
- * → enter transit. Consumers must not invent a second opacity/visibility hold;
- * put chrome in `afterPosition` and let this gate reveal the panel once.
+ * `placing` → measureable but unpainted (opacity 0) → `afterPosition` (wash, arrows)
+ * → `open` → enter transit. Consumers must not invent a second opacity hold; put
+ * chrome in `afterPosition` and let this gate reveal the panel once.
  */
 
 /** The animation class pairs `r-dropdown` ships, keyed by the side actually used. */
@@ -94,6 +94,8 @@ export const closeFloatingPanelsWithin = (owner: HTMLElement, preserveAncestorOf
     // Ordinary Select/Popover dismissal still uses its normal exit animation.
     panel.style.setProperty('display', 'none');
     panel.removeAttribute(FLOATING_PRESENCE_ATTR);
+    panel.style.removeProperty('opacity');
+    panel.style.removeProperty('pointer-events');
     panel.style.removeProperty('visibility');
   }
 };
@@ -224,21 +226,24 @@ export class FloatingController {
   }
 
   /**
-   * Single writer of `data-ran-floating` and the placing visibility gate.
-   * Enter keyframes own opacity once we flip to `open` — do not hold opacity here.
-   * Closing while still `placing` keeps the gate so an unpositioned panel never flashes.
+   * Single writer of `data-ran-floating` and the placing paint gate.
+   * `opacity:0` + `pointer-events:none` (not `visibility`) — visibility inherits and, under
+   * reduced-motion’s `transition-duration:.01ms`, left slotted controls stuck `visibility:
+   * hidden` after placing→open so focus()/Escape missed the panel. Enter keyframes still
+   * own opacity once `open` clears the inline hold (write applies `transit` first).
    */
   private setPresence(panel: HTMLElement, presence: FloatingPresence | null): void {
     this.presence = presence;
     if (presence) panel.setAttribute(FLOATING_PRESENCE_ATTR, presence);
     else panel.removeAttribute(FLOATING_PRESENCE_ATTR);
-    // visibility (not opacity): enter transit keyframes animate opacity from 0.
     if (presence === 'placing') {
-      panel.style.setProperty('visibility', 'hidden');
+      panel.style.setProperty('opacity', '0');
+      panel.style.setProperty('pointer-events', 'none');
     } else if (presence === 'open' || presence === null) {
-      panel.style.removeProperty('visibility');
+      panel.style.removeProperty('opacity');
+      panel.style.removeProperty('pointer-events');
     }
-    // `closing`: leave visibility as-is (hidden if never opened; visible for exit anim).
+    // `closing`: leave opacity/pointer-events as-is for the exit animation.
   }
 
   /** Include nested portaled panels when deciding whether a click is inside. */
@@ -349,12 +354,7 @@ export class FloatingController {
     this.detachReposition();
     host.dispatchEvent(new CustomEvent('hide'));
     this.setPresence(panel, 'closing');
-    // The exit class is set synchronously, so the wait can begin right away. On
-    // the way in, `position` schedules the class a frame out and the wait below
-    // is scheduled after it — same frame, and callbacks run in the order they
-    // were registered, so the class is on the panel before anything looks for
-    // an animation. `getAnimations()` forces the style recalculation that makes
-    // it visible.
+    // Exit transit is synchronous so settlePresence can see the animation.
     panel.setAttribute('transit', TRANSIT[this.resolvedSide ?? this.side()].exit);
     settlePresence(panel, () => {
       if (generation !== this.generation) return;
@@ -371,23 +371,20 @@ export class FloatingController {
   /**
    * Place the panel next to the anchor.
    *
-   * Deferred to the next frame so a `display: block` set this tick, and any
-   * content added with it, are part of the measurement -- the flip decision
-   * needs the panel's real laid-out height, which is also why the entrance
-   * animation is chosen here (from the side actually used) rather than by the
-   * caller (from the side merely asked for).
+   * Open flushes layout in this turn (`display: block` + content) so measurement,
+   * `afterPosition`, and placing→open happen before the caller continues — an rAF
+   * deferral left the paint gate up long enough that focus()/Escape missed the
+   * panel. Reposition (no entrance) still writes immediately.
    */
   position = (applyEntranceTransit = false): void => {
     const panel = this.options.panel();
     if (!panel) return;
     const generation = this.generation;
-    const run = (): void => {
-      const current = this.options.panel();
-      if (current === panel && (!applyEntranceTransit || (this.opened && generation === this.generation)))
-        this.write(current, applyEntranceTransit);
-    };
-    if (applyEntranceTransit && typeof requestAnimationFrame === 'function') requestAnimationFrame(run);
-    else run();
+    if (applyEntranceTransit) void panel.offsetWidth;
+    const current = this.options.panel();
+    if (current === panel && (!applyEntranceTransit || (this.opened && generation === this.generation))) {
+      this.write(current, applyEntranceTransit);
+    }
   };
 
   private write(panel: HTMLElement, applyEntranceTransit: boolean): void {
@@ -457,9 +454,10 @@ export class FloatingController {
     panel.style.setProperty('--ran-y', `${position.top}px`);
     // Chrome (select wash, popover arrow) is part of “positioned” — run before paint.
     afterPosition?.(position, panel);
-    // Promote placing → open once geometry + chrome are ready (isPositioned).
-    if (applyEntranceTransit || this.presence === 'placing') this.setPresence(panel, 'open');
+    // Transit before clearing the placing opacity hold so enter keyframes own opacity
+    // without a one-frame flash at 1.
     if (applyEntranceTransit) panel.setAttribute('transit', TRANSIT[position.side].enter);
+    if (applyEntranceTransit || this.presence === 'placing') this.setPresence(panel, 'open');
   }
 
   /**
