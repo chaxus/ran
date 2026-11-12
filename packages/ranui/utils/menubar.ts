@@ -277,16 +277,23 @@ export const mountMenubarHandoff = (options: MenubarHandoffOptions): (() => void
 
   /**
    * Place in clip-local coordinates — stable while the shell itself translates.
-   * Width spans the full clip (DESIGN: nav wash is full row, not fit-content);
-   * Y/height follow the option.
+   * Width uses the **target** shell row (CSS var), not the in-flight box: during a
+   * hop morph `clientWidth` is still the previous menu’s width, so a measured wash
+   * looked fit-content until settle. Overflow clips until the shell catches up.
    */
   const placeHover = (option: HTMLElement): void => {
     ensureHoverInClip();
     const clipBox = clip.getBoundingClientRect();
     const box = option.getBoundingClientRect();
+    const targetShellW = parseFloat(shell.style.getPropertyValue('--ran-menubar-w')) || 0;
+    const rowW = Math.max(
+      clip.clientWidth,
+      box.width,
+      targetShellW > 0 ? Math.max(0, targetShellW - SHELL_PAD * 2) : 0,
+    );
     hover.toggleAttribute('data-instant', hoverTarget === null);
     hover.style.transform = `translate(0px, ${box.top - clipBox.top}px)`;
-    hover.style.width = `${Math.max(clip.clientWidth, box.width)}px`;
+    hover.style.width = `${rowW}px`;
     hover.style.height = `${box.height}px`;
     hover.style.opacity = '1';
     hoverTarget = option;
