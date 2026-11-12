@@ -124,8 +124,8 @@ export class Select extends RanElement {
         height: rendered?.height ?? own.height,
       };
     },
-    // Placement is deferred a frame on open — place the selected wash only after
-    // option boxes are real, or the fill starts at 0×0 and fades in late.
+    // Wash is part of “positioned”: FloatingController stays on placing until
+    // this runs, then flips to open — no component-local opacity hold.
     afterPosition: () => {
       this._glassMenuLaidOut = true;
       this._optionHoverTarget = null;

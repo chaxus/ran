@@ -25,11 +25,16 @@ import { settlePresence } from '@/utils/presence';
  * put in the panel, and the sizing or arrow adjustments only it knows about,
  * supplied as hooks.
  *
- * `open` is the state and nothing infers it from the DOM. A panel's
+ * `open` is the intent and nothing infers it from the DOM. A panel's
  * `style.display` trails the state by the length of the exit animation, so any
  * decision made by reading it is a decision about the frame rather than the
  * intent -- which is how a click could land in that window and be swallowed,
  * and how `aria-expanded` drifted from what was on screen.
+ *
+ * Paint presence is a separate ladder (Floating UI's `isPositioned` pattern):
+ * `placing` → measureable but hidden → `afterPosition` (wash, arrows) → `open`
+ * → enter transit. Consumers must not invent a second opacity/visibility hold;
+ * put chrome in `afterPosition` and let this gate reveal the panel once.
  */
 
 /** The animation class pairs `r-dropdown` ships, keyed by the side actually used. */
@@ -47,6 +52,13 @@ type OwnedPanel = Node & { [PANEL_OWNER]?: HTMLElement; [PANEL_ESCAPE]?: (event:
 const ACTIVE_PANELS = Symbol.for('ranui.floating.active-panels');
 type FloatingDocument = Document & { [ACTIVE_PANELS]?: Set<HTMLElement> };
 export const FLOATING_CHANGE = 'ranui-floating-change';
+/**
+ * Presence attribute written on the panel host — Floating UI `isPositioned`
+ * analogue. CSS and DevTools read this; do not gate paint with a parallel hold.
+ */
+export const FLOATING_PRESENCE_ATTR = 'data-ran-floating';
+/** Measureable but not yet painted → interactive → exit animation. */
+export type FloatingPresence = 'placing' | 'open' | 'closing';
 
 /** Follow the same logical ancestry used for nested outside-click dismissal. */
 export const isFloatingDescendant = (node: Node, owner: Node): boolean => {
@@ -81,6 +93,8 @@ export const closeFloatingPanelsWithin = (owner: HTMLElement, preserveAncestorOf
     // A modal handoff must not leave a higher popup exit tail over the new dialog.
     // Ordinary Select/Popover dismissal still uses its normal exit animation.
     panel.style.setProperty('display', 'none');
+    panel.removeAttribute(FLOATING_PRESENCE_ATTR);
+    panel.style.removeProperty('visibility');
   }
 };
 
@@ -172,6 +186,12 @@ export class FloatingController {
    * one layer down would be a poor joke.
    */
   private opened = false;
+  /**
+   * Paint presence on the panel — independent of `opened` intent.
+   * `placing` means display is block for measurement but the user must not see
+   * it yet (Floating UI `isPositioned === false`).
+   */
+  private presence: FloatingPresence | null = null;
   /** Pending reposition frame, so a scroll burst coalesces into one write. */
   private repositionFrame = 0;
   /**
@@ -188,9 +208,37 @@ export class FloatingController {
     this.options = options;
   }
 
+  /** True after the first positioned write for the current open (Floating UI `isPositioned`). */
+  get isPositioned(): boolean {
+    return this.presence === 'open';
+  }
+
+  /** Current paint presence, or `null` when the panel is fully dismissed. */
+  get floatingPresence(): FloatingPresence | null {
+    return this.presence;
+  }
+
   /** The element the panel is positioned against. */
   private get anchor(): HTMLElement {
     return this.options.anchor?.() ?? this.options.host;
+  }
+
+  /**
+   * Single writer of `data-ran-floating` and the placing visibility gate.
+   * Enter keyframes own opacity once we flip to `open` — do not hold opacity here.
+   * Closing while still `placing` keeps the gate so an unpositioned panel never flashes.
+   */
+  private setPresence(panel: HTMLElement, presence: FloatingPresence | null): void {
+    this.presence = presence;
+    if (presence) panel.setAttribute(FLOATING_PRESENCE_ATTR, presence);
+    else panel.removeAttribute(FLOATING_PRESENCE_ATTR);
+    // visibility (not opacity): enter transit keyframes animate opacity from 0.
+    if (presence === 'placing') {
+      panel.style.setProperty('visibility', 'hidden');
+    } else if (presence === 'open' || presence === null) {
+      panel.style.removeProperty('visibility');
+    }
+    // `closing`: leave visibility as-is (hidden if never opened; visible for exit anim).
   }
 
   /** Include nested portaled panels when deciding whether a click is inside. */
@@ -284,10 +332,8 @@ export class FloatingController {
       registerPanel(panel, host, this.options.onEscape);
       this.resolvedSide = undefined;
       host.dispatchEvent(new CustomEvent('show'));
-      // Hold at opacity 0 until write() runs afterPosition (select wash) — a bare
-      // display:block paints an unwashed list for one frame. Prefer opacity over
-      // visibility:hidden so glass surfaces still composite when revealed.
-      panel.style.setProperty('opacity', '0');
+      // placing: display:block so layout can measure; paint gated until write().
+      this.setPresence(panel, 'placing');
       panel.style.setProperty('display', 'block');
       this.attachReposition();
       this.position(true);
@@ -302,6 +348,7 @@ export class FloatingController {
     registerPanel(panel);
     this.detachReposition();
     host.dispatchEvent(new CustomEvent('hide'));
+    this.setPresence(panel, 'closing');
     // The exit class is set synchronously, so the wait can begin right away. On
     // the way in, `position` schedules the class a frame out and the wait below
     // is scheduled after it — same frame, and callbacks run in the order they
@@ -312,7 +359,7 @@ export class FloatingController {
     settlePresence(panel, () => {
       if (generation !== this.generation) return;
       panel.style.setProperty('display', 'none');
-      panel.style.removeProperty('opacity');
+      this.setPresence(panel, null);
       panel.removeAttribute('transit');
       host.dispatchEvent(new CustomEvent('after-hide'));
     });
@@ -408,14 +455,11 @@ export class FloatingController {
     panel.style.setProperty('inset', `${position.top}px auto auto ${position.left}px`);
     panel.style.setProperty('--ran-x', `${position.left}px`);
     panel.style.setProperty('--ran-y', `${position.top}px`);
-    // Place chrome (e.g. select wash) before the enter opacity class — otherwise
-    // the first painted frame of the list has no selected fill, then it fades in.
+    // Chrome (select wash, popover arrow) is part of “positioned” — run before paint.
     afterPosition?.(position, panel);
-    if (applyEntranceTransit) {
-      // Drop the open hold so the enter keyframes own opacity from 0 → 1 with wash present.
-      panel.style.removeProperty('opacity');
-      panel.setAttribute('transit', TRANSIT[position.side].enter);
-    }
+    // Promote placing → open once geometry + chrome are ready (isPositioned).
+    if (applyEntranceTransit || this.presence === 'placing') this.setPresence(panel, 'open');
+    if (applyEntranceTransit) panel.setAttribute('transit', TRANSIT[position.side].enter);
   }
 
   /**
@@ -481,7 +525,12 @@ export class FloatingController {
     this.outsideBinding++;
     this.opened = false;
     const panel = this.options.panel();
-    if (panel) registerPanel(panel);
+    if (panel) {
+      registerPanel(panel);
+      this.setPresence(panel, null);
+    } else {
+      this.presence = null;
+    }
     if (this.repositionFrame && typeof cancelAnimationFrame === 'function') {
       cancelAnimationFrame(this.repositionFrame);
       this.repositionFrame = 0;

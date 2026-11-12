@@ -152,6 +152,11 @@
   z-index: var(--ran-dropdown-host-z-index, auto);
 }
 
+/* Floating UI isPositioned: measure under display:block, paint only after write. */
+:host([data-ran-floating='placing']) {
+  visibility: hidden;
+}
+
 .ranui-dropdown {
   /* Containing block for the select glass wash (::slotted(.ran-select-option-hover)). */
   position: var(--ran-dropdown-position, relative);

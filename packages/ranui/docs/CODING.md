@@ -104,10 +104,12 @@ rules it encodes:
   `scroll` (capture phase, for portaled panels), or through a `ResizeObserver` on the element
   that actually drives the measurement.
 - **Geometry-dependent chrome waits for layout.** Sliding washes, arrows and FLIP shells that
-  read option boxes must run after `FloatingController`'s `afterPosition` (or the equivalent
-  settled shell), not in the same turn as `open = true`. First place snaps (`data-instant` /
-  `transition: none`); later moves may ease. Placing before the panel is positioned paints a
-  0×0 wash that fades in late.
+  read option boxes must run in `FloatingController`'s `afterPosition` (or the equivalent
+  settled shell), not in the same turn as `open = true`. The controller keeps
+  `data-ran-floating="placing"` (Floating UI `isPositioned`) until that write finishes, then
+  flips to `open` and starts enter transit — do not add a second opacity/visibility hold in
+  the component. First place snaps (`data-instant` / `transition: none`); later moves may
+  ease. Placing chrome before the panel is positioned paints a 0×0 wash that fades in late.
 
 **Async work belongs to an intent and a lifecycle.** If a component starts asynchronous work,
 associate completion with the initiating input/context and current connection. Cancel obsolete work
