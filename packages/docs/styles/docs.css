@@ -1062,6 +1062,10 @@ r-dropdown.ran-chrome-menu r-dropdown-item {
    * Hug the current label so header peers share one visual rhythm. Longer options
    * (System / Liquid glass) size the portaled panel via ::part(dropdown) min-width
    * instead of padding empty space into every trigger.
+   *
+   * Spacing strategy: one 8px box gap + 12px trigger insets for every peer. Do not
+   * kern gaps by label length — short labels (Light) must not keep the 80px select
+   * floor or the empty pad reads as a wider gap before Graphite.
    */
   --ran-theme-switch-width: fit-content;
   --ran-theme-switch-min-width: 0;
@@ -1069,6 +1073,8 @@ r-dropdown.ran-chrome-menu r-dropdown-item {
   --ran-surface-switch-width: fit-content;
   --ran-surface-switch-min-width: 0;
   --ran-surface-switch-max-width: none;
+  /* Pierce into the inner r-select :host min-width (theme/surface wrap a select). */
+  --ran-select-min-width: 0;
   --ran-select-item-left: 12px;
   --ran-select-item-right: 12px;
   --ran-select-icon-inset-inline-end: 8px;
@@ -1229,6 +1235,7 @@ r-dropdown.ran-chrome-menu r-dropdown-item {
   flex: none;
   width: fit-content;
   min-width: 0;
+  --ran-select-min-width: 0;
   --ran-select-min-height: 32px;
   --ran-select-font-size: var(--type-label-1);
   --ran-select-border-radius: 5px;

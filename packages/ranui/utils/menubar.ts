@@ -385,7 +385,6 @@ export const mountMenubarHandoff = (options: MenubarHandoffOptions): (() => void
   };
 
   const hideViewport = (): void => {
-    window.clearTimeout(hoverSettleTimer);
     hoverGen += 1;
     document.documentElement.removeAttribute(VIEWPORT_ATTR);
     setShellBox(0, 0, 0, 0, 0, true);
@@ -535,8 +534,10 @@ export const mountMenubarHandoff = (options: MenubarHandoffOptions): (() => void
     armed = true;
     active = item;
     const gen = ++hopGeneration;
-    // Hide native portals before open so the harvest frame does not flash.
-    document.documentElement.setAttribute(VIEWPORT_ATTR, direction || 'pending');
+    // First open: leave the native portal visible until harvest swaps in the
+    // shared viewport (suppressing first left a blank gap). Peer hops: keep
+    // suppression so two native panels do not stack during the morph.
+    if (hopping) document.documentElement.setAttribute(VIEWPORT_ATTR, direction || 'pending');
     closeOthers(item);
     setOpen(item, true);
     present(item, hopping, direction, gen);

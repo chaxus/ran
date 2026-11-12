@@ -88,12 +88,12 @@ describe('r-menubar contract', () => {
     a.dispatchEvent(new PointerEvent('pointerenter', { bubbles: true }));
     expect(a.open).toBe(true);
     expect(b.open).toBe(false);
-    expect(document.documentElement.hasAttribute('data-ran-menubar-viewport')).toBe(true);
+    // Viewport attr is stamped only after a native panel is harvested — suppressing
+    // earlier left a blank gap before options appeared.
 
     b.dispatchEvent(new PointerEvent('pointerenter', { bubbles: true }));
     expect(a.open).toBe(false);
     expect(b.open).toBe(true);
-    expect(document.documentElement.getAttribute('data-ran-menubar-viewport')).toMatch(/left|right|pending|open/);
   });
 
   it('finds triggers nested under a wrapper', () => {

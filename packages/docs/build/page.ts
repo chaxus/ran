@@ -181,6 +181,7 @@ export const renderDoc = ({ page, head, assets, urls }: RenderDocOptions): strin
 <meta name="twitter:image" content="${OG_IMAGE}">
 <link rel="alternate" type="text/markdown" href="/llms.txt" title="llms.txt">
 <link rel="alternate" type="text/plain" href="/llms-full.txt" title="llms-full.txt">
+<style>${CRITICAL_PAINT}</style>
 <script>${THEME_BOOTSTRAP}</script>
 <script>${SET_FONT_SIZE}</script>
 <script>${PREVIEW_CODE}</script>
@@ -248,6 +249,13 @@ ${assets.js.map((src) => `<script type="module" src="${src}"></script>`).join('\
 </html>
 `;
 };
+
+/**
+ * First-paint ink before stylesheets arrive — stops the white/black page flash on
+ * refresh when the reader already chose dark (or the OS prefers it). Full tokens
+ * still come from docs.css; this only covers the root plate.
+ */
+const CRITICAL_PAINT = `html{background:#fff;color:#111113}html[data-ran-theme=dark],html[theme=dark]{background:#0b0d10;color:#ececef}@media (prefers-color-scheme:dark){html:not([data-ran-theme=light]):not([theme=light]){background:#0b0d10;color:#ececef}}`;
 
 /**
  * Applies the stored theme before first paint.

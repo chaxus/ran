@@ -12,8 +12,9 @@
   // labeled select and a labeled input must line up in a form).
   // Floor for a select with no width of its own: it sizes to its value, and a short value
   // (or none) still reads as a field rather than a bare chevron. 80px fits the docs' narrowest
-  // explicit width, so no existing usage is widened.
-  min-width: 80px;
+  // explicit width, so no existing usage is widened. Header chrome sets
+  // `--ran-select-min-width: 0` so short labels (Light) do not pad empty space into the row.
+  min-width: var(--ran-select-min-width, 80px);
   // The value sits in flow now, so a long label would otherwise widen the field past its container.
   max-width: 100%;
   outline: var(--ran-select-host-outline, 0);
