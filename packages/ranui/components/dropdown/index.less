@@ -152,7 +152,15 @@
   z-index: var(--ran-dropdown-host-z-index, auto);
 }
 
-/* Floating UI isPositioned: measure under display:block, paint only after write. */
+/* Floating UI isPositioned: measure under display:block, paint only after write.
+   Visibility inherits into the animation target; reduced-motion's
+   transition-duration:.01ms would invent a CSSTransition on placing→open and
+   fail “no animation to wait for”. Enter/exit use animation classes, not
+   transitions on the host/container. */
+:host([data-ran-floating]),
+:host([data-ran-floating]) .ranui-dropdown-container {
+  transition-property: none !important;
+}
 :host([data-ran-floating='placing']) {
   visibility: hidden;
 }
