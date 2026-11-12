@@ -249,8 +249,9 @@ describe('mountMenubarHandoff', () => {
     expect(css).toMatch(/transform\s+\d+ms/);
     expect(css).toContain('data-hover-fill');
     expect(css).toMatch(/__hover\[data-instant\]\{transition:none\}/);
-    // Hop snaps the shell; no content slide / cross-fade keyframes.
-    expect(css).not.toContain('ran-menubar-from-start');
+    // Hop: incoming fade+slide only — no outgoing cross-fade residual.
+    expect(css).toContain('ran-menubar-from-start');
+    expect(css).toContain('ran-menubar-from-end');
     expect(css).not.toContain('ran-menubar-to-start');
     expect(css).not.toContain('ran-menubar-fade-in');
     stop();

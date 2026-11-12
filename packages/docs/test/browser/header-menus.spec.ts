@@ -46,8 +46,8 @@ test('header chrome menus have no chevron and open on hover', async ({ page, bro
   await expect(viewportOption('Light')).toHaveCount(0);
 });
 
-test('hovering across chrome menus snaps the shared viewport to the new trigger', async ({ page, browserName }) => {
-  test.skip(browserName !== 'chromium', 'viewport hop sampling is chromium-first');
+test('hovering across chrome menus morphs the shared viewport', async ({ page, browserName }) => {
+  test.skip(browserName !== 'chromium', 'viewport morph sampling is chromium-first');
   await page.waitForFunction(() => customElements.get('r-menubar'));
   await page.locator('.lang-switch').hover();
   await expect(page.locator('.ran-menubar-viewport__shell')).toBeVisible();
@@ -63,12 +63,20 @@ test('hovering across chrome menus snaps the shared viewport to the new trigger'
     /left|right/,
   );
 
-  // Hop snaps — no mid-flight strand under English while the pointer is on System.
+  // Shell travels toward the theme trigger while morphing, then settles on it.
+  const samples: number[] = [];
+  for (let i = 0; i < 8; i++) {
+    samples.push(await page.locator('.ran-menubar-viewport__shell').evaluate((el) => el.getBoundingClientRect().left));
+    await page.waitForTimeout(30);
+  }
+  await page.waitForTimeout(280);
   const toX = await page.locator('.ran-menubar-viewport__shell').evaluate((el) => el.getBoundingClientRect().left);
   expect(Math.abs(themeLeft - langLeft)).toBeGreaterThan(8);
   expect(Math.abs(fromX - langLeft)).toBeLessThan(12);
   expect(Math.abs(toX - themeLeft)).toBeLessThan(12);
   expect(Math.abs(toX - fromX)).toBeGreaterThan(8);
+  const mid = samples.find((x) => Number.isFinite(x) && Math.abs(x - fromX) > 2 && Math.abs(x - toX) > 2);
+  expect(mid, `expected a mid-flight shell left, got ${JSON.stringify(samples)}`).toBeTruthy();
 });
 
 test('selected wash paints with the first open frame', async ({ page, browserName }) => {

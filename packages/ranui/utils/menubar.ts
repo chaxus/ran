@@ -2,12 +2,12 @@
  * Hover menubar handoff for chrome selects (language / theme / surface).
  *
  * Industry pattern for peer hops (Stripe / Radix NavigationMenu viewport):
- * one shared shell, outgoing content dropped immediately (no cross-fade
- * residual). Hop **snaps** the shell to the new trigger — a CSS morph left the
- * panel visibly stranded under the previous item while the pointer was already
- * on the next (English → System read as a miss). First open still paints wash
- * with the first layout. Independent select portals stay open for state/a11y
- * but are visually suppressed while the viewport is showing.
+ * one shared shell morphs position + size; incoming content fades/slides by
+ * direction. Outgoing content is dropped immediately (no dual-layer residual).
+ * Hop end snaps the shell to the new trigger so mid-flight travel cannot leave
+ * a settled miss. First open paints wash with the first layout (no content fade).
+ * Independent select portals stay open for state/a11y but are visually
+ * suppressed while the viewport is showing.
  *
  * Used by `<r-menubar>` and available as `mountMenubarHandoff`.
  */
@@ -39,6 +39,9 @@ const VIEWPORT_CLASS = 'ran-menubar-viewport';
 const DEFAULT_LEAVE = 180;
 const DEFAULT_DURATION = 280;
 const DEFAULT_EASE = 'cubic-bezier(0.22, 1, 0.36, 1)';
+/** Content enter slide — short enough to read as direction, not a stranded panel. */
+const SLIDE_DX = 16;
+
 type Harvest = {
   items: Array<{ value: string; label: string; active: boolean }>;
   width: number;
@@ -80,6 +83,11 @@ html[${VIEWPORT_ATTR}] ${panelSelector}{opacity:0!important;pointer-events:none!
 }
 .${VIEWPORT_CLASS}__clip{position:relative;width:100%;height:100%;overflow:hidden}
 .${VIEWPORT_CLASS}__layer{position:absolute;inset:0;display:flex;flex-direction:column;gap:0;opacity:1}
+.${VIEWPORT_CLASS}__layer[data-motion=from-start]{animation:ran-menubar-from-start ${duration}ms ${easing} both}
+.${VIEWPORT_CLASS}__layer[data-motion=from-end]{animation:ran-menubar-from-end ${duration}ms ${easing} both}
+/* Incoming only — outgoing is removed, so opacity here cannot stack two menus. */
+@keyframes ran-menubar-from-start{from{opacity:0;transform:translateX(-${SLIDE_DX}px)}to{opacity:1;transform:translateX(0)}}
+@keyframes ran-menubar-from-end{from{opacity:0;transform:translateX(${SLIDE_DX}px)}to{opacity:1;transform:translateX(0)}}
 /* One wash slides between rows — same motion as docs .sb__hover / r-select glass fill. */
 .${VIEWPORT_CLASS}__hover{
   position:absolute;top:0;left:0;z-index:0;width:0;height:0;
@@ -116,6 +124,7 @@ html[${VIEWPORT_ATTR}] ${panelSelector}{opacity:0!important;pointer-events:none!
 @media (prefers-reduced-motion:reduce){
   .${VIEWPORT_CLASS}__shell{transition:none}
   .${VIEWPORT_CLASS}__hover{transition:none}
+  .${VIEWPORT_CLASS}__layer[data-motion]{animation:none}
 }`;
   const existing = document.getElementById(STYLE_ID);
   if (existing) {
@@ -423,14 +432,51 @@ export const mountMenubarHandoff = (options: MenubarHandoffOptions): (() => void
       hideViewport();
     };
 
-    // First open and hop share one recipe: instant shell + wash in the same commit.
-    // A CSS morph stranded the panel under the previous trigger mid-flight.
-    const layer = buildLayer(harvest, null, onPick);
-    clip.replaceChildren(hover, layer);
-    fitAndShow(layer, x, y, w, 1, true, () => {
+    if (!hopping || reduceMotion()) {
+      // First open: no content fade — a fade reads as “selected wash arrived late”.
+      const layer = buildLayer(harvest, null, onPick);
+      clip.replaceChildren(hover, layer);
+      fitAndShow(layer, x, y, w, 1, true, () => {
+        hoverTarget = null;
+        syncHoverToLayer(layer);
+      });
+      return;
+    }
+
+    const enterMotion = direction === 'right' ? 'from-end' : 'from-start';
+    const incoming = buildLayer(harvest, enterMotion, onPick);
+    // Drop every prior layer before paint — no dual-menu residual.
+    for (const stale of [...clip.querySelectorAll<HTMLElement>(`.${VIEWPORT_CLASS}__layer`)]) {
+      stale.remove();
+    }
+    ensureHoverInClip();
+    clip.appendChild(incoming);
+    const nextH = layerContentHeight(incoming) + SHELL_PAD * 2;
+    const nextW = Math.max(w, incoming.scrollWidth + SHELL_PAD * 2);
+    // Morph shell toward the new trigger (Stripe / Radix viewport travel).
+    setShellBox(x, y, nextW, nextH, 1, false);
+    hoverTarget = null;
+    syncHoverToLayer(incoming);
+    // Settle exactly on the trigger — mid-flight travel must not leave a miss.
+    const settle = (): void => {
+      setShellBox(x, y, nextW, nextH, 1, true);
       hoverTarget = null;
-      syncHoverToLayer(layer);
-    });
+      syncHoverToLayer(incoming);
+    };
+    const onEnd = (event: TransitionEvent): void => {
+      if (event.target !== shell) return;
+      if (event.propertyName !== 'transform' && event.propertyName !== 'width' && event.propertyName !== 'height') {
+        return;
+      }
+      shell.removeEventListener('transitionend', onEnd);
+      settle();
+    };
+    shell.addEventListener('transitionend', onEnd);
+    window.clearTimeout(hoverSettleTimer);
+    hoverSettleTimer = window.setTimeout(() => {
+      shell.removeEventListener('transitionend', onEnd);
+      settle();
+    }, duration + 50);
   };
 
   const setOpen = (item: MenubarItem, open: boolean): void => {
