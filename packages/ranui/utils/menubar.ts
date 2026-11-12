@@ -433,8 +433,24 @@ export const mountMenubarHandoff = (options: MenubarHandoffOptions): (() => void
     viewport.setAttribute('aria-hidden', 'false');
 
     const onPick = (value: string): void => {
-      if ('value' in item) item.value = value;
-      else item.setAttribute('value', value);
+      // Prefer select's commit path so `change` fires (language URL navigation,
+      // theme/surface persistence). Bare `value =` mirrors the IDL setter and
+      // syncs the label without notifying — that left the docs lang switch stuck
+      // on the English page with only the trigger label updated.
+      const options = item.querySelectorAll?.('r-option');
+      const option = options
+        ? ([...options].find((node) => node.getAttribute('value') === value) as HTMLElement | undefined)
+        : undefined;
+      const selectLike = item as MenubarItem & {
+        selectOptionElement?: (el: HTMLElement, shouldDispatch?: boolean) => void;
+      };
+      if (option && typeof selectLike.selectOptionElement === 'function') {
+        selectLike.selectOptionElement(option, true);
+      } else if ('value' in item) {
+        item.value = value;
+      } else {
+        item.setAttribute('value', value);
+      }
       // Close after commit.
       window.clearTimeout(leaveTimer);
       closeOthers(null);

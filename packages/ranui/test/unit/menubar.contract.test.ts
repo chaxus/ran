@@ -234,6 +234,16 @@ describe('mountMenubarHandoff', () => {
     expect(document.querySelector('.ran-menubar-viewport')).toBeNull();
   });
 
+  it('commits viewport picks through selectOptionElement (change), not bare value=', async () => {
+    // Contract: onPick must prefer selectOptionElement(..., true) so hosts that
+    // navigate on `change` (docs language URLs) are notified. Bare `value =`
+    // only syncs the label.
+    const fs = await import('node:fs');
+    const path = await import('node:path');
+    const file = fs.readFileSync(path.resolve(__dirname, '../../utils/menubar.ts'), 'utf8');
+    expect(file).toMatch(/selectOptionElement\(option,\s*true\)/);
+  });
+
   it('ships a sliding option wash like docs sidebar hover', () => {
     const root = document.createElement('div');
     const item = makeItem();
