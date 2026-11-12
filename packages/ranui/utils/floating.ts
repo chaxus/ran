@@ -284,6 +284,10 @@ export class FloatingController {
       registerPanel(panel, host, this.options.onEscape);
       this.resolvedSide = undefined;
       host.dispatchEvent(new CustomEvent('show'));
+      // Hold at opacity 0 until write() runs afterPosition (select wash) — a bare
+      // display:block paints an unwashed list for one frame. Prefer opacity over
+      // visibility:hidden so glass surfaces still composite when revealed.
+      panel.style.setProperty('opacity', '0');
       panel.style.setProperty('display', 'block');
       this.attachReposition();
       this.position(true);
@@ -308,6 +312,7 @@ export class FloatingController {
     settlePresence(panel, () => {
       if (generation !== this.generation) return;
       panel.style.setProperty('display', 'none');
+      panel.style.removeProperty('opacity');
       panel.removeAttribute('transit');
       host.dispatchEvent(new CustomEvent('after-hide'));
     });
@@ -406,7 +411,11 @@ export class FloatingController {
     // Place chrome (e.g. select wash) before the enter opacity class — otherwise
     // the first painted frame of the list has no selected fill, then it fades in.
     afterPosition?.(position, panel);
-    if (applyEntranceTransit) panel.setAttribute('transit', TRANSIT[position.side].enter);
+    if (applyEntranceTransit) {
+      // Drop the open hold so the enter keyframes own opacity from 0 → 1 with wash present.
+      panel.style.removeProperty('opacity');
+      panel.setAttribute('transit', TRANSIT[position.side].enter);
+    }
   }
 
   /**

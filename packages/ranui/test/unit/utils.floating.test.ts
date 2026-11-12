@@ -273,6 +273,31 @@ describe('FloatingController', () => {
     expect(position.side).toBe('top');
     expect(position.align).toBe('center');
   });
+
+  it('holds opacity 0 until afterPosition so open does not paint an unwashed list', async () => {
+    const { host, panel } = mount();
+    const order: string[] = [];
+    const afterPosition = vi.fn(() => {
+      order.push(`afterPosition:opacity=${panel.style.opacity}`);
+    });
+    const write = panel.setAttribute.bind(panel);
+    vi.spyOn(panel, 'setAttribute').mockImplementation((name, value) => {
+      if (name === 'transit') order.push(`transit:${value}:opacity=${panel.style.opacity}`);
+      write(name, value);
+    });
+    const controller = controllerFor(host, panel, { afterPosition });
+
+    controller.apply(true);
+    expect(panel.style.display).toBe('block');
+    expect(panel.style.opacity).toBe('0');
+    expect(afterPosition).not.toHaveBeenCalled();
+
+    await nextFrame();
+    expect(afterPosition).toHaveBeenCalled();
+    expect(panel.style.opacity).toBe('');
+    expect(order[0]).toBe('afterPosition:opacity=0');
+    expect(order[1]).toMatch(/^transit:ran-dropdown-down-in:opacity=$/);
+  });
   it('closes toward the resolved side after automatic flipping', async () => {
     const { host, panel } = mount();
     const rect = (top: number, height: number) =>
