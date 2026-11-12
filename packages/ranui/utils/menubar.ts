@@ -2,9 +2,10 @@
  * Hover menubar handoff for chrome selects (language / theme / surface).
  *
  * Industry pattern for smooth peer hops (Stripe / Radix NavigationMenu):
- * one shared viewport shell morphs position + size. Incoming content slides by
- * direction at full opacity; the outgoing layer is dropped immediately so hops
- * never paint two menus at once (no cross-fade residual). Independent select
+ * one shared viewport shell morphs position + size. Outgoing content is dropped
+ * immediately (no cross-fade residual). Incoming rows snap inside the shell —
+ * a translateX slide at full opacity read as the panel sitting off the new
+ * trigger. Direction is carried by the shell morph alone. Independent select
  * portals stay open for state/a11y but are visually suppressed while the
  * viewport is showing.
  *
@@ -38,9 +39,6 @@ const VIEWPORT_CLASS = 'ran-menubar-viewport';
 const DEFAULT_LEAVE = 180;
 const DEFAULT_DURATION = 280;
 const DEFAULT_EASE = 'cubic-bezier(0.22, 1, 0.36, 1)';
-/** Content slide distance — GodUI ~3rem is carousel-like; 24px reads as direction. */
-const SLIDE_DX = 24;
-
 type Harvest = {
   items: Array<{ value: string; label: string; active: boolean }>;
   width: number;
@@ -82,11 +80,6 @@ html[${VIEWPORT_ATTR}] ${panelSelector}{opacity:0!important;pointer-events:none!
 }
 .${VIEWPORT_CLASS}__clip{position:relative;width:100%;height:100%;overflow:hidden}
 .${VIEWPORT_CLASS}__layer{position:absolute;inset:0;display:flex;flex-direction:column;gap:0;opacity:1}
-.${VIEWPORT_CLASS}__layer[data-motion=from-start]{animation:ran-menubar-from-start ${duration}ms ${easing} both}
-.${VIEWPORT_CLASS}__layer[data-motion=from-end]{animation:ran-menubar-from-end ${duration}ms ${easing} both}
-/* Transform only — opacity fades stacked two menus and read as hop residual. */
-@keyframes ran-menubar-from-start{from{transform:translateX(-${SLIDE_DX}px)}to{transform:translateX(0)}}
-@keyframes ran-menubar-from-end{from{transform:translateX(${SLIDE_DX}px)}to{transform:translateX(0)}}
 /* One wash slides between rows — same motion as docs .sb__hover / r-select glass fill. */
 .${VIEWPORT_CLASS}__hover{
   position:absolute;top:0;left:0;z-index:0;width:0;height:0;
@@ -123,7 +116,6 @@ html[${VIEWPORT_ATTR}] ${panelSelector}{opacity:0!important;pointer-events:none!
 @media (prefers-reduced-motion:reduce){
   .${VIEWPORT_CLASS}__shell{transition:none}
   .${VIEWPORT_CLASS}__hover{transition:none}
-  .${VIEWPORT_CLASS}__layer[data-motion]{animation:none}
 }`;
   const existing = document.getElementById(STYLE_ID);
   if (existing) {
@@ -443,8 +435,9 @@ export const mountMenubarHandoff = (options: MenubarHandoffOptions): (() => void
       return;
     }
 
-    const enterMotion = direction === 'right' ? 'from-end' : 'from-start';
-    const incoming = buildLayer(harvest, enterMotion, onPick);
+    // No content translateX — at full opacity that offset read as “panel missed the trigger”.
+    // Shell morph already carries hop direction; rows stay locked to the shell box.
+    const incoming = buildLayer(harvest, null, onPick);
     // Drop every prior layer before paint — cross-fading leave+enter left dual-menu residual.
     for (const stale of [...clip.querySelectorAll<HTMLElement>(`.${VIEWPORT_CLASS}__layer`)]) {
       stale.remove();

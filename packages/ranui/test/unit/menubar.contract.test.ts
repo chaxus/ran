@@ -249,8 +249,8 @@ describe('mountMenubarHandoff', () => {
     expect(css).toMatch(/transform\s+\d+ms/);
     expect(css).toContain('data-hover-fill');
     expect(css).toMatch(/__hover\[data-instant\]\{transition:none\}/);
-    // Hop enter is transform-only — opacity cross-fade left dual-menu residual.
-    expect(css).toContain('ran-menubar-from-start');
+    // Hop: shell morph only — content translateX at full opacity read as a miss.
+    expect(css).not.toContain('ran-menubar-from-start');
     expect(css).not.toContain('ran-menubar-to-start');
     expect(css).not.toContain('ran-menubar-fade-in');
     stop();
