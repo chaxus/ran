@@ -462,6 +462,7 @@ export const mountMenubarHandoff = (options: MenubarHandoffOptions): (() => void
     }
     ensureHoverInClip();
     clip.appendChild(incoming);
+    void incoming.offsetHeight;
     const nextH = layerContentHeight(incoming) + SHELL_PAD * 2;
     const nextW = Math.max(w, incoming.scrollWidth + SHELL_PAD * 2);
     // Morph shell toward the new trigger (Stripe / Radix viewport travel).
@@ -469,8 +470,12 @@ export const mountMenubarHandoff = (options: MenubarHandoffOptions): (() => void
     hoverTarget = null;
     syncHoverToLayer(incoming);
     // Settle exactly on the trigger — mid-flight travel must not leave a miss.
+    // Remeasure height: a tall→short hop (language → theme) must not keep the
+    // previous menu’s empty pad under the last row.
     const settle = (): void => {
-      setShellBox(x, y, nextW, nextH, 1, true);
+      const settledH = layerContentHeight(incoming) + SHELL_PAD * 2;
+      const settledW = Math.max(nextW, incoming.scrollWidth + SHELL_PAD * 2);
+      setShellBox(x, y, settledW, settledH, 1, true);
       hoverTarget = null;
       syncHoverToLayer(incoming);
     };
