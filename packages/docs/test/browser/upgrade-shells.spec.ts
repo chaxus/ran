@@ -27,6 +27,7 @@ test('eager header chrome upgrades; deferred invite input keeps a reserved shell
   expect(wireHtml).toMatch(/header-utils[\s\S]*shadowrootmode="closed"/);
   expect(wireHtml).toMatch(/r-input class="example__field"[\s\S]*shadowrootmode="closed"/);
   expect(wireHtml).toMatch(/r-select class="example__field"[\s\S]*shadowrootmode="closed"/);
+  expect(wireHtml).toMatch(/r-button class="example__submit"[^>]*data-ran-dsd/);
 
   await page.waitForFunction(
     () =>

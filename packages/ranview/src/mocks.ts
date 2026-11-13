@@ -260,6 +260,12 @@ export class HTMLElementMock {
     }
     const tagName =
       tagNameOverride || ((this as Record<string, unknown>)._ssrTag as string | undefined) || this.tagName;
+    // Mark Declarative Shadow DOM hosts so ranui's `:not(:defined)` FOUC plates
+    // (theme/undefined.less) skip them — those plates reserve light-DOM size and
+    // stack on top of the already-painted shadow, jumping ~18px on upgrade.
+    if (this.shadowRoot && !this.hasAttribute('data-ran-dsd')) {
+      this.setAttribute('data-ran-dsd', '');
+    }
     const attrs = Array.from(this.attributes.entries())
       .map(([k, v]) => ` ${k}="${escapeHtmlAttribute(v)}"`)
       .join('');

@@ -1006,9 +1006,10 @@ r-dropdown.ran-chrome-menu r-dropdown-item {
  * language control jumps beside them. Reserve the same trigger footprint as the
  * upgraded select (32px tall, longest-option floors) with a quiet ghost shell —
  * no second hover grey; this is a static pre-upgrade plate only.
+ * Skip `[data-ran-dsd]`: closed Declarative Shadow DOM already paints the trigger.
  */
-.appearance .theme-switch:not(:defined),
-.appearance .surface-switch:not(:defined) {
+.appearance .theme-switch:not(:defined):not([data-ran-dsd]),
+.appearance .surface-switch:not(:defined):not([data-ran-dsd]) {
   display: inline-block;
   box-sizing: border-box;
   height: 32px;
@@ -1018,20 +1019,20 @@ r-dropdown.ran-chrome-menu r-dropdown-item {
   border-radius: 5px;
   vertical-align: middle;
 }
-.appearance .theme-switch:not(:defined) {
+.appearance .theme-switch:not(:defined):not([data-ran-dsd]) {
   /* Hug the current label; panel min-width covers longer options. */
   min-width: 4.5rem;
 }
-.appearance .surface-switch:not(:defined) {
+.appearance .surface-switch:not(:defined):not([data-ran-dsd]) {
   min-width: 5.5rem;
 }
-:root[data-ran-surface='glass'] .header-utils .lang-switch:not(:defined),
-:root[data-ran-surface='glass'] .appearance .theme-switch:not(:defined),
-:root[data-ran-surface='glass'] .appearance .surface-switch:not(:defined) {
+:root[data-ran-surface='glass'] .header-utils .lang-switch:not(:defined):not([data-ran-dsd]),
+:root[data-ran-surface='glass'] .appearance .theme-switch:not(:defined):not([data-ran-dsd]),
+:root[data-ran-surface='glass'] .appearance .surface-switch:not(:defined):not([data-ran-dsd]) {
   border-radius: var(--glass-control-radius, 10px);
 }
 @media (max-width: 720px) {
-  .appearance .theme-switch:not(:defined) {
+  .appearance .theme-switch:not(:defined):not([data-ran-dsd]) {
     min-width: 6rem;
   }
 }
@@ -1041,7 +1042,7 @@ r-dropdown.ran-chrome-menu r-dropdown-item {
  * deferred module upgrades, without claiming the longest-option floor.
  */
 @media (max-width: 480px) {
-  .appearance .theme-switch:not(:defined) {
+  .appearance .theme-switch:not(:defined):not([data-ran-dsd]) {
     min-width: 32px;
     width: 32px;
   }
@@ -1102,7 +1103,8 @@ r-dropdown.ran-chrome-menu r-dropdown-item {
 @media (max-width: 1099px) {
   /* Match :not(:defined) specificity so the FOUC plate cannot keep the row open. */
   .appearance .surface-switch,
-  .appearance .surface-switch:not(:defined) {
+  .appearance .surface-switch:not(:defined),
+  .appearance .surface-switch:not(:defined):not([data-ran-dsd]) {
     display: none;
   }
 }
@@ -1255,7 +1257,7 @@ r-dropdown.ran-chrome-menu r-dropdown-item {
     color var(--ran-motion-duration-fast, 0.14s) var(--ran-motion-ease-standard, ease),
     border-color var(--ran-motion-duration-fast, 0.14s) var(--ran-motion-ease-standard, ease);
 }
-.header-utils .lang-switch:not(:defined) {
+.header-utils .lang-switch:not(:defined):not([data-ran-dsd]) {
   display: inline-block;
   box-sizing: border-box;
   height: 32px;
@@ -1267,7 +1269,7 @@ r-dropdown.ran-chrome-menu r-dropdown-item {
   vertical-align: middle;
 }
 @media (max-width: 480px) {
-  .header-utils .lang-switch:not(:defined) {
+  .header-utils .lang-switch:not(:defined):not([data-ran-dsd]) {
     min-width: 32px;
     width: 32px;
   }

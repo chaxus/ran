@@ -2,9 +2,14 @@
 // treats a component as an unknown inline element and lays its light-DOM children out in
 // flow. For the components below that is content the upgraded element hides, portals or
 // replaces, so it would flash on screen and push the page around until the upgrade
-// collapses it. Shadow styles cannot help: the shadow root does not exist yet. These rules
-// ship in ranui.css, which pages load before first paint, and stop matching the moment the
-// element is defined.
+// collapses it.
+//
+// When build-time Declarative Shadow DOM already paints the control (`data-ran-dsd` from
+// ranview serialize), these plates must not run: host padding/min-size would stack on the
+// shadow's own box and jump on upgrade (home invite `r-button`: 50px → 32px).
+//
+// Rules ship in ranui.css (before first paint) and stop matching once the element is defined
+// or when SSR stamped `data-ran-dsd`.
 
 // Hidden until opened, or rendered from source: nothing of it belongs on screen yet.
 r-content:not(:defined),
@@ -36,24 +41,25 @@ r-scratch:not(:defined) {
 // An input or select caption is one line of label text plus its 4px gap; `1lh` measures that
 // line with the inherited line height, as the upgraded caption does. Each rule is wrapped in
 // :where() so the page's own sizing and display for the element still win.
-:where(r-input:not(:defined)) {
+// Skip `[data-ran-dsd]`: the closed shadow already owns the box.
+:where(r-input:not(:defined):not([data-ran-dsd])) {
   display: block;
   min-height: var(--ran-input-min-height, var(--ran-size-7, 32px));
 }
-:where(r-select:not(:defined)) {
+:where(r-select:not(:defined):not([data-ran-dsd])) {
   display: inline-block;
   min-height: var(--ran-select-min-height, var(--ran-size-7, 32px));
 }
-:where(r-input[label]:not(:defined), r-select[label]:not(:defined)) {
+:where(r-input[label]:not(:defined):not([data-ran-dsd]), r-select[label]:not(:defined):not([data-ran-dsd])) {
   font-size: var(--ran-text-label-1, 14px);
 }
-:where(r-input[label]:not(:defined)) {
+:where(r-input[label]:not(:defined):not([data-ran-dsd])) {
   min-height: calc(1lh + var(--ran-space-1, 4px) + var(--ran-input-min-height, var(--ran-size-7, 32px)));
 }
-:where(r-select[label]:not(:defined)) {
+:where(r-select[label]:not(:defined):not([data-ran-dsd])) {
   min-height: calc(1lh + var(--ran-space-1, 4px) + var(--ran-select-min-height, var(--ran-size-7, 32px)));
 }
-:where(r-button:not(:defined)) {
+:where(r-button:not(:defined):not([data-ran-dsd])) {
   display: inline-flex;
   align-items: center;
   box-sizing: border-box;
@@ -67,7 +73,7 @@ r-scratch:not(:defined) {
   white-space: nowrap;
 }
 // Compact select of color themes — same box as the upgraded host.
-:where(r-theme-switch:not(:defined)) {
+:where(r-theme-switch:not(:defined):not([data-ran-dsd])) {
   display: inline-flex;
   box-sizing: border-box;
   width: var(--ran-theme-switch-width, 8.75rem);
@@ -75,7 +81,7 @@ r-scratch:not(:defined) {
   max-width: var(--ran-theme-switch-max-width, 11rem);
   min-height: var(--ran-theme-switch-trigger-min-height, 32px);
 }
-:where(r-surface-switch:not(:defined)) {
+:where(r-surface-switch:not(:defined):not([data-ran-dsd])) {
   display: inline-flex;
   box-sizing: border-box;
   width: var(--ran-surface-switch-width, 10.5rem);
@@ -84,7 +90,7 @@ r-scratch:not(:defined) {
   min-height: var(--ran-surface-switch-trigger-min-height, 32px);
 }
 // The label text is already there; the 16px box and its 8px gap come with the upgrade.
-:where(r-checkbox:not(:defined)) {
+:where(r-checkbox:not(:defined):not([data-ran-dsd])) {
   display: inline-block;
   padding-inline-start: calc(var(--ran-checkbox-width, var(--ran-size-1, 16px)) + var(--ran-checkbox-label-gap, 8px));
   font-size: var(--ran-checkbox-label-font-size, var(--ran-text-label-1, 14px));
