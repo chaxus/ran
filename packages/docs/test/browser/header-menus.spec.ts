@@ -474,13 +474,17 @@ test('tool wash slides from search onto the language trigger', async ({ page, br
       return transform !== onSearch;
     })
     .toBe(true);
-  const aligned = await page.evaluate(() => {
-    const pill = document.querySelector('.header-tools > .hu__hover') as HTMLElement | null;
-    const trigger = document.querySelector('.lang-switch') as HTMLElement | null;
-    if (!pill || !trigger) return false;
-    const a = pill.getBoundingClientRect();
-    const b = trigger.getBoundingClientRect();
-    return Math.abs(a.left - b.left) < 2 && Math.abs(a.width - b.width) < 2;
-  });
-  expect(aligned).toBe(true);
+  // Transform may update before the CSS transition settles the painted box.
+  await expect
+    .poll(async () =>
+      page.evaluate(() => {
+        const pill = document.querySelector('.header-tools > .hu__hover') as HTMLElement | null;
+        const trigger = document.querySelector('.lang-switch') as HTMLElement | null;
+        if (!pill || !trigger) return false;
+        const a = pill.getBoundingClientRect();
+        const b = trigger.getBoundingClientRect();
+        return Math.abs(a.left - b.left) < 2 && Math.abs(a.width - b.width) < 2;
+      }),
+    )
+    .toBe(true);
 });
