@@ -1,52 +1,67 @@
 /**
- * Build-time Declarative Shadow DOM for docs chrome that must paint before upgrade.
+ * Build-time Declarative Shadow DOM for every ranui host on a docs page.
  *
- * Client upgrade reuses the closed root via `ElementInternals.shadowRoot` and keeps
- * the painted tree (structure bind, no remount wipe). Skip this pass and first paint
- * falls back to empty hosts again.
+ * Component FOUC plates (each components/<name>/fouc.less, aggregated into
+ * ranui.css via theme/undefined.less) cover SPA / late-chunk loads. When the
+ * host can SSR, expand the full HTML so closed DSD + data-ran-dsd paint the
+ * real control and skip those plates — no site-specific allowlist.
+ *
+ * Client upgrade reuses the closed root via ElementInternals.shadowRoot and
+ * keeps the painted tree (structure bind, no remount wipe).
  */
-import 'ranui/select';
-import 'ranui/theme-switch';
-import 'ranui/surface-switch';
-import 'ranui/menubar';
-import 'ranui/input';
+import 'ranui/attachments';
 import 'ranui/button';
+import 'ranui/card';
 import 'ranui/checkbox';
+import 'ranui/colorpicker';
+import 'ranui/conversation';
+import 'ranui/disclosure-row';
+import 'ranui/dropdown';
+import 'ranui/fan-gallery';
+import 'ranui/glass';
+import 'ranui/icon';
+import 'ranui/image';
+import 'ranui/input';
+import 'ranui/loading';
+import 'ranui/markdown';
+import 'ranui/math';
+import 'ranui/menubar';
+import 'ranui/mermaid';
+import 'ranui/message';
+import 'ranui/player';
+import 'ranui/popover';
+import 'ranui/progress';
+import 'ranui/reasoning';
+import 'ranui/route';
+import 'ranui/router';
+import 'ranui/scratch';
+import 'ranui/section';
+import 'ranui/select';
+import 'ranui/skeleton';
+import 'ranui/state-dot';
+import 'ranui/surface-switch';
+import 'ranui/tab';
+import 'ranui/tabpane';
+import 'ranui/theme-switch';
+import 'ranui/token-meter';
+import 'ranui/tool-card';
+import 'ranui/voice-button';
+// Intentionally omitted (every-component EXEMPT — construct throws under Node):
+// ranui/content, ranui/link, ranui/modal, ranui/radar. They pass through bare;
+// hide/FOUC rules in ranui.css cover first paint. renderHTMLToString also
+// catches construct failures so a future barrel import stays safe.
 import { renderHTMLToString } from 'ranui/ssr-stream';
 
-const HEADER_UTILS_RE = /<r-menubar\b[^>]*class="header-utils"[^>]*>[\s\S]*?<\/r-menubar>/i;
-
-/** Home invite card fields — first viewport, same flash class as header chrome. */
-const HOME_EXAMPLE_TAGS: RegExp[] = [
-  /<r-input\b[^>]*class="example__field"[^>]*>[\s\S]*?<\/r-input>/gi,
-  /<r-select\b[^>]*class="example__field"[^>]*>[\s\S]*?<\/r-select>/gi,
-  /<r-checkbox\b[^>]*class="example__simulate"[^>]*>[\s\S]*?<\/r-checkbox>/gi,
-  /<r-button\b[^>]*class="example__submit"[^>]*>[\s\S]*?<\/r-button>/gi,
-];
-
-const expandMatch = async (html: string, match: RegExpExecArray | RegExpMatchArray, label: string): Promise<string> => {
-  const expanded = await renderHTMLToString(match[0]);
-  if (!expanded.includes('shadowrootmode=')) {
-    throw new Error(`${label}: expected Declarative Shadow DOM, but renderHTMLToString returned no shadowrootmode.`);
-  }
-  const index = match.index ?? 0;
-  return html.slice(0, index) + expanded + html.slice(index + match[0].length);
-};
+const HAS_RANUI = /<r-[a-z0-9-]+\b/i;
 
 /**
- * Expand the docs header `<r-menubar class="header-utils">…</r-menubar>` fragment
- * and the home invite example fields to Declarative Shadow DOM.
+ * Expand every registered ranui custom element in `html` to Declarative Shadow DOM.
+ * Unregistered / SSR-exempt tags are left bare (FOUC plates still apply).
  */
-export const ssrHeaderChrome = async (html: string): Promise<string> => {
-  const header = HEADER_UTILS_RE.exec(html);
-  let out = header ? await expandMatch(html, header, 'ssrHeaderChrome') : html;
-
-  for (const re of HOME_EXAMPLE_TAGS) {
-    re.lastIndex = 0;
-    const matches = [...out.matchAll(re)];
-    for (let i = matches.length - 1; i >= 0; i--) {
-      out = await expandMatch(out, matches[i]!, 'ssrHomeExample');
-    }
-  }
-  return out;
+export const ssrRanui = async (html: string): Promise<string> => {
+  if (!HAS_RANUI.test(html)) return html;
+  return renderHTMLToString(html);
 };
+
+/** @deprecated Prefer `ssrRanui` — expands the full page, not only header/home. */
+export const ssrHeaderChrome = ssrRanui;

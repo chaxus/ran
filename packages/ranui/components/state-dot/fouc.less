@@ -1,0 +1,8 @@
+// Document-level plate before upgrade. Same size token as `:host` in index.less.
+:where(r-state-dot:not(:defined):not([data-ran-dsd])) {
+  display: inline-block;
+  box-sizing: border-box;
+  width: var(--ran-state-dot-size, 8px);
+  height: var(--ran-state-dot-size, 8px);
+  vertical-align: middle;
+}

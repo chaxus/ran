@@ -1,10 +1,10 @@
 import { describe, expect, it } from 'vitest';
-import { ssrHeaderChrome } from '../build/ssr-chrome.ts';
+import { ssrRanui, ssrHeaderChrome } from '../build/ssr-chrome.ts';
 
-describe('ssrHeaderChrome', () => {
+describe('ssrRanui', () => {
   it('expands header-utils menubar to Declarative Shadow DOM', async () => {
     const html = `<header><r-menubar class="header-utils" lang="en"><r-select class="lang-switch" value="/" aria-label="Language" dropdownclass="ran-chrome-menu" trigger="hover click"><r-option value="/">English</r-option></r-select><r-theme-switch class="theme-switch" lang="en" trigger="hover click"></r-theme-switch><r-surface-switch class="surface-switch" lang="en" trigger="hover click"></r-surface-switch></r-menubar></header>`;
-    const out = await ssrHeaderChrome(html);
+    const out = await ssrRanui(html);
     expect(out).toContain('shadowrootmode="closed"');
     expect(out).toContain('ran-menubar');
     expect(out).toContain('selection-item');
@@ -23,7 +23,7 @@ describe('ssrHeaderChrome', () => {
       `<r-checkbox class="example__simulate" name="simulate">Simulate</r-checkbox>` +
       `<r-button class="example__submit" type="primary">Send invite</r-button>` +
       `</div>`;
-    const out = await ssrHeaderChrome(html);
+    const out = await ssrRanui(html);
     expect(out).toContain('shadowrootmode="closed"');
     expect(out).toMatch(/r-input[\s\S]*shadowrootmode="closed"[\s\S]*ran-input/);
     expect(out).toMatch(/r-button[\s\S]*shadowrootmode="closed"[\s\S]*ran-btn/);
@@ -40,8 +40,21 @@ describe('ssrHeaderChrome', () => {
     expect(body).toMatch(/ran-select-label[^>]*>Role</);
   });
 
-  it('leaves pages without header-utils unchanged', async () => {
+  it('expands arbitrary demo controls without an allowlist', async () => {
+    const html = `<main><r-progress percent="40"></r-progress><r-loading></r-loading><r-skeleton></r-skeleton></main>`;
+    const out = await ssrRanui(html);
+    expect(out).toMatch(/<r-progress[^>]*data-ran-dsd/);
+    expect(out).toMatch(/<r-loading[^>]*data-ran-dsd/);
+    expect(out).toMatch(/<r-skeleton[^>]*data-ran-dsd/);
+    expect(out).toContain('shadowrootmode="closed"');
+  });
+
+  it('leaves pages without ranui unchanged', async () => {
     const html = '<main><p>no chrome</p></main>';
-    expect(await ssrHeaderChrome(html)).toBe(html);
+    expect(await ssrRanui(html)).toBe(html);
+  });
+
+  it('keeps ssrHeaderChrome as an alias', async () => {
+    expect(ssrHeaderChrome).toBe(ssrRanui);
   });
 });

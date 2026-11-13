@@ -189,13 +189,15 @@ Events are the outward half of the contract, so treat a change to one as a break
 
 Not every element needs DSD keep or a sliding wash. Apply by class of problem:
 
-| Class              | When                                               | Components (docs / library)                                                                               | Treatment                                                                                              |
-| ------------------ | -------------------------------------------------- | --------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
-| First-paint chrome | Visible before the client bundle upgrades the host | `r-menubar`, `r-select`, `r-theme-switch`, `r-surface-switch`, home `r-input` / `r-button` / `r-checkbox` | Closed DSD **with styles** in the HTML; keep tree on upgrade (`paintedShadowChild`)                    |
-| List cursor        | Glass / nav row hover and selection                | `r-select` menus, `r-menubar` viewport, `r-tabs` header fill, host sidebar / header tool washes           | One sliding fill; **snap** on first place (`data-instant` → `transition: none`); ease only when moving |
-| Deferred / overlay | Loaded near viewport or opened by the reader       | `r-player`, `r-markdown`, `r-modal`, `r-message`, most others                                             | FOUC size plate or no plate; no wash requirement                                                       |
+| Class               | When                                               | Components (docs / library)                                                                     | Treatment                                                                                                                                                                                  |
+| ------------------- | -------------------------------------------------- | ----------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| First-paint control | Visible before the client bundle upgrades the host | Every fixed-size control (`r-button`, `r-input`, `r-select`, switches, `r-progress`, …)         | Component owns `fouc.less` (aggregated into `ranui.css`); host SSR via `renderHTMLToString` stamps closed DSD + `data-ran-dsd` so plates skip; keep tree on upgrade (`paintedShadowChild`) |
+| List cursor         | Glass / nav row hover and selection                | `r-select` menus, `r-menubar` viewport, `r-tabs` header fill, host sidebar / header tool washes | One sliding fill; **snap** on first place (`data-instant` → `transition: none`); ease only when moving                                                                                     |
+| Deferred / overlay  | Loaded near viewport or opened by the reader       | `r-player`, `r-markdown`, `r-modal`, `r-message`, hide-until-open content                       | Hide rule or FOUC plate in the component's `fouc.less` / `theme/undefined.less`; no wash requirement                                                                                       |
 
 Do **not** add entrance motion or a wash to every control — that invents noise. Fix flash where first paint is empty; fix wash where a list cursor already exists.
+
+**Component ownership.** Pre-upgrade size lives in `components/<name>/fouc.less` next to `index.less`, reading the same `--ran-*` tokens as `:host`. `theme/undefined.less` only aggregates those files plus cross-cutting hide rules. Consumers load `ranui/style` (or `ranui.css`) in `<head>` and, when they SSR, call `renderHTMLToString` after importing the components — no site allowlist of tags.
 
 ## 8. Testing
 

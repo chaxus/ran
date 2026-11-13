@@ -1,0 +1,7 @@
+// Document-level plate before upgrade. Same height token as `:host` in index.less.
+:where(r-progress:not(:defined):not([data-ran-dsd])) {
+  display: block;
+  box-sizing: border-box;
+  width: var(--ran-progress-width, 100%);
+  min-height: var(--ran-progress-height, var(--ran-size-3, 20px));
+}

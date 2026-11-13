@@ -10,8 +10,21 @@ class SSRMockElement {
   }
 }
 
+class SSRThrowingElement {
+  setAttribute(): void {
+    /* never reached */
+  }
+  constructor() {
+    throw new Error('SSR construct unavailable');
+  }
+}
+
 vi.mock('@/utils/ssr-registry', () => ({
-  getSSRConstructor: (tagName: string) => (tagName === 'r-known' ? SSRMockElement : undefined),
+  getSSRConstructor: (tagName: string) => {
+    if (tagName === 'r-known') return SSRMockElement;
+    if (tagName === 'r-throws') return SSRThrowingElement;
+    return undefined;
+  },
 }));
 
 vi.mock('@/utils/ssr', () => ({
@@ -64,5 +77,22 @@ describe('utils/ssr-stream', () => {
     await expect(renderHTMLToString('<unknown-element foo="bar">content')).resolves.toBe(
       '<unknown-element foo="bar">content',
     );
+  });
+
+  it('passes through hosts that throw on construct and still expands nested registered children', async () => {
+    const html = await renderHTMLToString('<r-throws open><r-known type="primary">OK</r-known></r-throws>');
+
+    expect(html).toBe('<r-throws open><rendered tag="r-known" attrs="type=primary">OK</rendered></r-throws>');
+  });
+
+  it('leaves custom elements inside code/pre/script samples unexpanded', async () => {
+    const html = await renderHTMLToString(
+      `<p><r-known>Live</r-known></p><pre><code><r-known type="primary">Sample</r-known></code></pre>` +
+        `<script type="text/plain"><r-known>In script</r-known></script>`,
+    );
+
+    expect(html).toContain('<rendered tag="r-known" attrs="">Live</rendered>');
+    expect(html).toContain('<pre><code><r-known type="primary">Sample</r-known></code></pre>');
+    expect(html).toContain('<script type="text/plain"><r-known>In script</r-known></script>');
   });
 });

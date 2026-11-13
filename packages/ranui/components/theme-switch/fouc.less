@@ -1,0 +1,10 @@
+// Compact theme select — same box as the upgraded host.
+// Skip `[data-ran-dsd]`: closed Declarative Shadow DOM already owns the box.
+:where(r-theme-switch:not(:defined):not([data-ran-dsd])) {
+  display: inline-flex;
+  box-sizing: border-box;
+  width: var(--ran-theme-switch-width, 8.75rem);
+  min-width: var(--ran-theme-switch-min-width, 7.5rem);
+  max-width: var(--ran-theme-switch-max-width, 11rem);
+  min-height: var(--ran-theme-switch-trigger-min-height, 32px);
+}
