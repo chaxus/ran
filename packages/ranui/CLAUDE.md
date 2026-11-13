@@ -43,7 +43,8 @@ packages/ranui/
 ├── components/           # One component per directory
 │   └── {name}/
 │       ├── index.ts      # Component class + defineSSR()
-│       └── index.less    # Shadow DOM styles (auto-imports base.less)
+│       ├── index.less    # Shadow DOM styles (auto-imports base.less)
+│       └── fouc.less     # Optional document-level pre-upgrade size plate (via theme/undefined.less)
 ├── utils/
 │   ├── component.ts      # ensureShadowRoot, shadowPart, attribute helpers
 │   ├── builder/          # ElementBuilder fluent DOM builder

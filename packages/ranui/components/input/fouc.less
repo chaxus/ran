@@ -1,0 +1,12 @@
+// Document-level plate before upgrade. Same size tokens as `:host` in index.less.
+// Skip `[data-ran-dsd]`: closed Declarative Shadow DOM already owns the box.
+:where(r-input:not(:defined):not([data-ran-dsd])) {
+  display: block;
+  min-height: var(--ran-input-min-height, var(--ran-size-7, 32px));
+}
+:where(r-input[label]:not(:defined):not([data-ran-dsd])) {
+  font-size: var(--ran-text-label-1, 14px);
+  // One line of caption + gap + control, matching the upgraded host.
+  // design-ok: sizing-scale caption gap is the host's --ran-space-1, not an intrinsic size step
+  min-height: calc(1lh + var(--ran-space-1, 4px) + var(--ran-input-min-height, var(--ran-size-7, 32px)));
+}

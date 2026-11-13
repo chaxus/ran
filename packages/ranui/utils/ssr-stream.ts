@@ -147,28 +147,34 @@ export async function* renderToStream(html: string): AsyncGenerator<string> {
       continue;
     }
 
+    const closedAttrs = Object.entries(token.attrs)
+      .map(([k, v]) => (v === '' ? ` ${k}` : ` ${k}="${v}"`))
+      .join('');
+    const passthrough = (inner: string): string => `<${token.tagName}${closedAttrs}>${inner}</${token.tagName}>`;
+
     const Ctor = getSSRConstructor(token.tagName);
+    // Always expand registered children first so a parent that cannot construct
+    // under Node (see every-component EXEMPT) still leaves nested ranui painted.
+    const childHtml = token.innerHTML.trim() ? await collectChunks(renderToStream(token.innerHTML)) : '';
+
     if (!Ctor) {
-      // Unknown element — pass through unchanged
-      const closedAttrs = Object.entries(token.attrs)
-        .map(([k, v]) => (v === '' ? ` ${k}` : ` ${k}="${v}"`))
-        .join('');
-      yield `<${token.tagName}${closedAttrs}>${token.innerHTML}</${token.tagName}>`;
+      // Unknown element — pass through unchanged (children already expanded).
+      yield passthrough(childHtml || token.innerHTML);
       continue;
     }
 
-    const el = new Ctor();
-    for (const [k, v] of Object.entries(token.attrs)) {
-      el.setAttribute(k, v);
+    try {
+      const el = new Ctor();
+      for (const [k, v] of Object.entries(token.attrs)) {
+        el.setAttribute(k, v);
+      }
+      if (childHtml) el.innerHTML = childHtml;
+      yield renderToString(el);
+    } catch {
+      // Registered but not constructible on the server — leave the host bare.
+      // Component FOUC plates / hide rules cover first paint until client upgrade.
+      yield passthrough(childHtml);
     }
-
-    // Recursively render children so parent can access them during serialization
-    if (token.innerHTML.trim()) {
-      const childHtml = await collectChunks(renderToStream(token.innerHTML));
-      el.innerHTML = childHtml;
-    }
-
-    yield renderToString(el);
   }
 }
 

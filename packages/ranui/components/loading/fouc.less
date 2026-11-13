@@ -1,0 +1,7 @@
+// Document-level plate before upgrade. Same size token as `:host` in index.less.
+:where(r-loading:not(:defined):not([data-ran-dsd])) {
+  display: inline-block;
+  box-sizing: border-box;
+  min-inline-size: var(--ran-loading-size, var(--ran-space-10, 40px));
+  min-block-size: var(--ran-loading-size, var(--ran-space-10, 40px));
+}

@@ -28,7 +28,7 @@ import { createOfflineManifest } from './offline.ts';
 import { absoluteUrl, generatedFiles, headFor } from './seo.ts';
 import { legacyRedirects } from './urls.ts';
 import type { DocContent } from './content.ts';
-import { ssrHeaderChrome } from './ssr-chrome.ts';
+import { ssrRanui } from './ssr-chrome.ts';
 
 export const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 export const DIST_DIR = join(ROOT, 'dist');
@@ -156,8 +156,8 @@ export const build = async (options: { skipAssets?: boolean } = {}): Promise<Doc
 
   const written: string[] = [];
   for (const page of content.pages) {
-    // Closed DSD for header-utils; client hydrates via ElementInternals.shadowRoot.
-    const html = await ssrHeaderChrome(renderDoc({ page, head: headFor(page, content), assets, urls: content.urls }));
+    // Closed DSD for every registered ranui host; client keeps the painted tree.
+    const html = await ssrRanui(renderDoc({ page, head: headFor(page, content), assets, urls: content.urls }));
     writeOut(DIST_DIR, page.outFile, html);
     written.push(page.outFile);
   }

@@ -1,0 +1,10 @@
+// Compact surface select — same box as the upgraded host.
+// Skip `[data-ran-dsd]`: closed Declarative Shadow DOM already owns the box.
+:where(r-surface-switch:not(:defined):not([data-ran-dsd])) {
+  display: inline-flex;
+  box-sizing: border-box;
+  width: var(--ran-surface-switch-width, 10.5rem);
+  min-width: var(--ran-surface-switch-min-width, 9rem);
+  max-width: var(--ran-surface-switch-max-width, 13rem);
+  min-height: var(--ran-surface-switch-trigger-min-height, 32px);
+}

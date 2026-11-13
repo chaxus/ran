@@ -217,9 +217,10 @@
   width: 100%;
 }
 /*
- * Invite fields ship closed Declarative Shadow DOM (build/ssr-chrome). The shadow
- * paints the real label and control before upgrade — do not add ::before/::after
- * FOUC plates or they double with DSD. Still hide light-DOM options until upgrade.
+ * Invite fields ship closed Declarative Shadow DOM (build/ssr-chrome → ssrRanui).
+ * The shadow paints the real label and control before upgrade — do not add
+ * ::before/::after FOUC plates or they double with DSD. Still hide light-DOM
+ * options until upgrade.
  */
 .example__field:not(:defined) {
   display: block;

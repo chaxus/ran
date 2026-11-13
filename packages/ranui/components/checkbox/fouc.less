@@ -1,0 +1,10 @@
+// Document-level plate before upgrade. Reserves the 16px box + gap the upgrade adds.
+// Skip `[data-ran-dsd]`: closed Declarative Shadow DOM already owns the box.
+:where(r-checkbox:not(:defined):not([data-ran-dsd])) {
+  display: inline-block;
+  padding-inline-start: calc(var(--ran-checkbox-width, var(--ran-size-1, 16px)) + var(--ran-checkbox-label-gap, 8px));
+  font-size: var(--ran-checkbox-label-font-size, var(--ran-text-label-1, 14px));
+  font-family: var(--ran-checkbox-label-font-family, var(--ran-skin-font-family, inherit));
+  font-weight: var(--ran-checkbox-label-font-weight, var(--ran-text-label-weight, 500));
+  line-height: var(--ran-checkbox-label-line-height, 1.5);
+}

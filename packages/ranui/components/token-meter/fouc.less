@@ -1,0 +1,10 @@
+// Document-level plate before upgrade. Reserves the label+track row the upgrade paints.
+:where(r-token-meter:not(:defined):not([data-ran-dsd])) {
+  display: inline-flex;
+  align-items: center;
+  box-sizing: border-box;
+  gap: var(--ran-token-meter-gap, var(--ran-space-2));
+  min-height: calc(1lh + var(--ran-token-meter-track-height, 0.375rem));
+  font-size: var(--ran-token-meter-font-size, var(--ran-text-label-3));
+  color: var(--ran-token-meter-color, var(--ran-color-text-secondary));
+}

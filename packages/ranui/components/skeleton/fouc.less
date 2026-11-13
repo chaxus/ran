@@ -1,0 +1,8 @@
+// Document-level plate before upgrade. Same size tokens as `:host` in index.less.
+// Size only — fill colour waits for the shadow so this sheet stays theme-safe.
+:where(r-skeleton:not(:defined):not([data-ran-dsd])) {
+  display: block;
+  box-sizing: border-box;
+  width: var(--ran-skeleton-width, 100%);
+  min-height: var(--ran-skeleton-height, var(--ran-size-1, 16px));
+}
