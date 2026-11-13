@@ -57,6 +57,21 @@ function findClosingTag(html: string, tagName: string, searchFrom: number): numb
   return -1;
 }
 
+/**
+ * Raw-text / sample containers: custom elements inside them are markup to show,
+ * not hosts to expand (playground readouts, fenced samples, script strings).
+ */
+const RAW_CONTAINER_RE = /<(script|style|textarea|title|code|pre|samp)\b/gi;
+
+function findRawContainerEnd(html: string, tagName: string, openStart: number): number {
+  const afterName = openStart + 1 + tagName.length;
+  const tagEnd = html.indexOf('>', afterName);
+  if (tagEnd === -1) return -1;
+  const closePos = findClosingTag(html, tagName, tagEnd + 1);
+  if (closePos === -1) return -1;
+  return closePos + `</${tagName}>`.length;
+}
+
 function tokenize(html: string): Token[] {
   const tokens: Token[] = [];
   // Custom element open tag: tag name must contain a hyphen. The regex matches only
@@ -64,11 +79,36 @@ function tokenize(html: string): Token[] {
   // with a linear `indexOf`. This avoids the `[^>]*` backtracking that CodeQL flagged
   // as a polynomial ReDoS on unterminated tags.
   const openTagRe = /<([a-z][a-z0-9]*(?:-[a-z0-9]+)+)/gi;
+  /** Emit cursor — start of the next static/CE slice. */
   let cursor = 0;
-  let match: RegExpExecArray | null;
-  openTagRe.lastIndex = 0;
+  /** Scan cursor — where the next open-tag / raw-container search begins. */
+  let search = 0;
 
-  while ((match = openTagRe.exec(html)) !== null) {
+  while (search < html.length) {
+    openTagRe.lastIndex = search;
+    RAW_CONTAINER_RE.lastIndex = search;
+    const match = openTagRe.exec(html);
+    const raw = RAW_CONTAINER_RE.exec(html);
+
+    // Prefer the earlier of a raw container or a custom element; raw wins on a tie
+    // so `<code><r-button>` stays a sample.
+    if (raw && (!match || raw.index <= match.index)) {
+      const rawName = raw[1]!.toLowerCase();
+      const rawEnd = findRawContainerEnd(html, rawName, raw.index);
+      if (rawEnd === -1) {
+        if (raw.index > cursor) tokens.push({ type: 'static', content: html.slice(cursor, raw.index) });
+        tokens.push({ type: 'static', content: html.slice(raw.index) });
+        return tokens;
+      }
+      if (raw.index > cursor) tokens.push({ type: 'static', content: html.slice(cursor, raw.index) });
+      tokens.push({ type: 'static', content: html.slice(raw.index, rawEnd) });
+      cursor = rawEnd;
+      search = rawEnd;
+      continue;
+    }
+
+    if (!match) break;
+
     const tagStart = match.index;
     const tagName = match[1].toLowerCase();
     const afterName = tagStart + match[0].length;
@@ -84,7 +124,7 @@ function tokenize(html: string): Token[] {
       nextChar !== '\r' &&
       nextChar !== '\f'
     ) {
-      openTagRe.lastIndex = afterName;
+      search = afterName;
       continue;
     }
 
@@ -94,7 +134,11 @@ function tokenize(html: string): Token[] {
     const innerStart = tagEnd + 1;
 
     const closePos = findClosingTag(html, tagName, innerStart);
-    if (closePos === -1) continue; // Malformed — skip
+    if (closePos === -1) {
+      // Malformed — leave in the static stream; keep scanning past this opener.
+      search = tagEnd + 1;
+      continue;
+    }
 
     const innerHTML = html.slice(innerStart, closePos);
     const outerEnd = closePos + `</${tagName}>`.length;
@@ -104,7 +148,7 @@ function tokenize(html: string): Token[] {
     }
     tokens.push({ type: 'custom-element', tagName, attrs: parseAttrs(attrsStr), innerHTML });
     cursor = outerEnd;
-    openTagRe.lastIndex = outerEnd;
+    search = outerEnd;
   }
 
   if (cursor < html.length) {

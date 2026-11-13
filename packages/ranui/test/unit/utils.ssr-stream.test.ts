@@ -84,4 +84,15 @@ describe('utils/ssr-stream', () => {
 
     expect(html).toBe('<r-throws open><rendered tag="r-known" attrs="type=primary">OK</rendered></r-throws>');
   });
+
+  it('leaves custom elements inside code/pre/script samples unexpanded', async () => {
+    const html = await renderHTMLToString(
+      `<p><r-known>Live</r-known></p><pre><code><r-known type="primary">Sample</r-known></code></pre>` +
+        `<script type="text/plain"><r-known>In script</r-known></script>`,
+    );
+
+    expect(html).toContain('<rendered tag="r-known" attrs="">Live</rendered>');
+    expect(html).toContain('<pre><code><r-known type="primary">Sample</r-known></code></pre>');
+    expect(html).toContain('<script type="text/plain"><r-known>In script</r-known></script>');
+  });
 });

@@ -18,7 +18,12 @@ export const mountPlaygrounds = (root: ParentNode = document): void => {
     const readout = playground.querySelector<HTMLElement>('.playground__markup code');
     if (!element || !readout) continue;
     const render = (): void => {
-      readout.textContent = element.outerHTML;
+      // Authoring markup only: strip the SSR paint stamp. cloneNode does not copy
+      // closed Declarative Shadow DOM, so the readout stays the light-DOM tag the
+      // reader would write — not the inlined template.
+      const clone = element.cloneNode(true) as HTMLElement;
+      clone.removeAttribute('data-ran-dsd');
+      readout.textContent = clone.outerHTML;
     };
     const write = (name: string, value: string): void => {
       if (value && value !== UNSET) element.setAttribute(name, value);
