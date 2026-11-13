@@ -454,15 +454,33 @@ test('menubar language pick navigates (fine pointer viewport commit)', async ({ 
   await expect(page.locator('html')).toHaveAttribute('lang', 'pt');
 });
 
-test('search tool wash clears when the pointer moves onto the language trigger', async ({ page, browserName }) => {
+test('tool wash slides from search onto the language trigger', async ({ page, browserName }) => {
   test.skip(browserName === 'firefox', 'hover wash needs a fine pointer path');
   await page.goto('/');
   await page.waitForFunction(() => customElements.get('r-menubar'));
   const fill = page.locator('.header-tools > .hu__hover');
-  await page.locator('.search-open').hover();
+  const search = page.locator('.search-open');
+  const lang = page.locator('.lang-switch');
+  await search.hover();
   await expect.poll(async () => fill.evaluate((el) => (el as HTMLElement).style.opacity)).toBe('1');
-  await page.locator('.lang-switch').hover();
+  const onSearch = await fill.evaluate((el) => (el as HTMLElement).style.transform);
+  await lang.hover();
   await expect(page.locator('.ran-menubar-viewport__option', { hasText: 'English' })).toBeVisible();
-  // Still inside header-tools — wash must not stay painted on Search.
-  await expect.poll(async () => fill.evaluate((el) => (el as HTMLElement).style.opacity)).toBe('0');
+  // Still inside header-tools — wash stays visible but must leave Search for Language.
+  await expect.poll(async () => fill.evaluate((el) => (el as HTMLElement).style.opacity)).toBe('1');
+  await expect
+    .poll(async () => {
+      const transform = await fill.evaluate((el) => (el as HTMLElement).style.transform);
+      return transform !== onSearch;
+    })
+    .toBe(true);
+  const aligned = await page.evaluate(() => {
+    const pill = document.querySelector('.header-tools > .hu__hover') as HTMLElement | null;
+    const trigger = document.querySelector('.lang-switch') as HTMLElement | null;
+    if (!pill || !trigger) return false;
+    const a = pill.getBoundingClientRect();
+    const b = trigger.getBoundingClientRect();
+    return Math.abs(a.left - b.left) < 2 && Math.abs(a.width - b.width) < 2;
+  });
+  expect(aligned).toBe(true);
 });
