@@ -46,7 +46,13 @@ const mountHoverFill = (root: HTMLElement, targetSelector: string): void => {
 
   root.addEventListener('pointerover', (event) => {
     const item = targetOf(event.target);
-    if (item && item !== current) place(item);
+    if (item) {
+      if (item !== current) place(item);
+      return;
+    }
+    // Search → language: still inside header-tools, so pointerleave never fires.
+    // Non-target siblings (menubar triggers) must clear the search/GitHub wash.
+    if (current) hide();
   });
   root.addEventListener('pointerleave', () => {
     const focused = root.querySelector<HTMLElement>(focusSelector);
