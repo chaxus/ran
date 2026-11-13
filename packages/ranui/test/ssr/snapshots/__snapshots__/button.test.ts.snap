@@ -1,6 +1,6 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`r-button DSD snapshot > matches snapshot 1`] = `
-"<r-button><template shadowrootmode="closed"><style>:host([hidden]){display:none}
+"<r-button data-ran-dsd=""><template shadowrootmode="closed"><style>:host([hidden]){display:none}
 @media (prefers-reduced-motion: reduce){*,*::before,*::after{animation-duration:.01ms !important;animation-iteration-count:1 !important;transition-duration:.01ms !important;scroll-behavior:auto !important}}</style><div class="ran-btn" part="button" role="button" tabindex="0"><div class="ran-btn-content" part="content"><slot class="slot"></slot></div></div></template></r-button>"
 `;
