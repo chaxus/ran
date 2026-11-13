@@ -453,3 +453,16 @@ test('menubar language pick navigates (fine pointer viewport commit)', async ({ 
   await page.waitForURL('**/pt/**');
   await expect(page.locator('html')).toHaveAttribute('lang', 'pt');
 });
+
+test('search tool wash clears when the pointer moves onto the language trigger', async ({ page, browserName }) => {
+  test.skip(browserName === 'firefox', 'hover wash needs a fine pointer path');
+  await page.goto('/');
+  await page.waitForFunction(() => customElements.get('r-menubar'));
+  const fill = page.locator('.header-tools > .hu__hover');
+  await page.locator('.search-open').hover();
+  await expect.poll(async () => fill.evaluate((el) => (el as HTMLElement).style.opacity)).toBe('1');
+  await page.locator('.lang-switch').hover();
+  await expect(page.locator('.ran-menubar-viewport__option', { hasText: 'English' })).toBeVisible();
+  // Still inside header-tools — wash must not stay painted on Search.
+  await expect.poll(async () => fill.evaluate((el) => (el as HTMLElement).style.opacity)).toBe('0');
+});
