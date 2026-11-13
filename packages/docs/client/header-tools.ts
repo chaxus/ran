@@ -1,10 +1,12 @@
 /**
- * One hover fill that slides between sibling controls, matching the sidebar's soft
- * pill motion instead of each control flashing on its own.
+ * One hover fill that slides between sibling controls in a row (header tools,
+ * primary nav) — same recipe as `.sb__hover`, not a per-control background flash.
  *
- * Header language / theme / surface live inside `<r-menubar class="header-utils">`
- * (library hover handoff). This module only wires the shared tool wash and language
- * URL navigation.
+ * Two layers, two owners (do not collapse them):
+ * - Trigger row: this helper. Targets must list every peer in the row.
+ * - Open menu rows: `<r-menubar>` / `r-select` glass wash inside the panel.
+ * Incomplete trigger targets caused the "wash stuck on Search" bug; "clear when
+ * leaving a target" patches made gaps flash. Keep the target list complete.
  */
 const mountHoverFill = (root: HTMLElement, targetSelector: string): void => {
   if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
@@ -44,15 +46,10 @@ const mountHoverFill = (root: HTMLElement, targetSelector: string): void => {
     .map((part) => `${part.trim()}:focus-visible`)
     .join(', ');
 
+  // Stay on the last target across gaps; only leave the root (or focus) hides.
   root.addEventListener('pointerover', (event) => {
     const item = targetOf(event.target);
-    if (item) {
-      if (item !== current) place(item);
-      return;
-    }
-    // Search → language: still inside header-tools, so pointerleave never fires.
-    // Non-target siblings (menubar triggers) must clear the search/GitHub wash.
-    if (current) hide();
+    if (item && item !== current) place(item);
   });
   root.addEventListener('pointerleave', () => {
     const focused = root.querySelector<HTMLElement>(focusSelector);
@@ -112,10 +109,10 @@ export const mountHeaderTools = (): void => {
   if (primary) mountHoverFill(primary, '.wordmark, .nav__link');
 
   const tools = document.querySelector<HTMLElement>('.header-tools');
-  // Language / theme / surface are `<r-menubar>` peers — their wash lives in the
-  // shared viewport. Including them here stacked a second sliding pill on the
-  // triggers and read as header jitter while menus hopped.
-  if (tools) mountHoverFill(tools, '.search-open, .header-github');
+  // Full peer list — selects stay triggers for this wash; menubar only owns the panel.
+  if (tools) {
+    mountHoverFill(tools, '.search-open, .lang-switch, .theme-switch, .surface-switch, .header-github');
+  }
 
   mountChromeMenus();
 };

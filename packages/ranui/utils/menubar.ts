@@ -168,7 +168,9 @@ const harvestFromPanel = (panel: HTMLElement): Harvest | null => {
   const items = [...panel.querySelectorAll('r-dropdown-item')].map((el) => ({
     value: el.getAttribute('value') || '',
     label: (el.textContent || '').replace(/\s+/g, ' ').trim(),
-    active: el.getAttribute('aria-selected') === 'true' || el.hasAttribute('active'),
+    // `active` on r-dropdown-item is not selection (theme/surface may stamp it on
+    // the idle option). Selection is aria-selected / the selected attribute.
+    active: el.getAttribute('aria-selected') === 'true' || el.hasAttribute('selected'),
   }));
   if (!items.length || items.every((item) => !item.label)) return null;
   const box = panel.getBoundingClientRect();
