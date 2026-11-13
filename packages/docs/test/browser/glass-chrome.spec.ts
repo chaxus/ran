@@ -252,10 +252,7 @@ for (const theme of ['light', 'dark'] as const) {
   });
 }
 
-test('under glass the theme menu uses a sliding wash, weight-selected, and no check', async ({
-  page,
-  browserName,
-}) => {
+test('under glass the theme menu uses a sliding wash, weight-selected, and no check', async ({ page, browserName }) => {
   // Header theme lives under `<r-menubar>` — assert the shared viewport wash, not the
   // suppressed native `r-dropdown` portal (opening via `host.open` then moving the
   // mouse arms menubar and freezes `.ran-select-option-hover`).
@@ -264,9 +261,7 @@ test('under glass the theme menu uses a sliding wash, weight-selected, and no ch
   await page.emulateMedia({ reducedMotion: 'no-preference' });
   await page.goto('/');
   await expect.poll(async () => (await rootTokens(page)).surface).toBe('glass');
-  await page.waitForFunction(
-    () => customElements.get('r-theme-switch') && customElements.get('r-menubar'),
-  );
+  await page.waitForFunction(() => customElements.get('r-theme-switch') && customElements.get('r-menubar'));
 
   await page.locator('.appearance .theme-switch').hover();
   const shell = page.locator('.ran-menubar-viewport__shell');

@@ -111,10 +111,7 @@ export const mountHeaderTools = (): void => {
   const tools = document.querySelector<HTMLElement>('.header-tools');
   // Full peer list — selects stay triggers for this wash; menubar only owns the panel.
   if (tools) {
-    mountHoverFill(
-      tools,
-      '.search-open, .lang-switch, .theme-switch, .surface-switch, .header-github',
-    );
+    mountHoverFill(tools, '.search-open, .lang-switch, .theme-switch, .surface-switch, .header-github');
   }
 
   mountChromeMenus();
