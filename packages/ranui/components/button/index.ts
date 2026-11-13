@@ -12,7 +12,17 @@ import {
   syncSheetAttribute,
 } from '@/utils/component';
 import { isActivationKey } from '@/utils/a11y';
-import '@/components/icon/index';
+// Do not static-import `ranui/icon` here — that pulls the icon module into the
+// button consumer bundle and blows the packed-size budget. SSR hosts that need
+// icons in DSD must import `ranui/icon` (and usually `ranui/icons`) themselves
+// so `getSSRConstructor('r-icon')` resolves. Browser path: dynamic import below.
+
+/** Load `r-icon` as a separate chunk when this button needs a glyph. */
+const ensureIconDefined = (): void => {
+  if (typeof document === 'undefined') return;
+  if (typeof customElements !== 'undefined' && customElements.get('r-icon')) return;
+  void import('@/components/icon/index');
+};
 
 export class Button extends RanElement {
   _btn!: HTMLDivElement;
@@ -204,6 +214,8 @@ export class Button extends RanElement {
       }
       return;
     }
+
+    ensureIconDefined();
 
     if (this._iconElement) {
       this._iconElement.setAttribute('name', iconName);

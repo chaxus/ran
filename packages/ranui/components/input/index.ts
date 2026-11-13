@@ -1,7 +1,6 @@
 import { RanElement, falseList, isDisabled } from '@/utils/index';
 import { createRef, Div, EventManager, InputBuilder, Label, View } from '@/utils/builder';
 import { checkInternalsValidity, reportInternalsValidity } from '@/utils/a11y';
-import '@/components/icon/index';
 import {
   ensureShadowRoot,
   getStringAttribute,
@@ -17,6 +16,14 @@ import inputCss from './index.less?inline';
 import { defineSSR, getSSRConstructor } from '@/utils/ssr-registry';
 import { uiText } from '@/utils/ui-text';
 import { inputText } from './text';
+
+// Do not static-import `ranui/icon` — keep input's packed initial JS under budget.
+// SSR hosts import `ranui/icon` / `ranui/icons` themselves; browser loads it below.
+const ensureIconDefined = (): void => {
+  if (typeof document === 'undefined') return;
+  if (typeof customElements !== 'undefined' && customElements.get('r-icon')) return;
+  void import('@/components/icon/index');
+};
 
 // Monotonic id source so each field's inner <input> can be referenced by its
 // <label for>. A counter (not Math.random) keeps ids stable and SSR-safe.
@@ -656,6 +663,7 @@ export class Input extends RanElement {
    * @description: 处理 icon 属性的问题
    */
   dealIcon = (): void => {
+    ensureIconDefined();
     if (!this._icon) {
       const IconCtor = getSSRConstructor('r-icon');
       if (typeof document === 'undefined' && IconCtor) {
