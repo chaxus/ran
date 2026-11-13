@@ -353,6 +353,8 @@ describe('HTMLElementMock — serialize', () => {
     expect(html).toContain('<template shadowrootmode="open">');
     expect(html).toContain('<span>shadow</span>');
     expect(html).toContain('</template>');
+    // FOUC plates in ranui skip hosts that already paint via Declarative Shadow DOM.
+    expect(html).toContain('data-ran-dsd');
   });
 
   it('tagNameOverride replaces tagName in output', () => {
