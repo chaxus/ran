@@ -14,7 +14,7 @@ import {
   syncSheetAttribute,
 } from '@/utils/component';
 import inputCss from './index.less?inline';
-import { defineSSR } from '@/utils/ssr-registry';
+import { defineSSR, getSSRConstructor } from '@/utils/ssr-registry';
 import { uiText } from '@/utils/ui-text';
 import { inputText } from './text';
 
@@ -86,10 +86,18 @@ export class Input extends RanElement {
     const part = wrap.getAttribute('part') || '';
     const cls = typeof wrap.className === 'string' ? wrap.className : '';
     if (!part.includes('input') && !cls.includes('ran-input')) return false;
-    const content = wrap.children.item(0) as HTMLInputElement | null;
-    if (!content || content.tagName.toLowerCase() !== 'input') return false;
+    // DSD may include `<r-icon>` before the native input when `icon` was SSR'd.
+    let content: HTMLInputElement | null = null;
+    let icon: HTMLElement | undefined;
+    for (const child of Array.from(wrap.children)) {
+      const tag = child.tagName.toLowerCase();
+      if (tag === 'input') content = child as HTMLInputElement;
+      else if (tag === 'r-icon') icon = child as HTMLElement;
+    }
+    if (!content) return false;
     this._input = wrap as HTMLDivElement;
     this._inputContent = content;
+    this._icon = icon;
     if (!this._inputContent.id) this._inputContent.id = `ran-input-${++inputIdSeq}`;
     for (const child of this._shadowDom.children) {
       if (child === wrap) break;
@@ -649,15 +657,27 @@ export class Input extends RanElement {
    */
   dealIcon = (): void => {
     if (!this._icon) {
-      this._icon = View('r-icon').class('ran-icon').build() as HTMLElement;
-      this._inputContent.insertAdjacentElement('beforebegin', this._icon);
+      const IconCtor = getSSRConstructor('r-icon');
+      if (typeof document === 'undefined' && IconCtor) {
+        this._icon = new IconCtor() as HTMLElement;
+        this._icon.setAttribute('class', 'ran-icon');
+      } else {
+        this._icon = View('r-icon').class('ran-icon').build() as HTMLElement;
+      }
+      if (typeof this._inputContent.insertAdjacentElement === 'function') {
+        this._inputContent.insertAdjacentElement('beforebegin', this._icon);
+      } else {
+        this._inputContent.parentNode?.insertBefore(this._icon, this._inputContent);
+      }
     }
     if (this.icon) {
       this._icon.setAttribute('name', this.icon);
+      const nested = this._icon as HTMLElement & { _preSerialize?: () => void };
+      if (typeof document === 'undefined') nested._preSerialize?.();
     }
   };
   /**
-   * Paint label / placeholder / type into Declarative Shadow DOM before serialize.
+   * Paint label / placeholder / type / icon into Declarative Shadow DOM before serialize.
    * SSR `setAttribute` does not run `attributeChangedCallback`, so without this the
    * invite-card first paint is a bare field until the client upgrades (~hundreds of ms).
    */
@@ -668,6 +688,8 @@ export class Input extends RanElement {
     if (placeholder != null) this.listenPlaceholder('placeholder', placeholder);
     const type = this.getAttribute('type');
     if (type != null) this.listenType('type', type);
+    const icon = this.getAttribute('icon');
+    if (icon) this.dealIcon();
   }
   /**
    * @description: 聚合监听事件

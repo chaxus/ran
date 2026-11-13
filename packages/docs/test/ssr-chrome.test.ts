@@ -49,6 +49,13 @@ describe('ssrRanui', () => {
     expect(out).toContain('shadowrootmode="closed"');
   });
 
+  it('paints builtin button icons into Declarative Shadow DOM', async () => {
+    const html = `<r-button type="default" icon="user">Default Button</r-button>`;
+    const out = await ssrRanui(html);
+    expect(out).toMatch(/<r-icon[^>]*name="user"/);
+    expect(out).toMatch(/<svg[^>]*data-name="user"/);
+  });
+
   it('leaves pages without ranui unchanged', async () => {
     const html = '<main><p>no chrome</p></main>';
     expect(await ssrRanui(html)).toBe(html);
