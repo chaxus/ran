@@ -46,11 +46,16 @@ import 'ranui/theme-switch';
 import 'ranui/token-meter';
 import 'ranui/tool-card';
 import 'ranui/voice-button';
+import { registerBuiltinIcons } from 'ranui/icons';
 // Intentionally omitted (every-component EXEMPT — construct throws under Node):
 // ranui/content, ranui/link, ranui/modal, ranui/radar. They pass through bare;
 // hide/FOUC rules in ranui.css cover first paint. renderHTMLToString also
 // catches construct failures so a future barrel import stays safe.
 import { renderHTMLToString } from 'ranui/ssr-stream';
+
+// Sync SVG strings into the icon cache so button/input `icon="…"` hosts paint
+// glyphs into Declarative Shadow DOM (no post-upgrade lazy-chunk pop-in).
+registerBuiltinIcons();
 
 const HAS_RANUI = /<r-[a-z0-9-]+\b/i;
 

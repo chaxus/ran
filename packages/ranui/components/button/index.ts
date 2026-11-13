@@ -3,7 +3,7 @@ import buttonCss from './index.less?inline';
 import { Div, Slot, createRef, EventManager, View } from '@/utils/builder';
 import { RanElement } from '@/utils/ssr';
 import { isDisabled } from '@/utils/dom';
-import { defineSSR } from '@/utils/ssr-registry';
+import { defineSSR, getSSRConstructor } from '@/utils/ssr-registry';
 import {
   ensureShadowRoot,
   mountShadowTree,
@@ -12,6 +12,17 @@ import {
   syncSheetAttribute,
 } from '@/utils/component';
 import { isActivationKey } from '@/utils/a11y';
+// Do not static-import `ranui/icon` here — that pulls the icon module into the
+// button consumer bundle and blows the packed-size budget. SSR hosts that need
+// icons in DSD must import `ranui/icon` (and usually `ranui/icons`) themselves
+// so `getSSRConstructor('r-icon')` resolves. Browser path: dynamic import below.
+
+/** Load `r-icon` as a separate chunk when this button needs a glyph. */
+const ensureIconDefined = (): void => {
+  if (typeof document === 'undefined') return;
+  if (typeof customElements !== 'undefined' && customElements.get('r-icon')) return;
+  void import('@/components/icon/index');
+};
 
 export class Button extends RanElement {
   _btn!: HTMLDivElement;
@@ -60,11 +71,20 @@ export class Button extends RanElement {
     const cls = typeof btn.className === 'string' ? btn.className : '';
     if (!part.includes('button') && !cls.includes('ran-btn')) return false;
     const content = btn.children.item(0) as HTMLDivElement | null;
-    const slot = content?.children.item(0) as HTMLSlotElement | null;
-    if (!content || !slot || slot.tagName.toLowerCase() !== 'slot') return false;
+    if (!content) return false;
+    // DSD may include `<r-icon>` before the slot when `icon` was SSR'd.
+    let slot: HTMLSlotElement | null = null;
+    let icon: HTMLElement | undefined;
+    for (const child of Array.from(content.children)) {
+      const tag = child.tagName.toLowerCase();
+      if (tag === 'slot') slot = child as HTMLSlotElement;
+      else if (tag === 'r-icon') icon = child as HTMLElement;
+    }
+    if (!slot) return false;
     this._btn = btn as HTMLDivElement;
     this._btnContent = content;
     this._slot = slot;
+    this._iconElement = icon;
     return true;
   }
 
@@ -185,8 +205,7 @@ export class Button extends RanElement {
    * @description: 设置 button 的 icon
    */
   setIcon = (): void => {
-    // Only proceed in browser and if icon exists
-    if (typeof document === 'undefined' || !this._slot) return;
+    if (!this._slot || !this._btnContent) return;
     const iconName = this.icon;
     if (!iconName) {
       if (this._iconElement) {
@@ -196,14 +215,28 @@ export class Button extends RanElement {
       return;
     }
 
+    ensureIconDefined();
+
     if (this._iconElement) {
       this._iconElement.setAttribute('name', iconName);
     } else {
-      // 🏗️ Check if icon already exists (Hydration)
-      let icon = this._shadowDom.querySelector<HTMLElement>('r-icon');
+      // Prefer a real Icon instance under SSR so its shadow (+ SVG) serializes.
+      let icon = this._shadowDom.querySelector?.<HTMLElement>('r-icon') ?? undefined;
       if (!icon) {
-        icon = View('r-icon').attr('color', 'currentColor').class('icon').build() as HTMLElement;
-        this._slot.insertAdjacentElement('beforebegin', icon);
+        const IconCtor = getSSRConstructor('r-icon');
+        if (typeof document === 'undefined' && IconCtor) {
+          icon = new IconCtor() as HTMLElement;
+          icon.setAttribute('color', 'currentColor');
+          icon.setAttribute('class', 'icon');
+        } else {
+          icon = View('r-icon').attr('color', 'currentColor').class('icon').build() as HTMLElement;
+        }
+        // insertAdjacentElement is browser-only; the SSR mock uses insertBefore.
+        if (typeof this._slot.insertAdjacentElement === 'function') {
+          this._slot.insertAdjacentElement('beforebegin', icon);
+        } else {
+          this._btnContent.insertBefore(icon, this._slot);
+        }
       }
       this._iconElement = icon;
       this._iconElement.setAttribute('name', iconName);
@@ -216,10 +249,31 @@ export class Button extends RanElement {
     // depending on what happened to be slotted. ~1.15x reads as visually
     // balanced next to the label (Vercel's Geist button icons use the same
     // ratio: 16px icon / 14px text) and works the same for icon-only buttons.
-    const fontSize = Number.parseFloat(getComputedStyle(this._btnContent).fontSize) || 14;
+    // Under SSR there is no getComputedStyle — fall back to the default 14px.
+    const fontSize =
+      typeof getComputedStyle === 'function' && this._btnContent
+        ? Number.parseFloat(getComputedStyle(this._btnContent).fontSize) || 14
+        : 14;
     const finalSize = this.iconSize || `${Math.round(fontSize * 1.15)}`;
     this._iconElement.setAttribute('size', String(finalSize));
+
+    // SSR setAttribute does not run the icon's attributeChangedCallback — paint now.
+    const nested = this._iconElement as HTMLElement & { _preSerialize?: () => void; setIcon?: () => void };
+    if (typeof document === 'undefined') {
+      nested._preSerialize?.() ?? nested.setIcon?.();
+    }
   };
+
+  /**
+   * Paint `icon` into Declarative Shadow DOM. SSR `setAttribute` skips
+   * `attributeChangedCallback` / `connectedCallback`, so without this the glyph
+   * is missing until the client upgrades and lazy-loads the SVG (refresh flash).
+   */
+  _preSerialize(): void {
+    this.setIcon();
+    this.syncA11yState();
+    this.syncAriaLabel();
+  }
 
   mousedown = (event: MouseEvent): void => {
     if (currentDevice() !== 'pc') return;

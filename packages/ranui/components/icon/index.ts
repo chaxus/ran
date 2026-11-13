@@ -2,7 +2,13 @@ import iconCss from './index.less?inline';
 import { RanElement } from '@/utils/ssr';
 import { Div, EventManager, View } from '@/utils/builder';
 import { defineSSR } from '@/utils/ssr-registry';
-import { ensureShadowRoot, getStringAttribute, setStringAttribute, syncSheetAttribute } from '@/utils/component';
+import {
+  ensureShadowRoot,
+  getStringAttribute,
+  paintedShadowChild,
+  setStringAttribute,
+  syncSheetAttribute,
+} from '@/utils/component';
 
 const isDev = import.meta.env.DEV;
 
@@ -168,9 +174,22 @@ export class Icon extends RanElement {
   constructor() {
     super();
     this._shadowDom = ensureShadowRoot(this, iconCss);
+    // Keep Declarative Shadow DOM (button demos ship the SVG in first paint).
+    const painted = paintedShadowChild(this._shadowDom);
+    if (painted && this._bindPaintedTree(painted as HTMLElement)) return;
+
     const div = Div().class('ran-icon').part('ran-icon').build();
     this._shadowDom.appendChild(div);
     this._div = div;
+  }
+
+  private _bindPaintedTree(div: HTMLElement): boolean {
+    const cls = typeof div.className === 'string' ? div.className : '';
+    if (!cls.includes('ran-icon') && div.getAttribute('part') !== 'ran-icon') return false;
+    this._div = div;
+    const svg = div.querySelector?.('svg') as SVGElement | null;
+    if (svg) this._icon = svg;
+    return true;
   }
 
   get name(): string {
@@ -248,43 +267,65 @@ export class Icon extends RanElement {
    * @return {*}
    */
   setIcon = (): void => {
-    if (typeof document === 'undefined') return;
+    const iconName = this.name;
+    // DSD already painted this name — keep the SVG; only re-sync size/colour/a11y.
+    if (iconName && this._icon?.getAttribute('data-name') === iconName) {
+      this.setSize();
+      this.setColor();
+      this.setSpin();
+      this.syncA11y();
+      return;
+    }
     if (this._icon) {
       this._icon.remove();
       this._icon = undefined;
     }
-    const iconName = this.name;
-    if (iconName) {
-      if (iconName.startsWith('<svg')) {
-        this.renderSvg(iconName, iconName);
-      } else {
-        try {
-          const cacheKey = `inline:${iconName}`;
-          const svg = iconSvgCache.get(cacheKey);
-          if (!svg) {
-            const loader = builtinIconLoaderByName[iconName];
-            if (loader) {
-              this.lazyLoadBuiltinIcon(iconName, loader);
-              return;
-            }
-            if (this.isDev && hasStartedRegistration) {
-              console.warn(`[ranui-icon] icon not registered: ${iconName}`);
-            }
-            return;
-          }
-          if (svg && this.isSvgText(svg)) {
-            this.renderSvg(svg, iconName);
-          } else if (this.isDev) {
-            console.warn(`[ranui-icon] invalid svg text: ${iconName}`);
-          }
-        } catch (error) {
-          if (this.isDev) {
-            console.warn(`[ranui-icon] render icon failed: ${iconName}`, error);
-          }
+    if (typeof document === 'undefined' && this._div) {
+      // SSR mock: clear prior innerHTML so a re-serialize does not stack glyphs.
+      this._div.innerHTML = '';
+    }
+    if (!iconName) return;
+    if (iconName.startsWith('<svg')) {
+      this.renderSvg(iconName, iconName);
+      return;
+    }
+    try {
+      const cacheKey = `inline:${iconName}`;
+      const svg = iconSvgCache.get(cacheKey);
+      if (!svg) {
+        // Under SSR the host must have called `registerBuiltinIcons()` (or
+        // `registerIcon`) first — we deliberately do not static-import the
+        // eager builtin map here so the browser chunk stays name-lazy.
+        const loader = builtinIconLoaderByName[iconName];
+        if (loader && typeof document !== 'undefined') {
+          this.lazyLoadBuiltinIcon(iconName, loader);
+          return;
         }
+        if (this.isDev && hasStartedRegistration) {
+          console.warn(`[ranui-icon] icon not registered: ${iconName}`);
+        }
+        return;
+      }
+      if (this.isSvgText(svg)) {
+        this.renderSvg(svg, iconName);
+      } else if (this.isDev) {
+        console.warn(`[ranui-icon] invalid svg text: ${iconName}`);
+      }
+    } catch (error) {
+      if (this.isDev) {
+        console.warn(`[ranui-icon] render icon failed: ${iconName}`, error);
       }
     }
   };
+
+  /**
+   * Paint the glyph into Declarative Shadow DOM. SSR `setAttribute` does not run
+   * `attributeChangedCallback`, so without this a named icon stays empty until the
+   * client lazy-loads the SVG chunk (visible pop-in on refresh).
+   */
+  _preSerialize(): void {
+    this.setIcon();
+  }
 
   /**
    * A builtin icon name that isn't registered yet → fetch its SVG chunk on demand,
@@ -327,6 +368,19 @@ export class Icon extends RanElement {
   };
 
   renderSvg = (svgContent: string, iconName: string): void => {
+    if (typeof document === 'undefined') {
+      // No DOMParser under Node — inject the SVG markup into the shadow div.
+      const sized = this.size || '1em';
+      const cssSize = /^\d+(\.\d+)?$/.test(sized) ? `${sized}px` : sized;
+      const color = this.color || 'currentColor';
+      const marked = svgContent.replace(
+        /<svg\b([^>]*)>/i,
+        `<svg$1 part="icon-svg" data-name="${iconName}" style="width:${cssSize};height:${cssSize};color:${color};fill:${color};stroke:${color}">`,
+      );
+      this._div.innerHTML = marked;
+      this.syncA11y();
+      return;
+    }
     const svgElement = this.parseSvg(svgContent);
     if (svgElement) {
       this._icon = svgElement;

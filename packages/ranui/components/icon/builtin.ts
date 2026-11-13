@@ -30,6 +30,13 @@ for (const [path, svg] of Object.entries(modules)) {
 export const BUILTIN_ICON_NAMES = Object.keys(builtinIcons).sort();
 
 /**
+ * Sync lookup of a shipped SVG string. Used by SSR (`_preSerialize`) so Declarative
+ * Shadow DOM can paint the glyph before the client lazy-chunk arrives. Returns
+ * `undefined` for names that are not in the bundled set.
+ */
+export const getBuiltinIconSvg = (name: string): string | undefined => builtinIcons[name];
+
+/**
  * Register every icon ranui ships (see `RAN_ICON_NAMES`) so `<r-icon name="…">`
  * renders it. Idempotent; call once, in the browser, before the first `<r-icon>`
  * connects. Import cost: the bundled SVG strings (~15 KB). To register only a

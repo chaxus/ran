@@ -199,6 +199,12 @@ Do **not** add entrance motion or a wash to every control — that invents noise
 
 **Component ownership.** Pre-upgrade size lives in `components/<name>/fouc.less` next to `index.less`, reading the same `--ran-*` tokens as `:host`. `theme/undefined.less` only aggregates those files plus cross-cutting hide rules. Consumers load `ranui/style` (or `ranui.css`) in `<head>` and, when they SSR, call `renderHTMLToString` after importing the components — no site allowlist of tags.
 
+**Icons in SSR.** Named glyphs (`icon="home"`, `<r-icon name="…">`) need their SVG in the
+cache before serialize, or Declarative Shadow DOM ships an empty icon that pops in after
+the client lazy-chunk. Call `registerBuiltinIcons()` from `ranui/icons` (or `registerIcon`
+for a subset) once on the server before `renderHTMLToString`. Components paint through
+`_preSerialize`; upgrade keeps the painted SVG via `paintedShadowChild` bind.
+
 ## 8. Testing
 
 Test from the lowest layer that can actually catch the bug:
