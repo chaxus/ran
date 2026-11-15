@@ -69,6 +69,23 @@ describe('parseChineseNumber', () => {
     expect(parseChineseNumber('百')).toBe(100);
     expect(parseChineseNumber('千')).toBe(1000);
     expect(parseChineseNumber('万')).toBe(10000);
+    expect(parseChineseNumber('亿')).toBe(100_000_000);
+  });
+
+  it('parses 亿 / 億 and mixes with 万', () => {
+    expect(parseChineseNumber('一亿')).toBe(100_000_000);
+    expect(parseChineseNumber('三億')).toBe(300_000_000);
+    expect(parseChineseNumber('一亿两千万')).toBe(120_000_000);
+    expect(parseChineseNumber('一亿零一万')).toBe(100_010_000);
+    expect(parseChineseNumber('一亿五')).toBe(150_000_000);
+  });
+
+  it('parses 廿 / 卅 / 卌 as 20 / 30 / 40', () => {
+    expect(parseChineseNumber('廿')).toBe(20);
+    expect(parseChineseNumber('廿三')).toBe(23);
+    expect(parseChineseNumber('卅二')).toBe(32);
+    expect(parseChineseNumber('卌')).toBe(40);
+    expect(parseChineseNumber('廿万')).toBe(200_000);
   });
 });
 

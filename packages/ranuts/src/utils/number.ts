@@ -193,20 +193,36 @@ const CN_UNITS: Record<string, number> = {
   千: 1000,
 };
 
+/** Section multipliers (万 = 10⁴, 亿 = 10⁸). Additive so「一亿零一万」works. */
+const CN_SECTIONS: Record<string, number> = {
+  万: 10_000,
+  萬: 10_000,
+  亿: 100_000_000,
+  億: 100_000_000,
+};
+
+/** Shorthand tens: 廿 = 二十，卅 = 三十，卌 = 四十。*/
+const CN_TENS: Record<string, number> = {
+  廿: 2,
+  卅: 3,
+  卌: 4,
+};
+
 /**
- * @description: Chinese numerals to Arabic — unit forms (「十五」「一百零三」「三万」),
- * consecutive digits (「二零二四」), and common abbreviations (「一百一」→ 110). A bare
- * unit means one of that unit (「百」→ 100). Simplified and traditional alike (万/萬);
- * full-width digits are normalised first. Returns null when an unrecognised character
- * is present.
+ * @description: Chinese numerals to Arabic — unit forms (「十五」「一百零三」「三万」「一亿」),
+ * consecutive digits (「二零二四」), shorthand tens (「廿三」), and common abbreviations
+ * (「一百一」→ 110). A bare unit means one of that unit (「百」→ 100, 「亿」→ 1e8).
+ * Simplified and traditional alike (万/萬，亿/億); full-width digits are normalised first.
+ * Returns null when an unrecognised character is present.
  * @param {string} value
  * @return {number | null}
  * @example
  * ```ts
  * parseChineseNumber('二十三'); // 23
+ * parseChineseNumber('廿三'); // 23
  * parseChineseNumber('二零二四'); // 2024
  * parseChineseNumber('一百一'); // 110
- * parseChineseNumber('百'); // 100
+ * parseChineseNumber('一亿两千万'); // 120000000
  * parseChineseNumber('第三章'); // null — contains non-numeral characters, slice the number out first
  * ```
  */
@@ -220,27 +236,42 @@ export const parseChineseNumber = (value: string): number | null => {
   let lastUnit = 0;
   let digitRun = false;
   let zeroAfterUnit = false;
+
+  const applyUnit = (unit: number): void => {
+    // Bare「十」「百」「千」count as 1 of that unit (「百」→ 100).
+    section += (current || 1) * unit;
+    current = 0;
+    lastUnit = unit;
+    digitRun = false;
+    zeroAfterUnit = false;
+  };
+
+  const applySection = (multiplier: number): void => {
+    // Bare「万」「亿」is one of that section; otherwise fold section+current and add.
+    const amount = section + current;
+    result += (amount || (result === 0 ? 1 : 0)) * multiplier;
+    section = 0;
+    current = 0;
+    lastUnit = multiplier;
+    digitRun = false;
+    zeroAfterUnit = false;
+  };
+
   for (const char of text) {
     if (CN_DIGITS[char] !== undefined) {
       const digit = CN_DIGITS[char];
       current = digitRun ? current * 10 + digit : digit;
       digitRun = true;
       if (digit === 0 && lastUnit > 0) zeroAfterUnit = true;
+    } else if (CN_TENS[char] !== undefined) {
+      // 「廿」≡「二十」: apply the leading digit, then 十。
+      current = CN_TENS[char];
+      digitRun = false;
+      applyUnit(10);
     } else if (CN_UNITS[char] !== undefined) {
-      // Bare「十」「百」「千」count as 1 of that unit (「百」→ 100).
-      section += (current || 1) * CN_UNITS[char];
-      current = 0;
-      lastUnit = CN_UNITS[char];
-      digitRun = false;
-      zeroAfterUnit = false;
-    } else if (char === '万' || char === '萬') {
-      // Bare「万」is 10000; otherwise fold the section and scale.
-      result = (result + section + (current || (section === 0 && result === 0 ? 1 : 0))) * 10000;
-      section = 0;
-      current = 0;
-      lastUnit = 10000;
-      digitRun = false;
-      zeroAfterUnit = false;
+      applyUnit(CN_UNITS[char]);
+    } else if (CN_SECTIONS[char] !== undefined) {
+      applySection(CN_SECTIONS[char]);
     } else {
       return null;
     }
