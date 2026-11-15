@@ -164,8 +164,8 @@ describe('parseVttTimestamp', () => {
     expect(parseVttTimestamp('')).toBeUndefined();
   });
 
-  it('rejects a single-digit hour rather than dropping it and parsing the rest', () => {
-    expect(parseVttTimestamp('1:02:03.000')).toBeUndefined();
+  it('keeps a single-digit hour on a three-part timestamp (never drops it)', () => {
+    expect(parseVttTimestamp('1:02:03.000')).toBe(3723);
   });
 
   it('rejects prefixes, suffixes and out-of-range minutes or seconds', () => {
@@ -189,6 +189,10 @@ describe('parseVttCueTiming', () => {
     expect(parseVttCueTiming('00:00:05.000 --> 00:00:10.000 align:start line:0')).toEqual({ start: 5, end: 10 });
   });
 
+  it('accepts tabs around --> and a single-digit hour', () => {
+    expect(parseVttCueTiming('1:02:03.000\t-->\t1:02:08.000')).toEqual({ start: 3723, end: 3728 });
+  });
+
   it('returns undefined when there is no --> separator', () => {
     expect(parseVttCueTiming('00:00:05.000')).toBeUndefined();
   });
@@ -196,6 +200,14 @@ describe('parseVttCueTiming', () => {
   it('returns undefined when either side fails to parse', () => {
     expect(parseVttCueTiming('not-a-time --> 00:00:05.000')).toBeUndefined();
     expect(parseVttCueTiming('00:00:00.000 --> not-a-time')).toBeUndefined();
-    expect(parseVttCueTiming('1:02:03.000 --> 1:02:08.000')).toBeUndefined();
+  });
+
+  it('returns undefined when end is not greater than start', () => {
+    expect(parseVttCueTiming('00:00:05.000 --> 00:00:05.000')).toBeUndefined();
+    expect(parseVttCueTiming('00:00:10.000 --> 00:00:05.000')).toBeUndefined();
+  });
+
+  it('returns undefined without spaces around -->', () => {
+    expect(parseVttCueTiming('00:00:00.000-->00:00:05.000')).toBeUndefined();
   });
 });

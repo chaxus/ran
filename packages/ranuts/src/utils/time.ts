@@ -101,19 +101,33 @@ export const formatDuration = (seconds: number): string => {
 };
 
 /**
- * WebVTT timestamp authoring syntax ([W3C](https://www.w3.org/TR/webvtt1/#webvtt-timestamp)):
- * optional hours with 2+ digits, minutes/seconds in 00–59, `.` + 3-digit millis.
- * Anchored to the whole string so a leading junk digit cannot silently drop the hour.
- * Also accepts `,` before millis (SRT) for subtitle interchange.
+ * One WebVTT/SRT timestamp body (no anchors). Hours optional; when the first component is
+ * not exactly two digits ≤59 the browser collect algorithm treats it as hours — we accept
+ * one or more hour digits on a three-part form. Minutes/seconds are 00–59; millis are three
+ * digits after `.` (WebVTT) or `,` (SRT).
+ * @see https://www.w3.org/TR/webvtt1/#webvtt-timestamp
+ * @see https://www.w3.org/TR/webvtt1/#collect-a-webvtt-timestamp
  */
-const VTT_TIMESTAMP = /^(?:(\d{2,}):)?([0-5]\d):([0-5]\d)[.,](\d{3})$/;
+/**
+ * WebVTT/SRT timestamp shape: optional hours (1+ digits on the three-part form, matching
+ * the browser collect algorithm), minutes/seconds 00–59, three-digit millis after `.` or `,`.
+ * @see https://www.w3.org/TR/webvtt1/#webvtt-timestamp
+ * @see https://www.w3.org/TR/webvtt1/#collect-a-webvtt-timestamp
+ */
+const VTT_TIMESTAMP_SHAPE = '(?:\\d+:)?[0-5]\\d:[0-5]\\d[.,]\\d{3}';
+const VTT_TIMESTAMP = /^(?:(\d+):)?([0-5]\d):([0-5]\d)[.,](\d{3})$/;
+/** Full cue timings line: start --> end, optional settings; spaces/tabs around `-->`. */
+const VTT_CUE_TIMING = new RegExp(
+  `^\\s*(${VTT_TIMESTAMP_SHAPE})\\s+-->\\s+(${VTT_TIMESTAMP_SHAPE})(?:\\s+\\S.*)?\\s*$`,
+);
 
 /**
  * @description: Parse a WebVTT (or SRT-compatible) timestamp into seconds —
- * `HH:MM:SS.mmm` or `MM:SS.mmm`. Hours are optional but need at least two digits when
- * present; minutes and seconds must be `00`–`59`; millis are exactly three digits after
- * `.` or `,`. Matches the whole string, so malformed input returns `undefined` instead of
- * a wrong partial parse. The inverse of [`formatDuration`](#formatduration); used by
+ * `HH:MM:SS.mmm` or `MM:SS.mmm`. Minutes and seconds must be `00`–`59`; millis are exactly
+ * three digits after `.` or `,`. The whole string must match (no prefixes/suffixes), so a
+ * malformed value returns `undefined` instead of a wrong partial parse. Hour digits follow
+ * the browser collect algorithm (one or more when the three-part form is used), not a silent
+ * substring of `MM:SS.mmm`. The inverse of [`formatDuration`](#formatduration); used by
  * subtitle/thumbnail-sprite VTT readers (e.g. ranui player scrub previews).
  * @param {string} raw the timestamp text, e.g. `'00:01:05.250'` or `'01:05.250'`
  * @return {number | undefined} seconds, or `undefined` when `raw` is not a valid timestamp
@@ -123,7 +137,7 @@ const VTT_TIMESTAMP = /^(?:(\d{2,}):)?([0-5]\d):([0-5]\d)[.,](\d{3})$/;
  * parseVttTimestamp('00:00:05,000');    // 5 (SRT comma)
  * parseVttTimestamp('01:05.250');       // 65.25
  * parseVttTimestamp('01:00:00.000');    // 3600
- * parseVttTimestamp('1:02:03.000');     // undefined — hour needs 2+ digits (WebVTT syntax)
+ * parseVttTimestamp('1:02:03.000');     // 3723 — whole string, hour kept
  * parseVttTimestamp('not a timestamp'); // undefined
  * ```
  */
@@ -135,23 +149,26 @@ export const parseVttTimestamp = (raw: string): number | undefined => {
 };
 
 /**
- * @description: Parse a WebVTT cue timing line — `<start> --> <end>`, optionally followed by
- * cue settings (`align:start line:0`) after the end timestamp, which are ignored. Built on
+ * @description: Parse a WebVTT cue timing line — `<start> --> <end>`, with one or more
+ * spaces/tabs around `-->`, optionally followed by cue settings (`align:start line:0`)
+ * which are ignored. Requires `end > start` per the WebVTT cue timings rules. Built on
  * [`parseVttTimestamp`](#parsevtttimestamp) for each side.
  * @param {string} line the timing line, e.g. `'00:00:00.000 --> 00:00:05.000 align:start line:0'`
- * @return {{ start: number; end: number } | undefined} `undefined` when either side fails to parse
+ * @return {{ start: number; end: number } | undefined} `undefined` when the line shape is
+ *   wrong, either side fails to parse, or `end` is not greater than `start`
  * @example
  * ```ts
  * parseVttCueTiming('00:00:00.000 --> 00:00:05.000'); // { start: 0, end: 5 }
  * parseVttCueTiming('00:00:05.000 --> 00:00:10.000 align:start line:0'); // { start: 5, end: 10 }
+ * parseVttCueTiming('00:00:05.000 --> 00:00:05.000'); // undefined — end must be greater
  * ```
  */
 export const parseVttCueTiming = (line: string): { start: number; end: number } | undefined => {
-  const [startRaw, endRaw] = line.split('-->');
-  if (!startRaw || !endRaw) return undefined;
-  const start = parseVttTimestamp(startRaw);
-  const end = parseVttTimestamp(endRaw.trim().split(/\s+/)[0] ?? '');
-  if (start === undefined || end === undefined) return undefined;
+  const match = line.match(VTT_CUE_TIMING);
+  if (!match) return undefined;
+  const start = parseVttTimestamp(match[1]);
+  const end = parseVttTimestamp(match[2]);
+  if (start === undefined || end === undefined || !(end > start)) return undefined;
   return { start, end };
 };
 
