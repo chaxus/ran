@@ -176,11 +176,11 @@ import { /* … */ } from 'ranuts/utils';
 - `opacity(img: ImgSource, opacity: number) => ImgSource` — Apply an overall opacity to an image, returning an offscreen canvas.
 - `openPortBridge({ targetWindow, targetOrigin, name, }: OpenPortBridgeOptions) => PortBridge` — Initiator: create a MessageChannel, hand one port to the target window and keep the other.
 - `paginateText(text: string, box: TextBox, metrics: TextGridMetrics, options?: PaginateOptions) => PaginateResult` — Cut text into pages that fit `box`, given the type metrics.
-- `parseChineseNumber(value: string) => number | null` — Chinese numerals to Arabic, covering 「十五」「二十三」「一百零三」「一千零一」「三万」.
+- `parseChineseNumber(value: string) => number | null` — Chinese numerals to Arabic — unit forms (「十五」「一百零三」「三万」「一亿」),
 - `parseEnglishNumber(value: string) => number | null` — English ordinals to numbers, tried in order: Arabic digits, number words
 - `parseRomanNumber(value: string) => number | null` — Roman numerals to Arabic (either case, handling subtractive forms such as IV / IX). Returns null for invalid input.
-- `parseVttCueTiming(line: string) => { start: number; end: number; } | undefined` — Parse a WebVTT cue timing line — `<start> --> <end>`, optionally followed by
-- `parseVttTimestamp(raw: string) => number | undefined` — Parse a WebVTT/SRT-style timestamp — `HH:MM:SS.mmm` or `MM:SS.mmm` (the hour
+- `parseVttCueTiming(line: string) => { start: number; end: number; } | undefined` — Parse a WebVTT cue timing line — `<start> --> <end>`, with one or more
+- `parseVttTimestamp(raw: string) => number | undefined` — Parse a WebVTT (or SRT-compatible) timestamp into seconds —
 - `performanceTime() => number` — Current timestamp
 - `perToNum(str?: string) => number` — Convert a percentage string into a number
 - `prefersReducedMotion() => boolean` — Whether the reader asked for reduced motion. `false` where there is no window (SSR, Node).

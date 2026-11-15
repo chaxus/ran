@@ -67,7 +67,7 @@ description: 'ranuts 工具函数总览：函数式工具（debounce、throttle�
 | ------------------------------------- | -------------------------------- | ---------------------------------------- |
 | formatDuration                        | 将时间秒数转换为格式化字符串     | [formatDuration](./time_format.md)       |
 | formatRelative                        | 描述相对当前的时间（「3 天前」） | [formatRelative](./time_format.md)       |
-| parseVttTimestamp / parseVttCueTiming | 解析 WebVTT 字幕时间行           | [parseVttTimestamp](./time_format.md)    |
+| parseVttTimestamp / parseVttCueTiming | 将 WebVTT/SRT cue 时间戳解析为秒 | [parseVttTimestamp](./time_format.md)    |
 | performanceTime                       | 获取高精度时间戳                 | [performanceTime](./performance_time.md) |
 
 ## 设备检测

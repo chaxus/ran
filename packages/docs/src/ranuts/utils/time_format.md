@@ -99,26 +99,44 @@ to tell past from future.
 
 ## parseVttTimestamp / parseVttCueTiming
 
-Parsing for WebVTT subtitle/caption timing: the `hh:mm:ss.mmm --> hh:mm:ss.mmm` lines in a
-`.vtt` file.
+**WebVTT** (Web Video Text Tracks) is the W3C format browsers use for subtitles, captions
+and timed metadata — the `.vtt` files next to a video. A cue timing line looks like
+`00:00:00.000 --> 00:00:05.000`; ranui's player also uses the same timing lines in
+thumbnail sprite manifests.
 
-`parseVttTimestamp` parses one timestamp (`hh:` is optional) into seconds; `parseVttCueTiming`
-parses a full cue timing line: both sides, separated by `-->`, with any trailing cue settings
-(`align:start line:0`) ignored, into `{ start, end }`.
+`parseVttTimestamp` turns one timestamp into seconds. `parseVttCueTiming` matches a full
+`start --> end` line (spaces/tabs required around `-->`; trailing cue settings such as
+`align:start line:0` ignored) into `{ start, end }`, and requires `end > start`.
+
+### What is accepted
+
+| Part        | Rule                                                                                                                                        |
+| ----------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| Hours       | Optional; on a three-part form, one or more digits (browser [collect](https://www.w3.org/TR/webvtt1/#collect-a-webvtt-timestamp) behaviour) |
+| Minutes/sec | Exactly two digits, **00–59** ([authoring syntax](https://www.w3.org/TR/webvtt1/#webvtt-timestamp))                                         |
+| Millis      | Exactly three digits after `.` (WebVTT) or `,` (SRT interchange)                                                                            |
+| Whole input | Must match end-to-end — no prefixes, suffixes or partial matches                                                                            |
+| Cue line    | `timestamp --> timestamp` with whitespace around `-->`; `end` strictly greater than `start`                                                 |
+
+Whole-string matching is the important one: an unanchored regex can turn `1:02:03.000` into
+`123` by quietly matching only `02:03.000`. Here the hour is kept (`3723`) or the input is
+rejected — never a silent wrong time. Invalid cues return `undefined` so they can be skipped.
 
 ```js
 import { parseVttTimestamp, parseVttCueTiming } from 'ranuts/utils';
 
 parseVttTimestamp('00:00:05.000'); // 5
+parseVttTimestamp('00:00:05,000'); // 5 (SRT comma)
 parseVttTimestamp('01:05.250'); // 65.25
-parseVttTimestamp('not a timestamp'); // undefined
+parseVttTimestamp('01:00:00.000'); // 3600
+parseVttTimestamp('1:02:03.000'); // 3723
+parseVttTimestamp('-00:05.000'); // undefined
+parseVttTimestamp('00:99.000'); // undefined
 
 parseVttCueTiming('00:00:00.000 --> 00:00:05.000'); // { start: 0, end: 5 }
 parseVttCueTiming('00:00:05.000 --> 00:00:10.000 align:start line:0'); // { start: 5, end: 10 }
+parseVttCueTiming('00:00:05.000 --> 00:00:05.000'); // undefined — end must be greater
 ```
-
-Both return `undefined`, never throw, when the input doesn't match, so a malformed line in a
-subtitle file can be skipped rather than aborting the whole parse.
 
 ## Notes
 

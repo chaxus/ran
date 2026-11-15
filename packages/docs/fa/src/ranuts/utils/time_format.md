@@ -91,20 +91,24 @@ formatRelative(Date.now() - 2 * 86_400_000, { style: 'compact' }); // '2d'
 
 خواندن زمان‌بندی زیرنویس WebVTT: همان خط‌های `hh:mm:ss.mmm --> hh:mm:ss.mmm` در یک فایل `.vtt`.
 
-`parseVttTimestamp` یک مهر زمانی را (که `hh:` در آن اختیاری است) به ثانیه تبدیل می‌کند؛ `parseVttCueTiming` یک خط زمان‌بندی کامل را می‌خواند، یعنی هر دو سوی جداشده با `-->` را به `{ start, end }` تبدیل می‌کند و تنظیم‌های نشانه‌ای که در انتها بیایند (`align:start line:0`) را نادیده می‌گیرد.
+`parseVttTimestamp` یک مهر زمانی را به ثانیه تبدیل می‌کند. `parseVttCueTiming` خط کامل `start --> end` را می‌خواند (پیرامون `-->` باید فاصله باشد؛ تنظیم‌های پایانی نادیده گرفته می‌شوند)، `{ start, end }` برمی‌گرداند و `end > start` می‌خواهد.
+
+### چه چیزی پذیرفته می‌شود
+
+مهر باید از سر تا ته رشته جور درآید (برش خاموش نه). دقیقه/ثانیه در ۰۰–۵۹؛ میلی‌ثانیه سه رقم (`.` یا `,` در SRT). وگرنه `undefined`.
 
 ```js
 import { parseVttTimestamp, parseVttCueTiming } from 'ranuts/utils';
 
 parseVttTimestamp('00:00:05.000'); // 5
 parseVttTimestamp('01:05.250'); // 65.25
+parseVttTimestamp('1:02:03.000'); // 3723
 parseVttTimestamp('not a timestamp'); // undefined
 
 parseVttCueTiming('00:00:00.000 --> 00:00:05.000'); // { start: 0, end: 5 }
 parseVttCueTiming('00:00:05.000 --> 00:00:10.000 align:start line:0'); // { start: 5, end: 10 }
+parseVttCueTiming('00:00:05.000 --> 00:00:05.000'); // undefined
 ```
-
-هر دو وقتی ورودی جور درنیاید `undefined` برمی‌گردانند و هرگز خطا نمی‌اندازند، پس یک خط بدشکل در فایل زیرنویس را می‌توان رد کرد به‌جای آنکه کل خواندن از هم بپاشد.
 
 ## یادداشت‌ها
 
