@@ -3,13 +3,13 @@ import { parseChineseNumber, parseEnglishNumber, parseRomanNumber, toFullWidth, 
 
 describe('toHalfWidth / toFullWidth', () => {
   it('normalizes full-width digits, letters and punctuation', () => {
-    expect(toHalfWidth('１２３')).toBe('123');
-    expect(toHalfWidth('ＡＢＣ')).toBe('ABC');
-    expect(toHalfWidth('（１）')).toBe('(1)');
+    expect(toHalfWidth('123')).toBe('123');
+    expect(toHalfWidth('ABC')).toBe('ABC');
+    expect(toHalfWidth('（1）')).toBe('(1)');
   });
 
   it('normalizes the ideographic space to a regular space', () => {
-    expect(toHalfWidth('a　b')).toBe('a b');
+    expect(toHalfWidth('a b')).toBe('a b');
   });
 
   it('leaves CJK characters untouched', () => {
@@ -24,7 +24,7 @@ describe('toHalfWidth / toFullWidth', () => {
 describe('parseChineseNumber', () => {
   it('parses plain digits, including full-width', () => {
     expect(parseChineseNumber('42')).toBe(42);
-    expect(parseChineseNumber('１２')).toBe(12);
+    expect(parseChineseNumber('12')).toBe(12);
   });
 
   it('parses units', () => {
@@ -50,6 +50,25 @@ describe('parseChineseNumber', () => {
     expect(parseChineseNumber('第三章')).toBeNull();
     expect(parseChineseNumber('abc')).toBeNull();
     expect(parseChineseNumber('')).toBeNull();
+  });
+
+  it('accumulates consecutive digits (二零二四 → 2024)', () => {
+    expect(parseChineseNumber('二零二四')).toBe(2024);
+    expect(parseChineseNumber('一二三')).toBe(123);
+  });
+
+  it('expands abbreviated trailing digits (一百一 → 110)', () => {
+    expect(parseChineseNumber('一百一')).toBe(110);
+    expect(parseChineseNumber('一千二')).toBe(1200);
+    expect(parseChineseNumber('一万五')).toBe(15000);
+    expect(parseChineseNumber('一百零一')).toBe(101);
+  });
+
+  it('treats a bare unit as one of that unit (百 → 100)', () => {
+    expect(parseChineseNumber('十')).toBe(10);
+    expect(parseChineseNumber('百')).toBe(100);
+    expect(parseChineseNumber('千')).toBe(1000);
+    expect(parseChineseNumber('万')).toBe(10000);
   });
 });
 

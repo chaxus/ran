@@ -167,10 +167,9 @@ export const addNumSym = (value: string | number, flag?: string | number): strin
 };
 
 /* ── Numbers written for humans ────────────────────────────────────────────
- * Parse ordinals as people write them: 「第二十三章」, "Chapter XIV", "Part Three".
- * All three parsers share one rule: **return null unless the whole input parsed**, never a
- * guess. These are mostly used to decide "is this line a heading", and one wrong number
- * poisons the entire sequence check.
+ * Convert numerals as people write them: Chinese「二十三」「二零二四」, Roman "XIV",
+ * English "Three". All three share one rule: **return null unless the whole input
+ * parsed**, never a partial guess.
  */
 
 const CN_DIGITS: Record<string, number> = {
@@ -195,15 +194,19 @@ const CN_UNITS: Record<string, number> = {
 };
 
 /**
- * @description: Chinese numerals to Arabic, covering 「十五」「二十三」「一百零三」「一千零一」「三万」.
- * Simplified and traditional alike (万/萬); full-width digits are normalised first. Returns
- * null when an unrecognised character is present.
+ * @description: Chinese numerals to Arabic — unit forms (「十五」「一百零三」「三万」),
+ * consecutive digits (「二零二四」), and common abbreviations (「一百一」→ 110). A bare
+ * unit means one of that unit (「百」→ 100). Simplified and traditional alike (万/萬);
+ * full-width digits are normalised first. Returns null when an unrecognised character
+ * is present.
  * @param {string} value
  * @return {number | null}
  * @example
  * ```ts
  * parseChineseNumber('二十三'); // 23
- * parseChineseNumber('一百零三'); // 103
+ * parseChineseNumber('二零二四'); // 2024
+ * parseChineseNumber('一百一'); // 110
+ * parseChineseNumber('百'); // 100
  * parseChineseNumber('第三章'); // null — contains non-numeral characters, slice the number out first
  * ```
  */
@@ -214,20 +217,37 @@ export const parseChineseNumber = (value: string): number | null => {
   let result = 0;
   let section = 0;
   let current = 0;
+  let lastUnit = 0;
+  let digitRun = false;
+  let zeroAfterUnit = false;
   for (const char of text) {
     if (CN_DIGITS[char] !== undefined) {
-      current = CN_DIGITS[char];
+      const digit = CN_DIGITS[char];
+      current = digitRun ? current * 10 + digit : digit;
+      digitRun = true;
+      if (digit === 0 && lastUnit > 0) zeroAfterUnit = true;
     } else if (CN_UNITS[char] !== undefined) {
-      // In 「十五」 the 「十」 has no digit before it, so it counts as 1
-      section += (current || (char === '十' ? 1 : 0)) * CN_UNITS[char];
+      // Bare「十」「百」「千」count as 1 of that unit (「百」→ 100).
+      section += (current || 1) * CN_UNITS[char];
       current = 0;
+      lastUnit = CN_UNITS[char];
+      digitRun = false;
+      zeroAfterUnit = false;
     } else if (char === '万' || char === '萬') {
-      result = (result + section + current) * 10000;
+      // Bare「万」is 10000; otherwise fold the section and scale.
+      result = (result + section + (current || (section === 0 && result === 0 ? 1 : 0))) * 10000;
       section = 0;
       current = 0;
+      lastUnit = 10000;
+      digitRun = false;
+      zeroAfterUnit = false;
     } else {
       return null;
     }
+  }
+  // 「一百一」omits the next-smaller unit → 110; 「一百零一」keeps ones via 零 → 101.
+  if (current > 0 && current < 10 && lastUnit >= 100 && !zeroAfterUnit) {
+    current *= lastUnit / 10;
   }
   return result + section + current;
 };

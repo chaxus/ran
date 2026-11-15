@@ -40,7 +40,7 @@ const TOKEN = /YYYY|YY|MM|M|DD|D|HH|H|hh|h|mm|m|ss|s|SSS|A|a|\[([^[\]]*)]/g;
  * ```ts
  * formatDate();                                          // '2026-07-25 14:30:00'
  * formatDate(1753425000000, 'YYYY/MM/DD');               // '2026/07/25'
- * formatDate(new Date(), 'YYYY[年]MM[月]DD[日] hh:mm a'); // '2026年07月25日 02:30 pm' (escaped literals)
+ * formatDate(new Date(), 'YYYY[年]MM[月]DD[日] hh:mm a'); // '2026 年 07 月 25 日 02:30 pm' (escaped literals)
  * ```
  */
 export const formatDate = (value?: DateInput, pattern: string = 'YYYY-MM-DD HH:mm:ss'): string => {
@@ -100,20 +100,25 @@ export const formatDuration = (seconds: number): string => {
   return hour === 0 ? `${pad(minute)}:${second}` : `${pad(hour)}:${pad(minute)}:${second}`;
 };
 
-const VTT_TIMESTAMP = /(?:(\d{2,}):)?(\d{2}):(\d{2})\.(\d{3})/;
+/** Whole-string WebVTT/SRT timestamp; hours need 2+ digits when present (WebVTT). */
+const VTT_TIMESTAMP = /^(?:(\d{2,}):)?(\d{2}):(\d{2})[.,](\d{3})$/;
 
 /**
  * @description: Parse a WebVTT/SRT-style timestamp — `HH:MM:SS.mmm` or `MM:SS.mmm` (the hour
- * component is optional) — into seconds. The inverse of [`formatDuration`](#formatduration),
- * for anything that reads cue timings back out of subtitle/thumbnail-sprite manifests rather
- * than formatting a duration for display.
+ * component is optional; when present it needs at least two digits) — into seconds. Accepts
+ * either `.` or `,` before the milliseconds (SRT). The inverse of
+ * [`formatDuration`](#formatduration), for anything that reads cue timings back out of
+ * subtitle/thumbnail-sprite manifests rather than formatting a duration for display.
  * @param {string} raw the timestamp text, e.g. `'00:01:05.250'` or `'01:05.250'`
  * @return {number | undefined} seconds, or `undefined` when `raw` doesn't match the pattern
+ *   or minutes/seconds fall outside `00`–`59`
  * @example
  * ```ts
  * parseVttTimestamp('00:00:05.000');    // 5
+ * parseVttTimestamp('00:00:05,000');    // 5 (SRT)
  * parseVttTimestamp('01:05.250');       // 65.25
  * parseVttTimestamp('01:00:00.000');    // 3600
+ * parseVttTimestamp('1:02:03.000');     // undefined — hour needs 2+ digits
  * parseVttTimestamp('not a timestamp'); // undefined
  * ```
  */
@@ -121,7 +126,10 @@ export const parseVttTimestamp = (raw: string): number | undefined => {
   const match = raw.trim().match(VTT_TIMESTAMP);
   if (!match) return undefined;
   const [, hours, minutes, seconds, millis] = match;
-  return (hours ? Number(hours) * 3600 : 0) + Number(minutes) * 60 + Number(seconds) + Number(millis) / 1000;
+  const minute = Number(minutes);
+  const second = Number(seconds);
+  if (minute > 59 || second > 59) return undefined;
+  return (hours ? Number(hours) * 3600 : 0) + minute * 60 + second + Number(millis) / 1000;
 };
 
 /**

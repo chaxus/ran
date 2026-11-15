@@ -163,6 +163,21 @@ describe('parseVttTimestamp', () => {
     expect(parseVttTimestamp('not a timestamp')).toBeUndefined();
     expect(parseVttTimestamp('')).toBeUndefined();
   });
+
+  it('rejects a single-digit hour rather than dropping it and parsing the rest', () => {
+    expect(parseVttTimestamp('1:02:03.000')).toBeUndefined();
+  });
+
+  it('rejects prefixes, suffixes and out-of-range minutes or seconds', () => {
+    expect(parseVttTimestamp('-00:05.000')).toBeUndefined();
+    expect(parseVttTimestamp('x00:01.000 extra')).toBeUndefined();
+    expect(parseVttTimestamp('00:99.000')).toBeUndefined();
+    expect(parseVttTimestamp('00:00:60.000')).toBeUndefined();
+  });
+
+  it('accepts the SRT comma millisecond separator', () => {
+    expect(parseVttTimestamp('00:00:05,000')).toBeCloseTo(5, 5);
+  });
 });
 
 describe('parseVttCueTiming', () => {
@@ -181,5 +196,6 @@ describe('parseVttCueTiming', () => {
   it('returns undefined when either side fails to parse', () => {
     expect(parseVttCueTiming('not-a-time --> 00:00:05.000')).toBeUndefined();
     expect(parseVttCueTiming('00:00:00.000 --> not-a-time')).toBeUndefined();
+    expect(parseVttCueTiming('1:02:03.000 --> 1:02:08.000')).toBeUndefined();
   });
 });

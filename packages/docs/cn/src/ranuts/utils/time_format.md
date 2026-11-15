@@ -93,20 +93,22 @@ formatRelative(Date.now() - 2 * 86_400_000, { style: 'compact' }); // '2d'
 
 解析 WebVTT 字幕的时间信息，即 `.vtt` 文件里 `hh:mm:ss.mmm --> hh:mm:ss.mmm` 这样的行。
 
-`parseVttTimestamp` 把单个时间戳（`hh:` 部分可选）解析成秒数；`parseVttCueTiming` 解析一整行 cue 时间信息，即用 `-->` 分隔的两端，并忽略结尾附带的 cue 设置（比如 `align:start line:0`），返回 `{ start, end }`。
+`parseVttTimestamp` 把单个时间戳（`hh:` 可选；出现时至少两位）解析成秒数，毫秒前的分隔符支持 `.` 或 `,`。`parseVttCueTiming` 解析一整行 cue 时间信息，即用 `-->` 分隔的两端，并忽略结尾附带的 cue 设置（比如 `align:start line:0`），返回 `{ start, end }`。
 
 ```js
 import { parseVttTimestamp, parseVttCueTiming } from 'ranuts/utils';
 
 parseVttTimestamp('00:00:05.000'); // 5
+parseVttTimestamp('00:00:05,000'); // 5（SRT）
 parseVttTimestamp('01:05.250'); // 65.25
+parseVttTimestamp('1:02:03.000'); // undefined —— 小时至少两位
 parseVttTimestamp('不是时间戳'); // undefined
 
 parseVttCueTiming('00:00:00.000 --> 00:00:05.000'); // { start: 0, end: 5 }
 parseVttCueTiming('00:00:05.000 --> 00:00:10.000 align:start line:0'); // { start: 5, end: 10 }
 ```
 
-两者在输入不匹配时都返回 `undefined`，不会抛出异常，这样字幕文件里格式错误的一行可以直接跳过，不会中断整个解析过程。
+两者在整串不匹配（或分/秒超出 `00`–`59`）时都返回 `undefined`，不会抛出异常，也不会静默丢掉前导小时数字——字幕文件里格式错误的一行可以直接跳过。
 
 ## 注意事项
 

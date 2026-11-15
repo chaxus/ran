@@ -102,7 +102,8 @@ to tell past from future.
 Parsing for WebVTT subtitle/caption timing: the `hh:mm:ss.mmm --> hh:mm:ss.mmm` lines in a
 `.vtt` file.
 
-`parseVttTimestamp` parses one timestamp (`hh:` is optional) into seconds; `parseVttCueTiming`
+`parseVttTimestamp` parses one timestamp (`hh:` is optional; when present it needs at least
+two digits) into seconds, accepting `.` or `,` before the milliseconds. `parseVttCueTiming`
 parses a full cue timing line: both sides, separated by `-->`, with any trailing cue settings
 (`align:start line:0`) ignored, into `{ start, end }`.
 
@@ -110,15 +111,18 @@ parses a full cue timing line: both sides, separated by `-->`, with any trailing
 import { parseVttTimestamp, parseVttCueTiming } from 'ranuts/utils';
 
 parseVttTimestamp('00:00:05.000'); // 5
+parseVttTimestamp('00:00:05,000'); // 5 (SRT)
 parseVttTimestamp('01:05.250'); // 65.25
+parseVttTimestamp('1:02:03.000'); // undefined — hour needs 2+ digits
 parseVttTimestamp('not a timestamp'); // undefined
 
 parseVttCueTiming('00:00:00.000 --> 00:00:05.000'); // { start: 0, end: 5 }
 parseVttCueTiming('00:00:05.000 --> 00:00:10.000 align:start line:0'); // { start: 5, end: 10 }
 ```
 
-Both return `undefined`, never throw, when the input doesn't match, so a malformed line in a
-subtitle file can be skipped rather than aborting the whole parse.
+Both return `undefined`, never throw, when the input doesn't match the whole string (or
+minutes/seconds fall outside `00`–`59`), so a malformed line in a subtitle file can be
+skipped rather than aborting the whole parse — and never silently drop a leading hour digit.
 
 ## Notes
 
