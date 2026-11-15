@@ -6,11 +6,11 @@
 
 ## API
 
-| 函数                        | 支持                                                        |
-| --------------------------- | ----------------------------------------------------------- |
+| 函数                        | 支持                                                                            |
+| --------------------------- | ------------------------------------------------------------------------------- |
 | `parseChineseNumber(value)` | 数字（半角与全角）、`一二三…`、单位 `十百千万/萬亿/億`、简写 `廿卅卌`，简繁通用 |
-| `parseRomanNumber(value)`   | `IVXLCDM`，大小写皆可，支持减法记法（`IV`、`IX`）           |
-| `parseEnglishNumber(value)` | 数字、英文数词 `one`–`twenty`，再退回罗马数字               |
+| `parseRomanNumber(value)`   | `IVXLCDM`，大小写皆可，支持减法记法（`IV`、`IX`）                               |
+| `parseEnglishNumber(value)` | 数字、英文数词 `one`–`twenty`，再退回罗马数字                                   |
 
 相关字符串工具：`toHalfWidth(value)` / `toFullWidth(value)` 做全半角归一化，
 `parseChineseNumber` 已内置调用。

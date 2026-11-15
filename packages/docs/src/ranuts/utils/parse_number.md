@@ -8,11 +8,11 @@ parsed in full.
 
 ## API
 
-| Function                    | Accepts                                                                                 |
-| --------------------------- | --------------------------------------------------------------------------------------- |
+| Function                    | Accepts                                                                                                          |
+| --------------------------- | ---------------------------------------------------------------------------------------------------------------- |
 | `parseChineseNumber(value)` | Digits (half- and full-width), `一二三…`, units `十百千万/萬亿/億`, shorthand `廿卅卌`, simplified + traditional |
-| `parseRomanNumber(value)`   | `IVXLCDM`, any case, subtractive notation (`IV`, `IX`)                                  |
-| `parseEnglishNumber(value)` | Digits, English number words `one`–`twenty`, then Roman numerals                        |
+| `parseRomanNumber(value)`   | `IVXLCDM`, any case, subtractive notation (`IV`, `IX`)                                                           |
+| `parseEnglishNumber(value)` | Digits, English number words `one`–`twenty`, then Roman numerals                                                 |
 
 Related string helpers: `toHalfWidth(value)` / `toFullWidth(value)` normalize full-width
 characters, which `parseChineseNumber` applies for you.
