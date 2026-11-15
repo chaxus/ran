@@ -240,7 +240,12 @@ describe('r-radar contract', () => {
     const radar = mount();
     const ctx = makeCtx();
     const fonts: string[] = [];
-    Object.defineProperty(ctx, 'font', { set: (font: string) => fonts.push(font), get: () => fonts.at(-1) ?? '' });
+    Object.defineProperty(ctx, 'font', {
+      set: (font: string) => {
+        fonts.push(font);
+      },
+      get: () => fonts.at(-1) ?? '',
+    });
     vi.spyOn(radar.abilityRadarChart, 'getContext').mockReturnValue(ctx as any);
     Object.defineProperty(radar.abilityRadarChartContainer, 'clientWidth', { value: 320, configurable: true });
     Object.defineProperty(radar.abilityRadarChartContainer, 'clientHeight', { value: 180, configurable: true });

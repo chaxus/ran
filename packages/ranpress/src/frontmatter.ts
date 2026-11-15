@@ -93,7 +93,7 @@ const parseValue = (raw: string): FrontmatterValue => {
  * is an error, because the alternative is silently treating the whole post as metadata.
  */
 export const parseFrontmatter = (raw: string, file: string): ParsedFile => {
-  // Strip a UTF-8 BOM: it would make the first line `﻿---`, which matches nothing,
+  // Strip a UTF-8 BOM: it would make the first line `\uFEFF---`, which matches nothing,
   // and the frontmatter would be silently rendered into the page as prose.
   const text = raw.charCodeAt(0) === 0xfeff ? raw.slice(1) : raw;
   // Split on \r?\n, not \n. A Windows checkout (core.autocrlf) turns every line into

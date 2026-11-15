@@ -475,7 +475,8 @@ const enhanceCodeBlock = (pre: HTMLPreElement, ctx: EnhanceContext): { themed?: 
 
   const token = ++renderSeq;
   const actions: HTMLElement[] = [];
-  let view!: CodeView;
+  // Filled after the container exists; copy/download handlers close over this object.
+  const view = {} as CodeView;
   let copy: CodeCopyControl | undefined;
   if (ctx.copy) {
     const status = Span().class('ran-md-copy-status').part('copy-status').attr('role', 'status').build();
@@ -520,7 +521,7 @@ const enhanceCodeBlock = (pre: HTMLPreElement, ctx: EnhanceContext): { themed?: 
   if (ctx.lineNumbers) container.dataset.lineNumbers = '';
   pre.replaceWith(container);
 
-  view = {
+  Object.assign(view, {
     container,
     pre: slot.pre,
     code: slot.pre.firstElementChild as HTMLElement,
@@ -529,7 +530,7 @@ const enhanceCodeBlock = (pre: HTMLPreElement, ctx: EnhanceContext): { themed?: 
     revision: token,
     ctx,
     copy,
-  };
+  });
   codeViews.set(container, view);
   requestHighlight(view);
   return { reader: view };
@@ -550,7 +551,7 @@ const enhanceCodeBlock = (pre: HTMLPreElement, ctx: EnhanceContext): { themed?: 
  * Characters that cannot be part of a hostname but are ordinary prose in CJK writing.
  *
  * GFM ends an autolink at whitespace, which was written for English. In Chinese, Japanese and
- * Korean the next word follows a URL immediately — `https://example.com获取内容` is an address
+ * Korean the next word follows a URL immediately — `https://example.com 获取内容` is an address
  * and four characters — so GFM reads the whole run as one address and the link navigates to a
  * punycoded domain nobody named. A wrong link is worse than no link.
  */
