@@ -120,7 +120,7 @@ export const observeDocumentTheme = (listener: DocumentThemeListener): (() => vo
   if (!documentThemeObserver) {
     documentThemeObserver = new MutationObserver((records) => {
       const changed = new Set(records.map((record) => record.attributeName ?? ''));
-      for (const notify of [...documentThemeListeners]) notify(changed);
+      for (const notify of Array.from(documentThemeListeners)) notify(changed);
     });
     documentThemeObserver.observe(document.documentElement, {
       attributes: true,

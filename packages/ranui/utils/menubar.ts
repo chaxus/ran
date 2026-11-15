@@ -475,7 +475,7 @@ export const mountMenubarHandoff = (options: MenubarHandoffOptions): (() => void
     const enterMotion = direction === 'right' ? 'from-end' : 'from-start';
     const incoming = buildLayer(harvest, enterMotion, onPick);
     // Drop every prior layer before paint — no dual-menu residual.
-    for (const stale of [...clip.querySelectorAll<HTMLElement>(`.${VIEWPORT_CLASS}__layer`)]) {
+    for (const stale of clip.querySelectorAll<HTMLElement>(`.${VIEWPORT_CLASS}__layer`)) {
       stale.remove();
     }
     ensureHoverInClip();
