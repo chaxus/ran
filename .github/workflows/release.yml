@@ -72,6 +72,14 @@ jobs:
       - name: Verify repository scripts
         run: pnpm verify:scripts
 
+      # Subset prepares only build up through the selected package; docs/apps still
+      # typecheck against ranui's dist, so build the full library set here.
+      - name: Build libraries for workspace typecheck
+        run: |
+          pnpm -F ranuts build
+          pnpm -F @alixex/ranview build
+          pnpm -F ranui build
+
       - name: Check source and documentation
         run: |
           pnpm lint:es
