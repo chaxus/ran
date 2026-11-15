@@ -91,24 +91,42 @@ formatRelative(Date.now() - 2 * 86_400_000, { style: 'compact' }); // '2d'
 
 ## parseVttTimestamp / parseVttCueTiming
 
-解析 WebVTT 字幕的时间信息，即 `.vtt` 文件里 `hh:mm:ss.mmm --> hh:mm:ss.mmm` 这样的行。
+**WebVTT**（Web Video Text Tracks）是浏览器用来挂字幕、说明文字和定时元数据的 W3C 格式，
+也就是视频旁边的 `.vtt` 文件。一条 cue 时间行形如 `00:00:00.000 --> 00:00:05.000`；
+ranui 播放器的缩略图 sprite 清单也用同一套时间行。
 
-`parseVttTimestamp` 把单个时间戳（`hh:` 可选；出现时至少两位）解析成秒数，毫秒前的分隔符支持 `.` 或 `,`。`parseVttCueTiming` 解析一整行 cue 时间信息，即用 `-->` 分隔的两端，并忽略结尾附带的 cue 设置（比如 `align:start line:0`），返回 `{ start, end }`。
+`parseVttTimestamp` 把单个时间戳解析成秒数。`parseVttCueTiming` 解析完整的
+`start --> end` 行（忽略末尾的 cue 设置，例如 `align:start line:0`），返回 `{ start, end }`。
+
+### 接受什么
+
+对齐 [WebVTT 时间戳书写语法](https://www.w3.org/TR/webvtt1/#webvtt-timestamp)：
+
+| 部分   | 规则                                              |
+| ------ | ------------------------------------------------- |
+| 小时   | 可选；出现时**至少两位**（`01:…`，不是 `1:…`）   |
+| 分/秒  | 恰好两位，且在 **00–59**                          |
+| 毫秒   | 小数点后恰好三位；`.`（WebVTT）或 `,`（SRT 互通） |
+| 整串   | 必须从头到尾匹配——不要前缀、后缀或半截匹配        |
+
+最后一条最关键：未锚定的正则会把 `1:02:03.000` 静默解析成 `123`（只吃到了 `02:03.000`）。
+整串匹配（与 pycaption 等库的校验形态一致）从机制上消除这类错误。非法输入返回
+`undefined`，坏掉的 cue 可以跳过，而不是把后面所有时间都弄歪。
 
 ```js
 import { parseVttTimestamp, parseVttCueTiming } from 'ranuts/utils';
 
 parseVttTimestamp('00:00:05.000'); // 5
-parseVttTimestamp('00:00:05,000'); // 5（SRT）
+parseVttTimestamp('00:00:05,000'); // 5（SRT 逗号）
 parseVttTimestamp('01:05.250'); // 65.25
+parseVttTimestamp('01:00:00.000'); // 3600
 parseVttTimestamp('1:02:03.000'); // undefined —— 小时至少两位
-parseVttTimestamp('不是时间戳'); // undefined
+parseVttTimestamp('-00:05.000'); // undefined
+parseVttTimestamp('00:99.000'); // undefined
 
 parseVttCueTiming('00:00:00.000 --> 00:00:05.000'); // { start: 0, end: 5 }
 parseVttCueTiming('00:00:05.000 --> 00:00:10.000 align:start line:0'); // { start: 5, end: 10 }
 ```
-
-两者在整串不匹配（或分/秒超出 `00`–`59`）时都返回 `undefined`，不会抛出异常，也不会静默丢掉前导小时数字——字幕文件里格式错误的一行可以直接跳过。
 
 ## 注意事项
 

@@ -181,7 +181,7 @@ import { /* … */ } from 'ranuts/utils';
 - `parseEnglishNumber(value: string) => number | null` — English ordinals to numbers, tried in order: Arabic digits, number words
 - `parseRomanNumber(value: string) => number | null` — Roman numerals to Arabic (either case, handling subtractive forms such as IV / IX). Returns null for invalid input.
 - `parseVttCueTiming(line: string) => { start: number; end: number; } | undefined` — Parse a WebVTT cue timing line — `<start> --> <end>`, optionally followed by
-- `parseVttTimestamp(raw: string) => number | undefined` — Parse a WebVTT/SRT-style timestamp — `HH:MM:SS.mmm` or `MM:SS.mmm` (the hour
+- `parseVttTimestamp(raw: string) => number | undefined` — Parse a WebVTT (or SRT-compatible) timestamp into seconds —
 - `performanceTime() => number` — Current timestamp
 - `perToNum(str?: string) => number` — Convert a percentage string into a number
 - `prefersReducedMotion() => boolean` — Whether the reader asked for reduced motion. `false` where there is no window (SSR, Node).
