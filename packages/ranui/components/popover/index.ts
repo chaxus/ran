@@ -13,6 +13,7 @@ import { createRef, Div, EventManager, Slot, View } from '@/utils/builder';
 import {
   ensureShadowRoot,
   getStringAttribute,
+  mountShadowTree,
   setStringAttribute,
   shadowPart,
   syncSheetAttribute,
@@ -137,7 +138,7 @@ export class Popover extends RanElement {
       .role('tooltip')
       .children(Slot().class('slot').ref(slotRef))
       .build() as HTMLDivElement;
-    this._shadowDom.appendChild(block);
+    mountShadowTree(this._shadowDom, popoverCss, block);
 
     this.popoverBlock = block;
     this._slot = shadowPart(slotRef, 'slot');

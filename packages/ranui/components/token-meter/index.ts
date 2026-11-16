@@ -8,6 +8,7 @@ import type { Progress } from '@/components/progress';
 import {
   ensureShadowRoot,
   getStringAttribute,
+  mountShadowTree,
   setStringAttribute,
   shadowPart,
   syncSheetAttribute,
@@ -120,7 +121,7 @@ export class TokenMeter extends RanElement {
         Span().class('ran-token-meter-flag').ref(flag).attr('part', 'flag').attr('hidden', '').build(),
       )
       .build();
-    this._shadowDom.appendChild(root);
+    mountShadowTree(this._shadowDom, componentCss, root);
     this._root = root;
     this._bar = bar;
     this._text = shadowPart(text, 'text');

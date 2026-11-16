@@ -12,6 +12,7 @@ import { createRef, Div, EventManager, Slot, View } from '@/utils/builder';
 import {
   ensureShadowRoot,
   getStringAttribute,
+  mountShadowTree,
   setStringAttribute,
   shadowPart,
   syncSheetAttribute,
@@ -75,7 +76,7 @@ export class Tabs extends RanElement {
           ),
       )
       .build() as HTMLDivElement;
-    this._shadowDom.appendChild(wrap);
+    mountShadowTree(this._shadowDom, tabCss, wrap);
 
     this._container = wrap;
     this._header = shadowPart(headerRef, 'header');

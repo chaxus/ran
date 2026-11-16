@@ -1,7 +1,13 @@
 import componentCss from './index.less?inline';
 import { Div } from '@/utils/builder';
 import { RanElement } from '@/utils/index';
-import { ensureShadowRoot, getStringAttribute, setStringAttribute, syncSheetAttribute } from '@/utils/component';
+import {
+  ensureShadowRoot,
+  getStringAttribute,
+  mountShadowTree,
+  setStringAttribute,
+  syncSheetAttribute,
+} from '@/utils/component';
 import { defineSSR } from '@/utils/ssr-registry';
 
 /** Lifecycle a dot can stand for. */
@@ -33,7 +39,7 @@ export class StateDot extends RanElement {
   constructor() {
     super();
     this._shadowDom = ensureShadowRoot(this, componentCss);
-    this._shadowDom.appendChild(Div().class('ran-state-dot').attr('part', 'dot').build());
+    mountShadowTree(this._shadowDom, componentCss, Div().class('ran-state-dot').attr('part', 'dot').build());
   }
 
   /** Which lifecycle step to show. Unknown values render as `idle`. */

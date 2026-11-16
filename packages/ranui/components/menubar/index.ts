@@ -3,9 +3,8 @@ import { EventManager, Slot, View } from '@/utils/builder';
 import { RanElement } from '@/utils/index';
 import {
   ensureShadowRoot,
+  hydrateShadowTree,
   getStringAttribute,
-  mountShadowTree,
-  paintedShadowChild,
   setStringAttribute,
   syncSheetAttribute,
 } from '@/utils/component';
@@ -36,25 +35,25 @@ export class Menubar extends RanElement {
 
   _events = new EventManager();
   _shadowDom: ShadowRoot;
-  _slot: HTMLSlotElement;
+  _slot!: HTMLSlotElement;
   _dispose: (() => void) | null = null;
 
   constructor() {
     super();
     this._shadowDom = ensureShadowRoot(this, menubarCss);
     // Keep Declarative Shadow DOM shell when present (slot by builder child order).
-    const painted = paintedShadowChild(this._shadowDom);
-    const paintedSlot = painted?.children.item(0) ?? painted?.children[0] ?? null;
-    if (paintedSlot?.tagName?.toLowerCase() === 'slot') {
-      this._slot = paintedSlot as HTMLSlotElement;
-      return;
-    }
-    this._slot = Slot().build() as HTMLSlotElement;
-    mountShadowTree(
-      this._shadowDom,
-      menubarCss,
-      View('div').class('ran-menubar').attr('part', 'root').children(this._slot).build(),
-    );
+    hydrateShadowTree(this._shadowDom, menubarCss, {
+      bind: (painted) => {
+        const slot = painted.children.item(0);
+        if (slot?.tagName?.toLowerCase() !== 'slot') return false;
+        this._slot = slot as HTMLSlotElement;
+        return true;
+      },
+      build: () => {
+        this._slot = Slot().build() as HTMLSlotElement;
+        return View('div').class('ran-menubar').attr('part', 'root').children(this._slot).build();
+      },
+    });
   }
 
   /** CSS injected into the component's shadow DOM. */

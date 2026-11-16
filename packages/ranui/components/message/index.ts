@@ -8,6 +8,7 @@ import { createRef, Div, Span, View } from '@/utils/builder';
 import {
   ensureShadowRoot,
   getStringAttribute,
+  mountShadowTree,
   setStringAttribute,
   shadowPart,
   syncSheetAttribute,
@@ -94,7 +95,7 @@ export class CustomMessage extends RanElement {
           ),
       )
       .build() as HTMLDivElement;
-    this._shadowDom.appendChild(notice);
+    mountShadowTree(this._shadowDom, messageCss, notice);
 
     this._notice = notice;
     this._content = shadowPart(contentRef, 'notice content');

@@ -3,6 +3,7 @@ import { createRef, Div, EventManager, View } from '@/utils/builder';
 import {
   ensureShadowRoot,
   getStringAttribute,
+  mountShadowTree,
   setBooleanAttribute,
   setStringAttribute,
   shadowPart,
@@ -63,7 +64,7 @@ export class Mermaid extends RanElement {
         Div().class('ran-mermaid-diagram').ref(diagramRef).part('diagram'),
       )
       .build();
-    this._shadowDom.appendChild(this._wrap);
+    mountShadowTree(this._shadowDom, mermaidCss, this._wrap);
     this._diagram = shadowPart(diagramRef, 'diagram');
     this._toolbar = shadowPart(toolbarRef, 'toolbar');
   }

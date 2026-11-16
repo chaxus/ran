@@ -4,13 +4,7 @@ import { Div, Slot, createRef, EventManager, View } from '@/utils/builder';
 import { RanElement } from '@/utils/ssr';
 import { isDisabled } from '@/utils/dom';
 import { defineSSR } from '@/utils/ssr-registry';
-import {
-  ensureShadowRoot,
-  mountShadowTree,
-  paintedShadowChild,
-  shadowPart,
-  syncSheetAttribute,
-} from '@/utils/component';
+import { ensureShadowRoot, hydrateShadowTree, shadowPart, syncSheetAttribute } from '@/utils/component';
 import { isActivationKey } from '@/utils/a11y';
 
 export class Button extends RanElement {
@@ -30,29 +24,30 @@ export class Button extends RanElement {
     super();
     this._shadowDom = ensureShadowRoot(this, buttonCss);
     // Keep Declarative Shadow DOM when present (home invite submit first paint).
-    const painted = paintedShadowChild(this._shadowDom);
-    if (painted && this._bindPaintedTree(painted as HTMLElement)) return;
-
-    const btnContentRef = createRef<HTMLDivElement>();
-    const slotRef = createRef<HTMLSlotElement>();
-
-    const btn = Div()
-      .class('ran-btn')
-      .attr('part', 'button')
-      .role('button')
-      .tabIndex(0)
-      .children(
-        Div()
-          .class('ran-btn-content')
-          .ref(btnContentRef)
-          .attr('part', 'content')
-          .children(Slot().ref(slotRef).class('slot')),
-      )
-      .build();
-    mountShadowTree(this._shadowDom, buttonCss, btn);
-    this._btn = btn;
-    this._btnContent = shadowPart(btnContentRef, 'content');
-    this._slot = shadowPart(slotRef, 'slot');
+    hydrateShadowTree(this._shadowDom, buttonCss, {
+      bind: (painted) => this._bindPaintedTree(painted as HTMLElement),
+      build: () => {
+        const btnContentRef = createRef<HTMLDivElement>();
+        const slotRef = createRef<HTMLSlotElement>();
+        const btn = Div()
+          .class('ran-btn')
+          .attr('part', 'button')
+          .role('button')
+          .tabIndex(0)
+          .children(
+            Div()
+              .class('ran-btn-content')
+              .ref(btnContentRef)
+              .attr('part', 'content')
+              .children(Slot().ref(slotRef).class('slot')),
+          )
+          .build();
+        this._btn = btn;
+        this._btnContent = shadowPart(btnContentRef, 'content');
+        this._slot = shadowPart(slotRef, 'slot');
+        return btn;
+      },
+    });
   }
 
   private _bindPaintedTree(btn: HTMLElement): boolean {

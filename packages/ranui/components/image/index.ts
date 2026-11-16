@@ -1,6 +1,12 @@
 import { Div } from '@/utils/builder';
 import { RanElement } from '@/utils/index';
-import { ensureShadowRoot, getStringAttribute, setStringAttribute, syncSheetAttribute } from '@/utils/component';
+import {
+  ensureShadowRoot,
+  getStringAttribute,
+  mountShadowTree,
+  setStringAttribute,
+  syncSheetAttribute,
+} from '@/utils/component';
 import imageCss from './index.less?inline';
 import { defineSSR } from '@/utils/ssr-registry';
 
@@ -15,7 +21,7 @@ export class ImageElement extends RanElement {
     super();
     this._shadowDom = ensureShadowRoot(this, imageCss);
     const container = Div().class('ran-image').attr('part', 'image').attr('data-state', 'loading').build();
-    this._shadowDom.appendChild(container);
+    mountShadowTree(this._shadowDom, imageCss, container);
     this._container = container;
   }
   /** Image shown when `src` fails. Empty by default: a failed image then shows a theme-aware placeholder that fills the box. */

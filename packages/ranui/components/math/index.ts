@@ -3,6 +3,7 @@ import { createRef, Div, EventManager, View } from '@/utils/builder';
 import {
   ensureShadowRoot,
   getStringAttribute,
+  mountShadowTree,
   setBooleanAttribute,
   setStringAttribute,
   shadowPart,
@@ -96,7 +97,8 @@ export class Math extends RanElement {
   }
   constructor() {
     super();
-    this._shadowDom = ensureShadowRoot(this, `${mathCss}\n${temmlCss}`);
+    const css = `${mathCss}\n${temmlCss}`;
+    this._shadowDom = ensureShadowRoot(this, css);
     const containRef = createRef<HTMLDivElement>();
     const toolbarRef = createRef<HTMLDivElement>();
     this._wrap = Div()
@@ -107,7 +109,7 @@ export class Math extends RanElement {
         Div().class('ran-math-render').ref(containRef).part('render'),
       )
       .build();
-    this._shadowDom.appendChild(this._wrap);
+    mountShadowTree(this._shadowDom, css, this._wrap);
     this.contain = shadowPart(containRef, 'render');
     this._toolbar = shadowPart(toolbarRef, 'toolbar');
   }

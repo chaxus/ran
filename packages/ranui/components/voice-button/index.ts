@@ -4,6 +4,7 @@ import { RanElement } from '@/utils/index';
 import {
   ensureShadowRoot,
   getStringAttribute,
+  mountShadowTree,
   setStringAttribute,
   shadowPart,
   syncSheetAttribute,
@@ -99,7 +100,7 @@ export class VoiceButton extends RanElement {
         View('span').class('ran-voice-hint').ref(hintRef).attr('part', 'hint').build(),
       )
       .build();
-    this._shadowDom.appendChild(button);
+    mountShadowTree(this._shadowDom, componentCss, button);
     this._button = button as HTMLButtonElement;
     this._icon = shadowPart(iconRef, 'r icon');
     this._hint = shadowPart(hintRef, 'hint');

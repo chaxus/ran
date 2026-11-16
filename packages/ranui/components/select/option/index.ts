@@ -1,6 +1,6 @@
 import { Div, Slot } from '@/utils/builder';
 import { RanElement, isDisabled } from '@/utils/index';
-import { ensureShadowRoot, setStringAttribute, syncSheetAttribute } from '@/utils/component';
+import { ensureShadowRoot, mountShadowTree, setStringAttribute, syncSheetAttribute } from '@/utils/component';
 import { defineSSR } from '@/utils/ssr-registry';
 
 export class Option extends RanElement {
@@ -17,7 +17,7 @@ export class Option extends RanElement {
     const slot = Slot().build() as HTMLSlotElement;
     const optionContent = Div().class('ran-select-dropdown-option-content').children(slot).build() as HTMLDivElement;
     const option = Div().class('ran-select-dropdown-option').children(optionContent).build() as HTMLDivElement;
-    this._shadowDom.appendChild(option);
+    mountShadowTree(this._shadowDom, '', option);
 
     this._slot = slot;
     this._optionContent = optionContent;

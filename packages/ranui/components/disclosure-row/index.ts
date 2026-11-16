@@ -4,6 +4,7 @@ import { RanElement } from '@/utils/index';
 import {
   ensureShadowRoot,
   getStringAttribute,
+  mountShadowTree,
   setStringAttribute,
   shadowPart,
   syncSheetAttribute,
@@ -209,7 +210,7 @@ export class DisclosureRow extends RanElement {
           .build(),
       )
       .build();
-    this._shadowDom.appendChild(root);
+    mountShadowTree(this._shadowDom, componentCss, root);
     this._root = root;
     this._leadingSlot = leadingSlot.current as HTMLSlotElement;
     this._headingSlot = headingSlot.current as HTMLSlotElement;

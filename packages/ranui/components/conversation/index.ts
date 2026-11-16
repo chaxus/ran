@@ -144,8 +144,7 @@ export class Conversation extends RanElement {
     // Replaces, not appends: on a server-rendered page the closed root already holds the
     // Declarative Shadow DOM snapshot, and a second copy above the live one pushes the
     // transcript out of its own scrollport.
-    mountShadowTree(this._shadowDom, componentCss, this._scroll);
-    this._shadowDom.appendChild(this._footer);
+    mountShadowTree(this._shadowDom, componentCss, this._scroll, this._footer);
     this._list = shadowPart(list, 'list');
     this._older = shadowPart(older, 'older');
     this._olderButton = shadowPart(olderButton, 'older button');

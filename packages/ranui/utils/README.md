@@ -21,7 +21,8 @@ import {
 | `ensureShadowRoot(host, cssText?, options?, internals?)`   | Create or reuse a cached / Declarative Shadow Root and apply component CSS. Prefer this over direct `attachShadow()`. |
 | `hostInternals(host)`                                      | Attach or reuse `ElementInternals` (closed DSD + form association).                                                   |
 | `paintedShadowChild(root)`                                 | First non-`<style>` element in a shadow root (DSD snapshot detection).                                                |
-| `mountShadowTree(root, cssText, node)`                     | Cold-path `replaceChildren` of a builder tree; keep DSD via structure bind instead of remounting.                     |
+| `mountShadowTree(root, cssText, ...nodes)`                 | Replace the root's content with builder nodes (removes a painted DSD snapshot instead of duplicating it).             |
+| `hydrateShadowTree(root, cssText, { bind, build })`        | Take a painted DSD tree over when `bind` recognises it; otherwise mount what `build` returns.                         |
 | `shadowPart(ref, name)`                                    | The element a builder captured with `.ref()`; throws, naming the field, if it never was.                              |
 | `getStringAttribute(element, name, fallback?)`             | Read an attribute with a string fallback.                                                                             |
 | `setStringAttribute(element, name, value, options?)`       | Set a string attribute; `removeEmpty: true` removes empty values.                                                     |
@@ -366,7 +367,7 @@ const html = renderToString(btn);
 // Output: <r-button effect="true"><template shadowrootmode="closed">...</template></r-button>
 ```
 
-Components should use `ensureShadowRoot` in the constructor so browser initialization can reuse an existing Declarative Shadow DOM root when one is present. Closed roots are recovered through `hostInternals(host)` → `ElementInternals.shadowRoot` (never a second `attachShadow`). Form-associated fields pass their internals into `ensureShadowRoot` so attach runs once. When DSD already painted content, keep it (`paintedShadowChild` + structure bind); use `mountShadowTree` only on the cold path.
+Components should use `ensureShadowRoot` in the constructor so browser initialization can reuse an existing Declarative Shadow DOM root when one is present. Closed roots are recovered through `hostInternals(host)` → `ElementInternals.shadowRoot` (never a second `attachShadow`). Form-associated fields pass their internals into `ensureShadowRoot` so attach runs once. Mount the constructor's tree through `hydrateShadowTree` (keep the painted tree when `bind` recognises it) or `mountShadowTree` (replace it), never `appendChild`, which leaves two trees in a server-rendered root.
 
 `RanElement` is exported from `utils/index.ts`:
 

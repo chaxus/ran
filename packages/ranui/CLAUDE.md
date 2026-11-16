@@ -240,7 +240,9 @@ After creating `components/mycomp/index.ts`:
 // Create or reuse shadow root (cached via WeakMap, applies CSS)
 ensureShadowRoot(host: HTMLElement, cssText?: string, options?: ShadowRootInit, internals?: ElementInternals): ShadowRoot
 hostInternals(host: HTMLElement): ElementInternals | undefined
-mountShadowTree(root: ShadowRoot, cssText: string, node: Node): void
+mountShadowTree(root: ShadowRoot, cssText: string, ...nodes: Node[]): void
+// Take over a painted DSD tree when `bind` recognises it, otherwise mount what `build` returns
+hydrateShadowTree(root: ShadowRoot, cssText: string, mount: { bind(painted: Element): boolean; build(): Node | readonly Node[] }): void
 
 // The element a builder captured; throws, naming the field, if `.ref()` never filled it
 shadowPart<T>(ref: Ref<T>, name: string): T

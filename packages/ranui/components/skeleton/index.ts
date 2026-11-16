@@ -1,6 +1,12 @@
 import skeletonCss from './index.less?inline';
 import { Div } from '@/utils/builder';
-import { ensureShadowRoot, getStringAttribute, setStringAttribute, syncSheetAttribute } from '@/utils/component';
+import {
+  ensureShadowRoot,
+  getStringAttribute,
+  mountShadowTree,
+  setStringAttribute,
+  syncSheetAttribute,
+} from '@/utils/component';
 import { RanElement } from '@/utils/index';
 import { defineSSR } from '@/utils/ssr-registry';
 
@@ -16,7 +22,7 @@ export class Skeleton extends RanElement {
     super();
     this._shadowDom = ensureShadowRoot(this, skeletonCss);
     this._div = Div().class('ran-skeleton').build();
-    this._shadowDom.appendChild(this._div);
+    mountShadowTree(this._shadowDom, skeletonCss, this._div);
   }
 
   get sheet(): string {

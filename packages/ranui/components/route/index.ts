@@ -1,7 +1,13 @@
 import routeCss from './index.less?inline';
 import { EventManager, Slot, createRoot, onCleanup, isSSR } from '@/utils/builder';
 import { RanElement } from '@/utils/index';
-import { ensureShadowRoot, getStringAttribute, setStringAttribute, syncSheetAttribute } from '@/utils/component';
+import {
+  ensureShadowRoot,
+  getStringAttribute,
+  mountShadowTree,
+  setStringAttribute,
+  syncSheetAttribute,
+} from '@/utils/component';
 import { defineSSR } from '@/utils/ssr-registry';
 import { getSSGPath, matchPath } from '@/utils/router';
 
@@ -30,7 +36,7 @@ export class Route extends RanElement {
   constructor() {
     super();
     this._shadowDom = ensureShadowRoot(this, routeCss);
-    this._shadowDom.appendChild(Slot().build());
+    mountShadowTree(this._shadowDom, routeCss, Slot().build());
   }
 
   /** Path pattern this route shows for. `:name` segments capture params and `*` matches the rest. Without `exact`, deeper paths also match. Defaults to `'/'`. */

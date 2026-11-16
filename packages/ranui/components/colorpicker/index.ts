@@ -8,6 +8,7 @@ import { defineSSR } from '@/utils/ssr-registry';
 import {
   ensureShadowRoot,
   getStringAttribute,
+  mountShadowTree,
   setStringAttribute,
   shadowPart,
   syncSheetAttribute,
@@ -106,7 +107,7 @@ export class ColorPicker extends RanElement {
       .cssVar('ran-popover-content-padding', '0')
       .children(colorpicker, popoverContent)
       .build() as HTMLElement;
-    this._shadowDom.appendChild(popoverBlock);
+    mountShadowTree(this._shadowDom, colorPickerCss, popoverBlock);
     this.popoverBlock = popoverBlock;
     this.popoverContent = shadowPart(popoverContentRef, 'r content');
     this.colorpicker = shadowPart(colorpickerRef, 'block');

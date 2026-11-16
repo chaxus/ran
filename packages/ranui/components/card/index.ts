@@ -4,6 +4,7 @@ import { RanElement } from '@/utils/index';
 import {
   ensureShadowRoot,
   getStringAttribute,
+  mountShadowTree,
   setStringAttribute,
   shadowPart,
   syncSheetAttribute,
@@ -62,7 +63,7 @@ export class Card extends RanElement {
           .children(Slot().attr('name', 'footer').ref(footerSlotRef)),
       )
       .build();
-    this._shadowDom.appendChild(card);
+    mountShadowTree(this._shadowDom, cardCss, card);
 
     this._headerEl = shadowPart(headerElRef, 'header');
     this._titleEl = shadowPart(titleElRef, 'title');

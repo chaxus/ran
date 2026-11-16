@@ -4,6 +4,7 @@ import { RanElement } from '@/utils/index';
 import {
   ensureShadowRoot,
   getStringAttribute,
+  mountShadowTree,
   setStringAttribute,
   shadowPart,
   syncSheetAttribute,
@@ -43,8 +44,12 @@ export class Section extends RanElement {
         Div().class('ran-section-subtitle').ref(subtitleElRef).attr('part', 'subtitle'),
       )
       .build();
-    this._shadowDom.appendChild(container);
-    this._shadowDom.appendChild(Div().class('ran-section-body').attr('part', 'body').children(Slot()).build());
+    mountShadowTree(
+      this._shadowDom,
+      sectionCss,
+      container,
+      Div().class('ran-section-body').attr('part', 'body').children(Slot()).build(),
+    );
 
     this._headerEl = container;
     this._headingEl = shadowPart(headingElRef, 'heading');
