@@ -1,6 +1,41 @@
 import { expect, test } from '@playwright/test';
 import { freshApp, insideShadow, rows, send } from './helpers';
 
+test.describe('the server-rendered shell', () => {
+  test.beforeEach(async ({ page }) => {
+    await freshApp(page);
+  });
+
+  test('upgrades in place, holding one copy of each element tree', async ({ page }) => {
+    // The page arrives as Declarative Shadow DOM. Upgrade must take that root over, not add
+    // a live tree beside the painted one: a second transcript above the real one pushed it
+    // out of its own scrollport, where its rows could be seen but not clicked.
+    const conversation = await insideShadow(page, '#chat', (root) => ({
+      scrollports: root.querySelectorAll('.ran-conversation').length,
+      footers: root.querySelectorAll('.ran-conversation-footer').length,
+    }));
+    expect(conversation).toEqual({ scrollports: 1, footers: 1 });
+
+    const frame = await page.evaluate(() => {
+      const host = document.querySelector('#chat') as HTMLElement & { _shadowDom: ShadowRoot };
+      const scroll = host._shadowDom.querySelector('.ran-conversation') as HTMLElement;
+      return {
+        host: Math.round(host.getBoundingClientRect().top),
+        scroll: Math.round(scroll.getBoundingClientRect().top),
+      };
+    });
+    expect(Math.abs(frame.scroll - frame.host)).toBeLessThanOrEqual(1);
+
+    const copies = await page.evaluate(() =>
+      (['r-attachments', 'r-icon'] as const).map((tag) => {
+        const host = document.querySelector(tag) as HTMLElement & { _shadowDom: ShadowRoot };
+        return host._shadowDom.querySelectorAll(tag === 'r-icon' ? '.ran-icon' : '.ran-attachments').length;
+      }),
+    );
+    expect(copies).toEqual([1, 1]);
+  });
+});
+
 test.describe('a conversation, end to end', () => {
   test.beforeEach(async ({ page }) => {
     await freshApp(page);
