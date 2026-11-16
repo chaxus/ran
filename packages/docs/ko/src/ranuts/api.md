@@ -1,6 +1,6 @@
 ---
 title: ranuts API 레퍼런스
-description: 'ranuts가 내보내는 모든 심볼 — 7개 진입점, 총 433개 export를 시그니처와 설명과 함께.'
+description: 'ranuts가 내보내는 모든 심볼 — 7개 진입점, 총 437개 export를 시그니처와 설명과 함께.'
 ---
 
 # ranuts API (자동 생성)
@@ -12,11 +12,11 @@ description: 'ranuts가 내보내는 모든 심볼 — 7개 진입점, 총 433�
 심볼이 속한 **서브패스**에서 import하세요. 예: `import { debounce } from
 'ranuts/utils'`. 루트 배럴 `ranuts`는 utils + visual 표면을 다시 내보냅니다.
 
-**export 433개**, 진입점 7개.
+**export 437개**, 진입점 7개.
 
 ## 진입점
 
-- [`ranuts/utils`](#ranuts-utils) — 브라우저용 및 범용 유틸리티 · _브라우저 + node_ · export 344개
+- [`ranuts/utils`](#ranuts-utils) — 브라우저용 및 범용 유틸리티 · _브라우저 + node_ · export 348개
 - [`ranuts/sw`](#ranuts-sw) — Service Worker 캐싱 전략과 프리캐시 프로토콜 · _service worker 전용_ · export 9개
 - [`ranuts/visual`](#ranuts-visual) — 2D 렌더링 엔진 (Canvas / WebGL / WebGPU) · _브라우저 전용_ · export 16개
 - [`ranuts/i18n`](#ranuts-i18n) — 프레임워크 비종속 i18n 엔진 (ranuts/utils에서도 다시 내보냄) · _브라우저 + node_ · export 9개
@@ -177,7 +177,11 @@ import { /* … */ } from 'ranuts/utils';
 - `openPortBridge({ targetWindow, targetOrigin, name, }: OpenPortBridgeOptions) => PortBridge` — Initiator: create a MessageChannel, hand one port to the target window and keep the other.
 - `paginateText(text: string, box: TextBox, metrics: TextGridMetrics, options?: PaginateOptions) => PaginateResult` — Cut text into pages that fit `box`, given the type metrics.
 - `parseChineseNumber(value: string) => number | null` — Chinese numerals to Arabic — unit forms (「十五」「一百零三」「三万」「一亿」),
+- `parseChineseNumberBigInt(value: string) => bigint | null` — Chinese numerals to an exact `bigint`, with the same rules as
+- `parseChineseNumberString(value: string) => string | null` — Chinese numerals to an exact decimal string, with the same rules as
 - `parseEnglishNumber(value: string) => number | null` — English ordinals to numbers, tried in order: Arabic digits, number words
+- `parseEnglishNumberBigInt(value: string) => bigint | null` — English ordinals to an exact `bigint`, with the same rules as
+- `parseEnglishNumberString(value: string) => string | null` — English ordinals to an exact decimal string, with the same rules as
 - `parseRomanNumber(value: string) => number | null` — Roman numerals to Arabic (either case, handling subtractive forms such as IV / IX). Returns null for invalid input.
 - `parseVttCueTiming(line: string) => { start: number; end: number; } | undefined` — Parse a WebVTT cue timing line — `<start> --> <end>`, with one or more
 - `parseVttTimestamp(raw: string) => number | undefined` — Parse a WebVTT (or SRT-compatible) timestamp into seconds —

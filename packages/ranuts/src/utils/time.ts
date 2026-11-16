@@ -124,8 +124,9 @@ const VTT_CUE_TIMING = new RegExp(
 /**
  * @description: Parse a WebVTT (or SRT-compatible) timestamp into seconds —
  * `HH:MM:SS.mmm` or `MM:SS.mmm`. Minutes and seconds must be `00`–`59`; millis are exactly
- * three digits after `.` or `,`. The whole string must match (no prefixes/suffixes), so a
- * malformed value returns `undefined` instead of a wrong partial parse. Hour digits follow
+ * three digits after `.` or `,`. Surrounding whitespace is trimmed; the rest must match whole
+ * (no prefixes/suffixes), so a malformed value returns `undefined` instead of a wrong partial
+ * parse. Hour digits follow
  * the browser collect algorithm (one or more when the three-part form is used), not a silent
  * substring of `MM:SS.mmm`. The inverse of [`formatDuration`](#formatduration); used by
  * subtitle/thumbnail-sprite VTT readers (e.g. ranui player scrub previews).
