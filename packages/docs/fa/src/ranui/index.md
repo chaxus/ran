@@ -83,13 +83,13 @@ document.body.appendChild(button);
 
 | import                                            | شامل                                                    |
 | ------------------------------------------------- | ------------------------------------------------------- |
-| `ranui`                                           | همهٔ کامپوننت‌ها                                        |
+| `ranui`                                           | همهٔ کامپوننت‌ها                                         |
 | `ranui/<component>`                               | یک کامپوننت: `ranui/button`، `ranui/select`، …          |
-| [`ranui/theme`](/fa/ranui/theme/)                 | پوستهٔ روشن/تیره و بازنویسی توکن‌ها؛ بدون عنصر          |
+| [`ranui/theme`](/fa/ranui/theme/)                 | پوستهٔ روشن/تیره و بازنویسی توکن‌ها؛ بدون عنصر           |
 | [`ranui/i18n`](/fa/ranui/i18n/)                   | موتور ترجمه؛ بدون عنصر                                  |
-| `ranui/fonts`                                     | قلم‌های میزبانی‌شدهٔ Geist Sans و Geist Mono            |
+| `ranui/fonts`                                     | قلم‌های میزبانی‌شدهٔ Geist Sans و Geist Mono             |
 | `ranui/style`                                     | شیوه‌نامه، اگر پیکربندی شما خودش برنمی‌داردش            |
-| [`ranui/builder`](/fa/ranui/builder/)             | سازندهٔ روان DOM با واکنش‌پذیری ریزدانه                 |
+| [`ranui/builder`](/fa/ranui/builder/)             | سازندهٔ روان DOM با واکنش‌پذیری ریزدانه                  |
 | [`ranui/ssr`](/fa/ranui/ssr/)، `ranui/ssr-stream` | رندر سمت سرور                                           |
 | `ranui/testing`                                   | ابزارهایی برای رسیدن به shadow root بسته از دل یک آزمون |
 | `ranui/typings`                                   | تایپ‌های محیطی عناصر برای JSX / TS                      |

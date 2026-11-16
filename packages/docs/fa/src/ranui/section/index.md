@@ -97,7 +97,7 @@ description: 'سطحی برای یک بخش از صفحه، با عنوان دس
 | `header`   | ردیف عنوان که عنوان و زیرعنوان را دربر می‌گیرد |
 | `heading`  | عنصر عنوان ARIA سطح ۲                          |
 | `subtitle` | سطر زیرعنوان پشتیبان                           |
-| `body`     | پوششِ بدنه پیرامون اسلات پیش‌فرض               |
+| `body`     | پوششِ بدنه پیرامون اسلات پیش‌فرض                |
 
 متغیرهای CSS در دسترس: `--ran-section-border-color`، `--ran-section-radius`، `--ran-section-background`، `--ran-section-shadow`، `--ran-section-padding`، `--ran-section-heading-color`، `--ran-section-heading-font-size`، `--ran-section-heading-font-weight`، `--ran-section-subtitle-color`.
 

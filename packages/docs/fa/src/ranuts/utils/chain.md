@@ -23,9 +23,9 @@ new Chain(tagName: string, options?: ElementCreationOptions)
 | `setTextContent`   | محتوای متنی را تعیین می‌کند          | `Chain`       |
 | `setStyle`         | سبکی را تعیین می‌کند                 | `Chain`       |
 | `addChild`         | فرزندی می‌افزاید (آرایه هم می‌پذیرد) | `Chain`       |
-| `listen`           | شنوندهٔ رویداد می‌نشاند              | `Chain`       |
-| `clearListener`    | شنوندهٔ رویداد را برمی‌دارد          | `Chain`       |
-| `clearAllListener` | همهٔ شنونده‌های رویداد را برمی‌دارد  | `Chain`       |
+| `listen`           | شنوندهٔ رویداد می‌نشاند               | `Chain`       |
+| `clearListener`    | شنوندهٔ رویداد را برمی‌دارد           | `Chain`       |
+| `clearAllListener` | همهٔ شنونده‌های رویداد را برمی‌دارد   | `Chain`       |
 
 #### ویژگی‌ها
 

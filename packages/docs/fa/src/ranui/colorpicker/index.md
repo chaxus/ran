@@ -29,7 +29,7 @@ description: 'نمونهٔ رنگ فشرده‌ای که پنلی با مهار�
 
 | خصیصه      | نوع       | پیش‌فرض | توضیح                                                                            |
 | ---------- | --------- | ------- | -------------------------------------------------------------------------------- |
-| `value`    | `string`  | `''`    | رنگ کنونی به‌شکل رشتهٔ رنگ CSS (HEX، `rgb(...)`، `rgba(...)`)                    |
+| `value`    | `string`  | `''`    | رنگ کنونی به‌شکل رشتهٔ رنگ CSS (HEX، `rgb(...)`، `rgba(...)`)                     |
 | `disabled` | `boolean` | `false` | با بودنش، نمونه باز نمی‌شود، از ترتیب tab بیرون می‌رود و `aria-disabled` می‌گیرد |
 | `sheet`    | `string`  | `''`    | CSS تزریق‌شده به shadow DOM کامپوننت                                             |
 
@@ -114,10 +114,10 @@ toolbar.append(picker);
 
 نمونه‌ای که پنل را باز می‌کند دو Part برای استایل‌دهی از بیرون shadow DOM در اختیار می‌گذارد:
 
-| Part     | توضیح                                           |
-| -------- | ----------------------------------------------- |
+| Part     | توضیح                                        |
+| -------- | -------------------------------------------- |
 | `block`  | نگه‌دارندهٔ نمونه (جعبهٔ ماشه با زمینهٔ شطرنجی) |
-| `swatch` | پرشدگی درونی که رنگ کنونی را نشان می‌دهد        |
+| `swatch` | پرشدگی درونی که رنگ کنونی را نشان می‌دهد     |
 
 ```css
 r-colorpicker::part(block) {
@@ -133,12 +133,12 @@ r-colorpicker::part(block) {
 
 | متغیر                                   | کاربرد                           |
 | --------------------------------------- | -------------------------------- |
-| `--ran-colorpicker-background`          | زمینهٔ نمونه                     |
-| `--ran-colorpicker-border`              | حاشیهٔ نمونه                     |
+| `--ran-colorpicker-background`          | زمینهٔ نمونه                      |
+| `--ran-colorpicker-border`              | حاشیهٔ نمونه                      |
 | `--ran-colorpicker-hover-border-color`  | رنگ حاشیه هنگام نگه‌داشتن نشانگر |
-| `--ran-colorpicker-border-radius`       | گردی گوشهٔ نمونه                 |
-| `--ran-colorpicker-block-border-radius` | گردی گوشهٔ بلوک درونی            |
-| `--ran-colorpicker-transition`          | گذارِ hover                      |
+| `--ran-colorpicker-border-radius`       | گردی گوشهٔ نمونه                  |
+| `--ran-colorpicker-block-border-radius` | گردی گوشهٔ بلوک درونی             |
+| `--ran-colorpicker-transition`          | گذارِ hover                       |
 
 ```css
 r-colorpicker {

@@ -142,8 +142,8 @@ r-loading {
 | --------------------------------------- | --------- | --------------------------------------- |
 | `--loading-{type}-width`                | `4em`     | عرض انیمیشن (واحد `px` توصیه می‌شود)    |
 | `--loading-{type}-height`               | `4em`     | ارتفاع انیمیشن (واحد `px` توصیه می‌شود) |
-| `--loading-{type}-background`           | `#4096ff` | رنگ زمینهٔ اصلی                         |
-| `--loading-{type}-div-background-color` | `#4096ff` | رنگ زمینهٔ عنصرهای فرزند                |
+| `--loading-{type}-background`           | `#4096ff` | رنگ زمینهٔ اصلی                          |
+| `--loading-{type}-div-background-color` | `#4096ff` | رنگ زمینهٔ عنصرهای فرزند                 |
 
 > `{type}` را با نام مشخص انیمیشن جایگزین کنید، مثلاً `circle`، `double-bounce` یا `rotate`. رنگ‌های پایه به‌طور پیش‌فرض از توکن‌های پوستهٔ `--ran-color-primary`، `--ran-color-success` و `--ran-color-text` می‌آیند.
 

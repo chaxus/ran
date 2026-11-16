@@ -62,14 +62,14 @@ npm install ranui
 
 ### خصیصه‌ها
 
-| ویژگی                  | نوع       | پیش‌فرض                   | توضیح                                             |
-| ---------------------- | --------- | ------------------------- | ------------------------------------------------- |
-| `src`                  | `string`  | —                         | نشانی فایل؛ تنظیم آن پنجره را باز می‌کند          |
+| ویژگی                  | نوع       | پیش‌فرض                   | توضیح                                           |
+| ---------------------- | --------- | ------------------------- | ----------------------------------------------- |
+| `src`                  | `string`  | —                         | نشانی فایل؛ تنظیم آن پنجره را باز می‌کند        |
 | `closeable`            | `string`  | —                         | رشتهٔ false دکمهٔ بستن و Escape را غیرفعال می‌کند |
-| `baseUrl` / `baseurl`  | `string`  | `https://edit.chaxus.com` | نشانی صفحهٔ ویرایشگر Office                       |
-| `readonly`             | `boolean` | `false`                   | حالت اختیاری فقط‌خواندنی Office                   |
-| `pdf-mode` / `pdfMode` | `string`  | `eager`                   | حالت PDF: eager یا virtual                        |
-| `label`                | `string`  | `Preview file`            | نام دسترس‌پذیر کنترل بازکردن                      |
+| `baseUrl` / `baseurl`  | `string`  | `https://edit.chaxus.com` | نشانی صفحهٔ ویرایشگر Office                      |
+| `readonly`             | `boolean` | `false`                   | حالت اختیاری فقط‌خواندنی Office                 |
+| `pdf-mode` / `pdfMode` | `string`  | `eager`                   | حالت PDF: eager یا virtual                      |
+| `label`                | `string`  | `Preview file`            | نام دسترس‌پذیر کنترل بازکردن                    |
 
 ### منبع فایل `src`
 
