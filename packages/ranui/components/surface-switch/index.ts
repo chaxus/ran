@@ -3,9 +3,8 @@ import { EventManager, View } from '@/utils/builder';
 import { RanElement } from '@/utils/index';
 import {
   ensureShadowRoot,
+  hydrateShadowTree,
   getStringAttribute,
-  mountShadowTree,
-  paintedShadowChild,
   setStringAttribute,
   syncSheetAttribute,
 } from '@/utils/component';
@@ -41,7 +40,7 @@ export class SurfaceSwitch extends RanElement {
 
   _events = new EventManager();
   _shadowDom: ShadowRoot;
-  _select: HTMLElement & { value: string };
+  _select!: HTMLElement & { value: string };
   _options: Map<RanSurfaceName, HTMLElement> = new Map();
 
   constructor() {
@@ -49,45 +48,48 @@ export class SurfaceSwitch extends RanElement {
     this._shadowDom = ensureShadowRoot(this, surfaceSwitchCss);
 
     // Keep Declarative Shadow DOM select when present — remounting flashes labels.
-    const painted = paintedShadowChild(this._shadowDom);
-    if (painted?.tagName?.toLowerCase() === 'r-select') {
-      this._select = painted as HTMLElement & { value: string };
-      for (const choice of CHOICES) {
-        let option: HTMLElement | null = null;
-        for (const child of painted.children) {
-          if (child.tagName.toLowerCase() === 'r-option' && child.getAttribute('value') === choice) {
-            option = child as HTMLElement;
-            break;
+    hydrateShadowTree(this._shadowDom, surfaceSwitchCss, {
+      bind: (painted) => {
+        if (painted.tagName?.toLowerCase() !== 'r-select') return false;
+        this._select = painted as HTMLElement & { value: string };
+        for (const choice of CHOICES) {
+          let option: HTMLElement | null = null;
+          for (const child of painted.children) {
+            if (child.tagName.toLowerCase() === 'r-option' && child.getAttribute('value') === choice) {
+              option = child as HTMLElement;
+              break;
+            }
           }
+          if (!option) {
+            option = View('r-option').attr('value', choice).attr('part', `option ${choice}`).build() as HTMLElement;
+            painted.appendChild(option);
+          }
+          this._options.set(choice, option);
         }
-        if (!option) {
-          option = View('r-option').attr('value', choice).attr('part', `option ${choice}`).build() as HTMLElement;
-          painted.appendChild(option);
-        }
-        this._options.set(choice, option);
-      }
-      return;
-    }
+        return true;
+      },
+      build: () => {
+        const options = CHOICES.map((choice) => {
+          const option = View('r-option').attr('value', choice).attr('part', `option ${choice}`).build() as HTMLElement;
+          this._options.set(choice, option);
+          return option;
+        });
 
-    const options = CHOICES.map((choice) => {
-      const option = View('r-option').attr('value', choice).attr('part', `option ${choice}`).build() as HTMLElement;
-      this._options.set(choice, option);
-      return option;
+        // Use the Select class directly so SSR builds a real select shadow tree
+        // (View('r-select') is only an HTMLElementMock under Node and skips DSD chrome).
+        // Portaled panel is outside this shadow tree — chrome menu vars land via dropdownclass.
+        // Host `trigger` (e.g. docs header `hover click`) wins; default stays click.
+        const select = new Select() as HTMLElement & { value: string };
+        select.classList.add('ran-surface-switch');
+        select.setAttribute('part', 'select');
+        select.setAttribute('trigger', this.getAttribute('trigger') || 'click');
+        select.setAttribute('dropdownclass', 'ran-chrome-menu');
+        select.setAttribute('value', 'solid');
+        for (const option of options) select.appendChild(option);
+        this._select = select;
+        return this._select;
+      },
     });
-
-    // Use the Select class directly so SSR builds a real select shadow tree
-    // (View('r-select') is only an HTMLElementMock under Node and skips DSD chrome).
-    // Portaled panel is outside this shadow tree — chrome menu vars land via dropdownclass.
-    // Host `trigger` (e.g. docs header `hover click`) wins; default stays click.
-    const select = new Select() as HTMLElement & { value: string };
-    select.classList.add('ran-surface-switch');
-    select.setAttribute('part', 'select');
-    select.setAttribute('trigger', this.getAttribute('trigger') || 'click');
-    select.setAttribute('dropdownclass', 'ran-chrome-menu');
-    select.setAttribute('value', 'solid');
-    for (const option of options) select.appendChild(option);
-    this._select = select;
-    mountShadowTree(this._shadowDom, surfaceSwitchCss, this._select);
   }
 
   get sheet(): string {

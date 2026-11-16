@@ -4,6 +4,7 @@ import { RanElement } from '@/utils/index';
 import {
   ensureShadowRoot,
   getStringAttribute,
+  mountShadowTree,
   setStringAttribute,
   shadowPart,
   syncSheetAttribute,
@@ -141,7 +142,7 @@ export class ToolCard extends RanElement {
         Div().class('ran-tool-card-body').ref(body).attr('part', 'body').build(),
       )
       .build();
-    this._shadowDom.appendChild(row);
+    mountShadowTree(this._shadowDom, componentCss, row);
 
     this._row = row as DisclosureRow;
     this._dot = shadowPart(dot, 'state dot');

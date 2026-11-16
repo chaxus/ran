@@ -1,6 +1,6 @@
 ---
 title: ranuts API 参考
-description: 'ranuts 导出的全部符号 — 7 个入口点，共 433 个导出，含签名与描述。'
+description: 'ranuts 导出的全部符号 — 7 个入口点，共 437 个导出，含签名与描述。'
 ---
 
 # ranuts API（自动生成）
@@ -12,11 +12,11 @@ description: 'ranuts 导出的全部符号 — 7 个入口点，共 433 个导�
 请从符号所属的**子路径**导入，例如 `import { debounce } from
 'ranuts/utils'`。根入口 `ranuts` 重新导出 utils + visual 的全部符号。
 
-**433 个导出**，共 7 个入口点。
+**437 个导出**，共 7 个入口点。
 
 ## 入口点
 
-- [`ranuts/utils`](#ranuts-utils) — 浏览器与通用工具函数 · _浏览器 + node_ · 344 个导出
+- [`ranuts/utils`](#ranuts-utils) — 浏览器与通用工具函数 · _浏览器 + node_ · 348 个导出
 - [`ranuts/sw`](#ranuts-sw) — Service Worker 缓存策略与预缓存协议 · _仅 service worker_ · 9 个导出
 - [`ranuts/visual`](#ranuts-visual) — 2D 渲染引擎（Canvas / WebGL / WebGPU） · _仅浏览器_ · 16 个导出
 - [`ranuts/i18n`](#ranuts-i18n) — 框架无关的 i18n 引擎（也从 ranuts/utils 再导出） · _浏览器 + node_ · 9 个导出
@@ -177,7 +177,11 @@ import { /* … */ } from 'ranuts/utils';
 - `openPortBridge({ targetWindow, targetOrigin, name, }: OpenPortBridgeOptions) => PortBridge` — Initiator: create a MessageChannel, hand one port to the target window and keep the other.
 - `paginateText(text: string, box: TextBox, metrics: TextGridMetrics, options?: PaginateOptions) => PaginateResult` — Cut text into pages that fit `box`, given the type metrics.
 - `parseChineseNumber(value: string) => number | null` — Chinese numerals to Arabic — unit forms (「十五」「一百零三」「三万」「一亿」),
+- `parseChineseNumberBigInt(value: string) => bigint | null` — Chinese numerals to an exact `bigint`, with the same rules as
+- `parseChineseNumberString(value: string) => string | null` — Chinese numerals to an exact decimal string, with the same rules as
 - `parseEnglishNumber(value: string) => number | null` — English ordinals to numbers, tried in order: Arabic digits, number words
+- `parseEnglishNumberBigInt(value: string) => bigint | null` — English ordinals to an exact `bigint`, with the same rules as
+- `parseEnglishNumberString(value: string) => string | null` — English ordinals to an exact decimal string, with the same rules as
 - `parseRomanNumber(value: string) => number | null` — Roman numerals to Arabic (either case, handling subtractive forms such as IV / IX). Returns null for invalid input.
 - `parseVttCueTiming(line: string) => { start: number; end: number; } | undefined` — Parse a WebVTT cue timing line — `<start> --> <end>`, with one or more
 - `parseVttTimestamp(raw: string) => number | undefined` — Parse a WebVTT (or SRT-compatible) timestamp into seconds —

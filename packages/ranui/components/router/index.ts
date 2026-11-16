@@ -1,7 +1,13 @@
 import routerCss from './index.less?inline';
 import { EventManager, Slot } from '@/utils/builder';
 import { RanElement } from '@/utils/index';
-import { ensureShadowRoot, getStringAttribute, setStringAttribute, syncSheetAttribute } from '@/utils/component';
+import {
+  ensureShadowRoot,
+  getStringAttribute,
+  mountShadowTree,
+  setStringAttribute,
+  syncSheetAttribute,
+} from '@/utils/component';
 import { defineSSR } from '@/utils/ssr-registry';
 import { useRouter, type RouterComponentElement, type RouterCore } from '@/utils/router';
 
@@ -23,7 +29,7 @@ export class Router extends RanElement {
     super();
     this._shadowDom = ensureShadowRoot(this, routerCss);
     const slot = Slot().build();
-    this._shadowDom.appendChild(slot);
+    mountShadowTree(this._shadowDom, routerCss, slot);
     this._slot = slot as HTMLSlotElement;
   }
 

@@ -2,7 +2,7 @@ import contentCss from './index.less?inline';
 import { Slot } from '@/utils/builder';
 import { RanElement } from '@/utils/index';
 import { defineSSR } from '@/utils/ssr-registry';
-import { ensureShadowRoot } from '@/utils/component';
+import { ensureShadowRoot, mountShadowTree } from '@/utils/component';
 
 export class Content extends RanElement {
   observer: MutationObserver;
@@ -12,7 +12,7 @@ export class Content extends RanElement {
     super();
     this._shadowDom = ensureShadowRoot(this, contentCss);
     const slot = Slot().class('slot').build() as HTMLElement;
-    this._shadowDom.appendChild(slot);
+    mountShadowTree(this._shadowDom, contentCss, slot);
     this._slot = slot;
     this.observer = new MutationObserver(this.callback);
   }

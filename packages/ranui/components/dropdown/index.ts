@@ -4,6 +4,7 @@ import { createRef, Div, Slot } from '@/utils/builder';
 import {
   ensureShadowRoot,
   getStringAttribute,
+  mountShadowTree,
   setStringAttribute,
   shadowPart,
   syncSheetAttribute,
@@ -44,7 +45,7 @@ export class Dropdown extends RanElement {
           .children(Slot().class('slot').ref(slotRef)),
       )
       .build() as HTMLElement;
-    this._shadowDom.appendChild(container);
+    mountShadowTree(this._shadowDom, dropdownCss, container);
 
     this.container = container;
     this.dropdown = shadowPart(dropdownRef, 'ranui dropdown');

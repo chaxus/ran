@@ -188,6 +188,7 @@ export class RanPlayer extends RanElement {
     this.innerHTML = '';
     const viewRefs = ensurePlayerView({
       shadowDom: this._shadowDom,
+      cssText: playerCss,
       speedOptions: SPEED,
       onSpeedChange: this.changeSpeed,
     });

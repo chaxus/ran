@@ -3,10 +3,9 @@ import { createRef, Div, EventManager, InputBuilder, Label, View } from '@/utils
 import { checkInternalsValidity, reportInternalsValidity } from '@/utils/a11y';
 import {
   ensureShadowRoot,
+  hydrateShadowTree,
   getStringAttribute,
   hostInternals,
-  mountShadowTree,
-  paintedShadowChild,
   setBooleanAttribute,
   setStringAttribute,
   shadowPart,
@@ -71,21 +70,23 @@ export class Input extends RanElement {
     this._internals = hostInternals(this);
     this._shadowDom = ensureShadowRoot(this, inputCss, { mode: 'closed' }, this._internals);
     // Keep Declarative Shadow DOM when present — remounting wipes the invite-card first paint.
-    const painted = paintedShadowChild(this._shadowDom);
-    if (painted && this._bindPaintedTree(painted as HTMLElement)) return;
-
-    const inputContentRef = createRef<HTMLInputElement>();
-    const wrap = Div()
-      .class('ran-input')
-      .part('input')
-      .children(InputBuilder().class('ran-input-content').ref(inputContentRef).part('content'))
-      .build();
-    mountShadowTree(this._shadowDom, inputCss, wrap);
-    this._input = wrap;
-    this._inputContent = shadowPart(inputContentRef, 'content');
-    // A stable id so a rendered <label> can point its `for` at this control,
-    // giving it an accessible name and click-to-focus (both in the same shadow root).
-    if (!this._inputContent.id) this._inputContent.id = `ran-input-${++inputIdSeq}`;
+    hydrateShadowTree(this._shadowDom, inputCss, {
+      bind: (painted) => this._bindPaintedTree(painted as HTMLElement),
+      build: () => {
+        const inputContentRef = createRef<HTMLInputElement>();
+        const wrap = Div()
+          .class('ran-input')
+          .part('input')
+          .children(InputBuilder().class('ran-input-content').ref(inputContentRef).part('content'))
+          .build();
+        this._input = wrap;
+        this._inputContent = shadowPart(inputContentRef, 'content');
+        // A stable id so a rendered <label> can point its `for` at this control,
+        // giving it an accessible name and click-to-focus (both in the same shadow root).
+        if (!this._inputContent.id) this._inputContent.id = `ran-input-${++inputIdSeq}`;
+        return wrap;
+      },
+    });
   }
 
   /** Wire refs from a DSD snapshot (optional label / message siblings around the wrap). */

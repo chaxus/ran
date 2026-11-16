@@ -2,7 +2,13 @@ import componentCss from './index.less?inline';
 import { observeEntry, prefersReducedMotion, spring, stagger } from 'ranuts/utils';
 import { Div, Slot } from '@/utils/builder';
 import { RanElement } from '@/utils/index';
-import { ensureShadowRoot, getStringAttribute, setStringAttribute, syncSheetAttribute } from '@/utils/component';
+import {
+  ensureShadowRoot,
+  getStringAttribute,
+  mountShadowTree,
+  setStringAttribute,
+  syncSheetAttribute,
+} from '@/utils/component';
 import { defineSSR } from '@/utils/ssr-registry';
 
 /** The opening spring: settles in about half a second with a slight overshoot. */
@@ -51,7 +57,7 @@ export class FanGallery extends RanElement {
     this._shadowDom = ensureShadowRoot(this, componentCss);
     this._slot = Slot().build() as HTMLSlotElement;
     this._stage = Div().class('ran-fan-gallery').attr('part', 'stage').children(this._slot).build();
-    this._shadowDom.appendChild(this._stage);
+    mountShadowTree(this._shadowDom, componentCss, this._stage);
     this._slot.addEventListener('slotchange', () => {
       this._observeSizes();
       this._layout(false);

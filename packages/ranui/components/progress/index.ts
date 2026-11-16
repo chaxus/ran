@@ -4,6 +4,7 @@ import { createRef, Div, EventManager, RanElement } from '@/utils/index';
 import {
   ensureShadowRoot,
   getStringAttribute,
+  mountShadowTree,
   setStringAttribute,
   shadowPart,
   syncSheetAttribute,
@@ -71,7 +72,7 @@ export class Progress extends RanElement {
         Div().class('ran-progress-dot').ref(progressDotRef).part('dot'),
       )
       .build();
-    this._shadowDom.appendChild(container);
+    mountShadowTree(this._shadowDom, progressCss, container);
 
     this._progress = container;
     this._progressWrap = shadowPart(progressWrapRef, 'wrap');

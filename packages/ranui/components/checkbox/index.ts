@@ -4,8 +4,7 @@ import { createRef, Div, EventManager, InputBuilder, Slot, Span } from '@/utils/
 import { checkInternalsValidity, isActivationKey, reportInternalsValidity, updateRequiredValidity } from '@/utils/a11y';
 import {
   ensureShadowRoot,
-  mountShadowTree,
-  paintedShadowChild,
+  hydrateShadowTree,
   getStringAttribute,
   hostInternals,
   setBooleanAttribute,
@@ -45,40 +44,38 @@ export class Checkbox extends RanElement {
     super();
     this._internals = hostInternals(this);
     this._shadowDom = ensureShadowRoot(this, checkboxCss, { mode: 'closed' }, this._internals);
-    const painted = paintedShadowChild(this._shadowDom);
-    if (painted && this._bindPaintedTree(painted as HTMLElement)) {
-      this.context = { checked: false };
-      return;
-    }
-
-    const containerRef = createRef<HTMLDivElement>();
-    const checkInputRef = createRef<HTMLInputElement>();
-    const checkInnerRef = createRef<HTMLSpanElement>();
-    const wrapper = Div()
-      .class('ran-checkbox-wrapper')
-      .part('wrapper')
-      .children(
-        Div()
-          .class('ran-checkbox')
-          .ref(containerRef)
-          .part('checkbox')
+    hydrateShadowTree(this._shadowDom, checkboxCss, {
+      bind: (painted) => this._bindPaintedTree(painted as HTMLElement),
+      build: () => {
+        const containerRef = createRef<HTMLDivElement>();
+        const checkInputRef = createRef<HTMLInputElement>();
+        const checkInnerRef = createRef<HTMLSpanElement>();
+        const wrapper = Div()
+          .class('ran-checkbox-wrapper')
+          .part('wrapper')
           .children(
-            InputBuilder().class('ran-checkbox-input').ref(checkInputRef).part('input').attr('type', 'checkbox'),
-            Span().class('ran-checkbox-inner').ref(checkInnerRef).part('inner'),
-          ),
-        Span().class('ran-checkbox-label').part('label').children(Slot()),
-      )
-      .build();
-    mountShadowTree(this._shadowDom, checkboxCss, wrapper);
-
-    this.container = shadowPart(containerRef, 'ran checkbox');
-    this.checkInput = shadowPart(checkInputRef, 'input');
-    this.checkInner = shadowPart(checkInnerRef, 'inner');
-    // The host is the accessible checkbox (see connectedCallback); the inner
-    // <input> is a decorative visual/hit target, so keep it out of the a11y tree
-    // and tab order to avoid a duplicate, always-unchecked checkbox node.
-    this.checkInput.setAttribute('aria-hidden', 'true');
-    this.checkInput.tabIndex = -1;
+            Div()
+              .class('ran-checkbox')
+              .ref(containerRef)
+              .part('checkbox')
+              .children(
+                InputBuilder().class('ran-checkbox-input').ref(checkInputRef).part('input').attr('type', 'checkbox'),
+                Span().class('ran-checkbox-inner').ref(checkInnerRef).part('inner'),
+              ),
+            Span().class('ran-checkbox-label').part('label').children(Slot()),
+          )
+          .build();
+        this.container = shadowPart(containerRef, 'ran checkbox');
+        this.checkInput = shadowPart(checkInputRef, 'input');
+        this.checkInner = shadowPart(checkInnerRef, 'inner');
+        // The host is the accessible checkbox (see connectedCallback); the inner
+        // <input> is a decorative visual/hit target, so keep it out of the a11y tree
+        // and tab order to avoid a duplicate, always-unchecked checkbox node.
+        this.checkInput.setAttribute('aria-hidden', 'true');
+        this.checkInput.tabIndex = -1;
+        return wrapper;
+      },
+    });
 
     this.context = {
       checked: false,

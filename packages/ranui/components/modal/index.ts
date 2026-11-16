@@ -13,7 +13,13 @@ import {
 import { RanElement } from '@/utils/ssr';
 import { falseList } from '@/utils/dom';
 import { ButtonBuilder, Div, EventManager, Slot, View } from '@/utils/builder';
-import { ensureShadowRoot, getStringAttribute, setStringAttribute, syncSheetAttribute } from '@/utils/component';
+import {
+  ensureShadowRoot,
+  getStringAttribute,
+  mountShadowTree,
+  setStringAttribute,
+  syncSheetAttribute,
+} from '@/utils/component';
 import { settlePresence } from '@/utils/presence';
 import { defineSSR } from '@/utils/ssr-registry';
 
@@ -128,7 +134,7 @@ export class Modal extends RanElement {
           ),
       )
       .build() as HTMLDivElement;
-    this._shadowDom.appendChild(root);
+    mountShadowTree(this._shadowDom, modalCss, root);
 
     this._root = root;
     this._mask = this._root.querySelector('.ran-modal-mask') as HTMLDivElement;

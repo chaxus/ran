@@ -5,8 +5,7 @@ import { defineSSR } from '@/utils/ssr-registry';
 import {
   ensureShadowRoot,
   getStringAttribute,
-  mountShadowTree,
-  paintedShadowChild,
+  hydrateShadowTree,
   setStringAttribute,
   syncSheetAttribute,
 } from '@/utils/component';
@@ -176,13 +175,14 @@ export class Icon extends RanElement {
     super();
     this._shadowDom = ensureShadowRoot(this, iconCss);
     // Keep Declarative Shadow DOM (button demos ship the SVG in first paint).
-    const painted = paintedShadowChild(this._shadowDom);
-    if (painted && this._bindPaintedTree(painted as HTMLElement)) return;
-
-    const div = Div().class('ran-icon').part('ran-icon').build();
-    // Replaces the server-rendered snapshot rather than adding a second copy beside it.
-    mountShadowTree(this._shadowDom, iconCss, div);
-    this._div = div;
+    hydrateShadowTree(this._shadowDom, iconCss, {
+      bind: (painted) => this._bindPaintedTree(painted as HTMLElement),
+      build: () => {
+        const div = Div().class('ran-icon').part('ran-icon').build();
+        this._div = div;
+        return div;
+      },
+    });
   }
 
   private _bindPaintedTree(div: HTMLElement): boolean {
