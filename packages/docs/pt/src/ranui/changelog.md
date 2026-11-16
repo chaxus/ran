@@ -9,6 +9,18 @@ Gerado a partir de `packages/ranui/CHANGELOG.md` do repositório. As entradas ma
 
 ::: v-pre
 
+## [0.5.6] — 2026-11-16
+
+Published to npm as [ranui@0.5.6](https://www.npmjs.com/package/ranui/v/0.5.6) on the `latest` tag.
+
+- **Server rendering upgrades cleanly.** Every server-rendered element replaces its Declarative Shadow DOM snapshot when it upgrades instead of adding a second tree beside it. The choice between keeping and replacing a snapshot is made in one place for every component. Closed shadow roots from the server are reused through `ElementInternals`.
+- **First paint matches the upgraded element.** `r-button` and `r-input` icons, and `r-input` / `r-select` labels, are drawn in the server-rendered HTML. Pre-upgrade size plates now ship with each component in `ranui.css` and skip hosts that already have a server-rendered shadow root, so a refresh no longer shows a double box or a layout jump.
+- **`r-menubar` and `mountMenubarHandoff`** (new, from `ranui/menubar`): hover-open header menus with peer hops between triggers, moved from the docs site into the library. The selection highlight follows the pointer across the full row and is placed before the panel appears.
+- `r-select` panels are at least as wide as their trigger, open with the highlight already in place, and ignore scrolling inside the panel while floating.
+- `r-scratch` is registered from the package barrel again.
+- Icons for `r-button` / `r-input` load as a separate chunk, keeping them off the initial bundle.
+- Packed internal dependencies resolve to `ranuts@0.5.6` and `@alixex/ranview@0.2.5`, whose server DOM gains the methods the upgrade path uses (`replaceChildren`, `insertBefore` and `children`).
+
 ## [0.5.5] — 2026-11-08
 
 Published to npm as [ranui@0.5.5](https://www.npmjs.com/package/ranui/v/0.5.5) on the `latest` tag.
