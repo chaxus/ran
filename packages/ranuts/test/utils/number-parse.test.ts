@@ -4,6 +4,8 @@ import {
   parseChineseNumberBigInt,
   parseChineseNumberString,
   parseEnglishNumber,
+  parseEnglishNumberBigInt,
+  parseEnglishNumberString,
   parseRomanNumber,
   toFullWidth,
   toHalfWidth,
@@ -125,6 +127,32 @@ describe('parseChineseNumber', () => {
     expect(parseChineseNumber('佰佰')).toBeNull();
   });
 
+  it('places a lone digit after stacked units one place below them', () => {
+    expect(parseChineseNumber('一千万五')).toBe(15_000_000);
+    expect(parseChineseNumber('一千二百万五')).toBe(12_500_000);
+    expect(parseChineseNumber('十万五')).toBe(150_000);
+    expect(parseChineseNumber('十五万五')).toBe(155_000);
+    expect(parseChineseNumber('一万亿五')).toBe(1_500_000_000_000);
+  });
+
+  it('accepts 零 only once, right after a unit and before more digits', () => {
+    expect(parseChineseNumber('一千零五十')).toBe(1050);
+    expect(parseChineseNumber('一万零五')).toBe(10_005);
+    for (const input of [
+      '一万零亿',
+      '零一百',
+      '一百零零一',
+      '一万零零五',
+      '二十零',
+      '十零',
+      '一千零',
+      '一万零',
+      '一千零万',
+    ]) {
+      expect(parseChineseNumber(input), input).toBeNull();
+    }
+  });
+
   it('lets only the first character be a bare unit', () => {
     expect(parseChineseNumber('百五')).toBe(150);
     expect(parseChineseNumber('一百十')).toBe(110);
@@ -231,5 +259,19 @@ describe('parseEnglishNumber', () => {
   it('returns null for a digit string past Number.MAX_SAFE_INTEGER', () => {
     expect(parseEnglishNumber('9007199254740991')).toBe(Number.MAX_SAFE_INTEGER);
     expect(parseEnglishNumber('12345678901234567890')).toBeNull();
+  });
+});
+
+describe('parseEnglishNumberBigInt / parseEnglishNumberString', () => {
+  it('parse digit strings exactly, past Number.MAX_SAFE_INTEGER too', () => {
+    expect(parseEnglishNumberBigInt('12345678901234567890')).toBe(12345678901234567890n);
+    expect(parseEnglishNumberString('12345678901234567890')).toBe('12345678901234567890');
+  });
+
+  it('follow the same rules as parseEnglishNumber', () => {
+    expect(parseEnglishNumberBigInt('Three')).toBe(3n);
+    expect(parseEnglishNumberString('XII')).toBe('12');
+    expect(parseEnglishNumberBigInt('VV')).toBeNull();
+    expect(parseEnglishNumberString('thirty')).toBeNull();
   });
 });

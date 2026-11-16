@@ -235,10 +235,15 @@ const parseChineseGroup = (group: string): number | null => {
   for (const char of group) {
     const value = CN_DIGITS[char];
     if (value !== undefined) {
-      // Unit form never has two digits in a row (「一百二零」); 零 only follows a unit.
+      // Unit form never has two digits in a row (「一百二零」).
       if (digit !== null) return null;
-      if (value === 0) zero = true;
-      else digit = value;
+      if (value === 0) {
+        // 零 stands once for skipped places right after a unit: not leading (「零一百」) or doubled (「一百零零一」).
+        if (zero || lastUnit === 10_000) return null;
+        zero = true;
+      } else {
+        digit = value;
+      }
       continue;
     }
     const unit = CN_UNITS[char];
@@ -250,7 +255,8 @@ const parseChineseGroup = (group: string): number | null => {
     digit = null;
     zero = false;
   }
-  if (digit === null) return total;
+  // A trailing 零 skips nothing (「十零」「一千零」).
+  if (digit === null) return zero ? null : total;
   // 「一百一」omits the next-smaller unit → 110; 「一百零一」keeps ones via 零 → 101.
   return total + (!zero && lastUnit >= 100 && lastUnit < 10_000 ? (digit * lastUnit) / 10 : digit);
 };
@@ -266,10 +272,19 @@ const parseChineseSections = (text: string, sections: typeof CN_SECTIONS): bigin
   const head = parseChineseSections(text.slice(0, at), smaller);
   if (!head) return null;
   let tail = text.slice(at + 1);
-  // 「一万五」: a lone digit after the mark is the next-smaller unit → 15000.
+  // 「一万五」「一千万五」: a lone digit after the mark is one place below the lowest unit before it
+  // (万 → 千, 千万 → 百万, 万亿 → 千亿).
   const lone = tail.length === 1 ? CN_DIGITS[tail] : undefined;
-  if (lone) return head * size + (BigInt(lone) * size) / 10n;
-  if (tail.startsWith('零')) tail = tail.slice(1);
+  if (lone) {
+    let place = size;
+    for (let rest = head; rest % 10n === 0n; rest /= 10n) place *= 10n;
+    return head * size + (BigInt(lone) * place) / 10n;
+  }
+  if (tail.startsWith('零')) {
+    tail = tail.slice(1);
+    // 「一万零」skips nothing; 「一万零零五」doubles the 零.
+    if (tail.length === 0 || tail.startsWith('零')) return null;
+  }
   const rest = parseChineseSections(tail, smaller);
   return rest === null ? null : head * size + rest;
 };
@@ -439,6 +454,40 @@ export const parseEnglishNumber = (value: string): number | null => {
   if (EN_NUMBER_WORDS[text] !== undefined) return EN_NUMBER_WORDS[text];
   return parseRomanNumber(text);
 };
+
+/**
+ * @description: English ordinals to an exact `bigint`, with the same rules as
+ * [`parseEnglishNumber`](#parseenglishnumber) and no upper bound on a digit string. Returns null
+ * when nothing matches.
+ * @param {string} value
+ * @return {bigint | null}
+ * @example
+ * ```ts
+ * parseEnglishNumberBigInt('Three'); // 3n
+ * parseEnglishNumberBigInt('12345678901234567890'); // 12345678901234567890n
+ * ```
+ */
+export const parseEnglishNumberBigInt = (value: string): bigint | null => {
+  const text = value.trim().toLowerCase();
+  if (/^\d+$/.test(text)) return BigInt(text);
+  const parsed = EN_NUMBER_WORDS[text] ?? parseRomanNumber(text);
+  return parsed === null ? null : BigInt(parsed);
+};
+
+/**
+ * @description: English ordinals to an exact decimal string, with the same rules as
+ * [`parseEnglishNumber`](#parseenglishnumber) and no upper bound on a digit string. Returns null
+ * when nothing matches.
+ * @param {string} value
+ * @return {string | null}
+ * @example
+ * ```ts
+ * parseEnglishNumberString('XII'); // '12'
+ * parseEnglishNumberString('12345678901234567890'); // '12345678901234567890'
+ * ```
+ */
+export const parseEnglishNumberString = (value: string): string | null =>
+  parseEnglishNumberBigInt(value)?.toString() ?? null;
 
 /**
  * @description: Clamp `value` into the inclusive range `[min, max]`.

@@ -1,6 +1,6 @@
 ---
 title: مرجع API کتابخانهٔ ranuts
-description: 'همهٔ نمادهایی که ranuts صادر می‌کند — 435 خروجی در 7 نقطهٔ ورود، همراه با امضا و توضیح.'
+description: 'همهٔ نمادهایی که ranuts صادر می‌کند — 437 خروجی در 7 نقطهٔ ورود، همراه با امضا و توضیح.'
 ---
 
 # API کتابخانهٔ ranuts (تولید خودکار)
@@ -13,11 +13,11 @@ description: 'همهٔ نمادهایی که ranuts صادر می‌کند — 4
 از همان **زیرمسیری** که نماد به آن تعلق دارد import کنید، مثلاً `import { debounce } from
 'ranuts/utils'`. نقطهٔ ورود ریشه یعنی `ranuts` سطح utils و visual را دوباره صادر می‌کند.
 
-**435 خروجی** در 7 نقطهٔ ورود.
+**437 خروجی** در 7 نقطهٔ ورود.
 
 ## نقاط ورود
 
-- [`ranuts/utils`](#ranuts-utils) — ابزارهای مرورگر و ابزارهای عمومی · _مرورگر + node_ · 346 خروجی
+- [`ranuts/utils`](#ranuts-utils) — ابزارهای مرورگر و ابزارهای عمومی · _مرورگر + node_ · 348 خروجی
 - [`ranuts/sw`](#ranuts-sw) — راهبردهای حافظهٔ نهان Service Worker و پروتکل پیش‌بارگذاری · _فقط service worker_ · 9 خروجی
 - [`ranuts/visual`](#ranuts-visual) — موتور رندر دوبعدی (Canvas / WebGL / WebGPU) · _فقط مرورگر_ · 16 خروجی
 - [`ranuts/i18n`](#ranuts-i18n) — موتور i18n مستقل از فریم‌ورک (از ranuts/utils هم دوباره صادر می‌شود) · _مرورگر + node_ · 9 خروجی
@@ -181,6 +181,8 @@ import { /* … */ } from 'ranuts/utils';
 - `parseChineseNumberBigInt(value: string) => bigint | null` — Chinese numerals to an exact `bigint`, with the same rules as
 - `parseChineseNumberString(value: string) => string | null` — Chinese numerals to an exact decimal string, with the same rules as
 - `parseEnglishNumber(value: string) => number | null` — English ordinals to numbers, tried in order: Arabic digits, number words
+- `parseEnglishNumberBigInt(value: string) => bigint | null` — English ordinals to an exact `bigint`, with the same rules as
+- `parseEnglishNumberString(value: string) => string | null` — English ordinals to an exact decimal string, with the same rules as
 - `parseRomanNumber(value: string) => number | null` — Roman numerals to Arabic (either case, handling subtractive forms such as IV / IX). Returns null for invalid input.
 - `parseVttCueTiming(line: string) => { start: number; end: number; } | undefined` — Parse a WebVTT cue timing line — `<start> --> <end>`, with one or more
 - `parseVttTimestamp(raw: string) => number | undefined` — Parse a WebVTT (or SRT-compatible) timestamp into seconds —

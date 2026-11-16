@@ -1,6 +1,6 @@
 ---
 title: Referência da API do ranuts
-description: 'Todos os símbolos exportados pelo ranuts: 435 exportações em 7 pontos de entrada, com assinaturas e descrições.'
+description: 'Todos os símbolos exportados pelo ranuts: 437 exportações em 7 pontos de entrada, com assinaturas e descrições.'
 ---
 
 # API do ranuts (gerada)
@@ -13,11 +13,11 @@ entrada importar, restrições de ambiente, convenções) leia antes [CLAUDE.md]
 Importe da **subrota** dona do símbolo, por exemplo `import { debounce } from
 'ranuts/utils'`. O barril raiz `ranuts` reexporta a superfície de utils + visual.
 
-**435 exportações** em 7 pontos de entrada.
+**437 exportações** em 7 pontos de entrada.
 
 ## Pontos de entrada
 
-- [`ranuts/utils`](#ranuts-utils) — Utilitários para o navegador e de uso geral · _navegador + node_ · 346 exportações
+- [`ranuts/utils`](#ranuts-utils) — Utilitários para o navegador e de uso geral · _navegador + node_ · 348 exportações
 - [`ranuts/sw`](#ranuts-sw) — Estratégias de cache do Service Worker e o protocolo de pré-cache · _apenas service worker_ · 9 exportações
 - [`ranuts/visual`](#ranuts-visual) — Motor de renderização 2D (Canvas / WebGL / WebGPU) · _apenas navegador_ · 16 exportações
 - [`ranuts/i18n`](#ranuts-i18n) — Motor de i18n independente de framework (também reexportado de ranuts/utils) · _navegador + node_ · 9 exportações
@@ -181,6 +181,8 @@ import { /* … */ } from 'ranuts/utils';
 - `parseChineseNumberBigInt(value: string) => bigint | null` — Chinese numerals to an exact `bigint`, with the same rules as
 - `parseChineseNumberString(value: string) => string | null` — Chinese numerals to an exact decimal string, with the same rules as
 - `parseEnglishNumber(value: string) => number | null` — English ordinals to numbers, tried in order: Arabic digits, number words
+- `parseEnglishNumberBigInt(value: string) => bigint | null` — English ordinals to an exact `bigint`, with the same rules as
+- `parseEnglishNumberString(value: string) => string | null` — English ordinals to an exact decimal string, with the same rules as
 - `parseRomanNumber(value: string) => number | null` — Roman numerals to Arabic (either case, handling subtractive forms such as IV / IX). Returns null for invalid input.
 - `parseVttCueTiming(line: string) => { start: number; end: number; } | undefined` — Parse a WebVTT cue timing line — `<start> --> <end>`, with one or more
 - `parseVttTimestamp(raw: string) => number | undefined` — Parse a WebVTT (or SRT-compatible) timestamp into seconds —

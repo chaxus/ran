@@ -6,13 +6,14 @@
 
 ## API
 
-| 函数                              | 支持                                                                                                  |
-| --------------------------------- | ----------------------------------------------------------------------------------------------------- |
-| `parseChineseNumber(value)`       | 数字（半角与全角）、`一二三…`、单位 `十百千万/萬亿/億`、简写 `廿卅卌`、大写 `壹贰叁…拾佰仟`，简繁通用 |
-| `parseChineseNumberBigInt(value)` | 输入同 `parseChineseNumber`，返回精确的 `bigint`，没有上限                                            |
-| `parseChineseNumberString(value)` | 同上，返回精确的十进制字符串（可直接 JSON 序列化）                                                    |
-| `parseRomanNumber(value)`         | `IVXLCDM`，大小写皆可，只接受标准写法（`IV`、`IX`、`XCIX`；3999 以上可重复 `M`）                      |
-| `parseEnglishNumber(value)`       | 数字、英文数词 `one`–`twenty`，再退回罗马数字                                                         |
+| 函数                                                                  | 支持                                                                                                  |
+| --------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
+| `parseChineseNumber(value)`                                           | 数字（半角与全角）、`一二三…`、单位 `十百千万/萬亿/億`、简写 `廿卅卌`、大写 `壹贰叁…拾佰仟`，简繁通用 |
+| `parseChineseNumberBigInt(value)`                                     | 输入同 `parseChineseNumber`，返回精确的 `bigint`，没有上限                                            |
+| `parseChineseNumberString(value)`                                     | 同上，返回精确的十进制字符串（可直接 JSON 序列化）                                                    |
+| `parseRomanNumber(value)`                                             | `IVXLCDM`，大小写皆可，只接受标准写法（`IV`、`IX`、`XCIX`；3999 以上可重复 `M`）                      |
+| `parseEnglishNumber(value)`                                           | 数字、英文数词 `one`–`twenty`，再退回罗马数字                                                         |
+| `parseEnglishNumberBigInt(value)` / `parseEnglishNumberString(value)` | 输入同 `parseEnglishNumber`，任意长度的数字串都能精确返回                                             |
 
 相关字符串工具：`toHalfWidth(value)` / `toFullWidth(value)` 做全半角归一化，
 `parseChineseNumber` 已内置调用。
@@ -60,5 +61,6 @@ toHalfWidth('（1）'); // '(1)'
    需要的话自行扩展词表。
 6. **超过 `Number.MAX_SAFE_INTEGER`（约 9e15）后 `number` 无法精确表示**，所以
    `parseChineseNumber` 和 `parseEnglishNumber` 的纯数字分支在这里返回 `null`。数值可能这么大时，
-   用 `parseChineseNumberBigInt` 或 `parseChineseNumberString`。
+   用 `parseChineseNumberBigInt` / `parseChineseNumberString` 或 `parseEnglishNumberBigInt` /
+   `parseEnglishNumberString`。
 7. **罗马数字必须是标准写法**。`VV`、`IC`、`IIX` 以及钟面上的 `IIII` 都返回 `null`，不会猜一个值。
