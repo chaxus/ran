@@ -1,4 +1,4 @@
-/// <reference path="./typings-elements.generated.d.ts" />
+import './typings-elements.generated';
 
 export {};
 

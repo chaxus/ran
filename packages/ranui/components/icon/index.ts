@@ -5,6 +5,7 @@ import { defineSSR } from '@/utils/ssr-registry';
 import {
   ensureShadowRoot,
   getStringAttribute,
+  mountShadowTree,
   paintedShadowChild,
   setStringAttribute,
   syncSheetAttribute,
@@ -179,7 +180,8 @@ export class Icon extends RanElement {
     if (painted && this._bindPaintedTree(painted as HTMLElement)) return;
 
     const div = Div().class('ran-icon').part('ran-icon').build();
-    this._shadowDom.appendChild(div);
+    // Replaces the server-rendered snapshot rather than adding a second copy beside it.
+    mountShadowTree(this._shadowDom, iconCss, div);
     this._div = div;
   }
 

@@ -50,9 +50,9 @@ const patchText = (current: Text, next: string): void => {
 };
 
 export const syncReaderAttributes = (current: Element, next: Element): void => {
-  for (const attribute of [...current.attributes])
+  for (const attribute of Array.from(current.attributes))
     if (!next.hasAttribute(attribute.name)) current.removeAttribute(attribute.name);
-  for (const attribute of [...next.attributes])
+  for (const attribute of Array.from(next.attributes))
     if (current.getAttribute(attribute.name) !== attribute.value) current.setAttribute(attribute.name, attribute.value);
 };
 
@@ -76,7 +76,7 @@ export const reconcileReader = (current: Node, next: Node, selecting = false): v
     syncReaderAttributes(current, next);
   }
   let old = current.firstChild;
-  for (const incoming of [...next.childNodes]) {
+  for (const incoming of Array.from(next.childNodes)) {
     if (
       old &&
       old.nodeType === incoming.nodeType &&

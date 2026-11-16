@@ -91,20 +91,24 @@ formatRelative(Date.now() - 2 * 86_400_000, { style: 'compact' }); // '2d'
 
 WebVTT の字幕タイミング、つまり `.vtt` ファイルの `hh:mm:ss.mmm --> hh:mm:ss.mmm` という行を解釈します。
 
-`parseVttTimestamp` はタイムスタンプひとつ（`hh:` は省略可）を秒に直します。`parseVttCueTiming` はキューのタイミング行まるごと、つまり `-->` で区切られた両側を `{ start, end }` に直し、末尾に付くキュー設定（`align:start line:0` など）は読み飛ばします。
+`parseVttTimestamp` はタイムスタンプひとつを秒に直します。`parseVttCueTiming` は `start --> end` 行全体を `{ start, end }` に直し（`-->` の両側に空白が必要、末尾のキュー設定は無視）、`end > start` を要求します。
+
+### 受け入れる形
+
+時刻は文字列全体で照合します（部分一致で時間を落とさない）。分・秒は 00–59、ミリ秒は 3 桁（`.` または SRT の `,`）。不正なら `undefined`。
 
 ```js
 import { parseVttTimestamp, parseVttCueTiming } from 'ranuts/utils';
 
 parseVttTimestamp('00:00:05.000'); // 5
 parseVttTimestamp('01:05.250'); // 65.25
+parseVttTimestamp('1:02:03.000'); // 3723
 parseVttTimestamp('not a timestamp'); // undefined
 
 parseVttCueTiming('00:00:00.000 --> 00:00:05.000'); // { start: 0, end: 5 }
 parseVttCueTiming('00:00:05.000 --> 00:00:10.000 align:start line:0'); // { start: 5, end: 10 }
+parseVttCueTiming('00:00:05.000 --> 00:00:05.000'); // undefined
 ```
-
-どちらも入力が形に合わなければ例外ではなく `undefined` を返すので、字幕ファイルの中に壊れた行があっても、解析全体を止めずにその行だけ飛ばせます。
 
 ## 補足
 

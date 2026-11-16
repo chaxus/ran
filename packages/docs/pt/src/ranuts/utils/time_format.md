@@ -91,20 +91,24 @@ formatRelative(Date.now() - 2 * 86_400_000, { style: 'compact' }); // '2d'
 
 Interpretação dos tempos de legenda WebVTT: as linhas `hh:mm:ss.mmm --> hh:mm:ss.mmm` de um arquivo `.vtt`.
 
-O `parseVttTimestamp` transforma uma marca de tempo (com `hh:` opcional) em segundos; o `parseVttCueTiming` interpreta uma linha de tempos inteira — os dois lados separados por `-->` — e devolve `{ start, end }`, ignorando os ajustes de cue que venham no fim (`align:start line:0`).
+O `parseVttTimestamp` transforma uma marca de tempo em segundos. O `parseVttCueTiming` interpreta uma linha `start --> end` inteira (precisa de espaço em torno de `-->`; ignora ajustes no fim) em `{ start, end }` e exige `end > start`.
+
+### O que é aceito
+
+A marca tem de casar de ponta a ponta (sem recorte silencioso). Minutos/segundos em 00–59; milissegundos com três dígitos (`.` ou `,` do SRT). Se não servir, `undefined`.
 
 ```js
 import { parseVttTimestamp, parseVttCueTiming } from 'ranuts/utils';
 
 parseVttTimestamp('00:00:05.000'); // 5
 parseVttTimestamp('01:05.250'); // 65.25
+parseVttTimestamp('1:02:03.000'); // 3723
 parseVttTimestamp('not a timestamp'); // undefined
 
 parseVttCueTiming('00:00:00.000 --> 00:00:05.000'); // { start: 0, end: 5 }
 parseVttCueTiming('00:00:05.000 --> 00:00:10.000 align:start line:0'); // { start: 5, end: 10 }
+parseVttCueTiming('00:00:05.000 --> 00:00:05.000'); // undefined
 ```
-
-Os dois devolvem `undefined` quando a entrada não casa, e nunca lançam, de modo que uma linha malformada num arquivo de legendas pode ser pulada em vez de abortar a leitura inteira.
 
 ## Notas
 

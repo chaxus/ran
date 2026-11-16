@@ -1,7 +1,7 @@
 {
   "$comment": "Advisory only. Agents must resolve the host's installed ranuts version and read its docs; this file records what the skill was authored against in the ran monorepo.",
   "package": "ranuts",
-  "authoredAgainst": "0.5.4",
+  "authoredAgainst": "0.5.5",
   "apiSource": "installed:docs/API.md",
   "bundledApi": false,
   "rule": "Never claim an export that is absent from the host's installed package docs for that version."

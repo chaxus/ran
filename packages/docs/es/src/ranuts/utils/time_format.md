@@ -91,20 +91,24 @@ formatRelative(Date.now() - 2 * 86_400_000, { style: 'compact' }); // '2d'
 
 Interpretación de los tiempos de subtítulos WebVTT: las líneas `hh:mm:ss.mmm --> hh:mm:ss.mmm` de un archivo `.vtt`.
 
-`parseVttTimestamp` convierte una marca de tiempo (con `hh:` opcional) en segundos; `parseVttCueTiming` interpreta una línea de tiempos completa —los dos lados separados por `-->`— y devuelve `{ start, end }`, pasando por alto los ajustes de cue que vengan al final (`align:start line:0`).
+`parseVttTimestamp` convierte una marca de tiempo en segundos. `parseVttCueTiming` interpreta una línea `start --> end` completa (hace falta espacio alrededor de `-->`; ignora ajustes al final) en `{ start, end }` y exige `end > start`.
+
+### Qué se acepta
+
+La marca debe coincidir de extremo a extremo (sin recortes silenciosos). Minutos/segundos en 00–59; milisegundos con tres dígitos (`.` o `,` de SRT). Si no vale, `undefined`.
 
 ```js
 import { parseVttTimestamp, parseVttCueTiming } from 'ranuts/utils';
 
 parseVttTimestamp('00:00:05.000'); // 5
 parseVttTimestamp('01:05.250'); // 65.25
+parseVttTimestamp('1:02:03.000'); // 3723
 parseVttTimestamp('not a timestamp'); // undefined
 
 parseVttCueTiming('00:00:00.000 --> 00:00:05.000'); // { start: 0, end: 5 }
 parseVttCueTiming('00:00:05.000 --> 00:00:10.000 align:start line:0'); // { start: 5, end: 10 }
+parseVttCueTiming('00:00:05.000 --> 00:00:05.000'); // undefined
 ```
-
-Ambas devuelven `undefined` cuando la entrada no encaja, y nunca lanzan, así que una línea mal formada en un archivo de subtítulos se puede saltar en vez de abortar toda la lectura.
 
 ## Notas
 

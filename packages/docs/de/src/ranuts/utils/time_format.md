@@ -91,20 +91,24 @@ formatRelative(Date.now() - 2 * 86_400_000, { style: 'compact' }); // '2d'
 
 Liest die Zeitangaben von WebVTT-Untertiteln: die Zeilen `hh:mm:ss.mmm --> hh:mm:ss.mmm` in einer `.vtt`-Datei.
 
-`parseVttTimestamp` wandelt einen einzelnen Zeitstempel (`hh:` ist freigestellt) in Sekunden um; `parseVttCueTiming` liest eine ganze Cue-Zeitzeile – beide durch `-->` getrennten Seiten – als `{ start, end }` und übergeht dabei angehängte Cue-Einstellungen (`align:start line:0`).
+`parseVttTimestamp` wandelt einen Zeitstempel in Sekunden um. `parseVttCueTiming` liest eine ganze `start --> end`-Zeile (Leerzeichen um `-->` nötig; angehängte Einstellungen werden übergangen) als `{ start, end }` und verlangt `end > start`.
+
+### Was akzeptiert wird
+
+Der Stempel muss die ganze Zeichenkette treffen (kein stilles Teilmatch). Minuten/Sekunden 00–59; Millisekunden drei Stellen (`.` oder SRT-`,`). Sonst `undefined`.
 
 ```js
 import { parseVttTimestamp, parseVttCueTiming } from 'ranuts/utils';
 
 parseVttTimestamp('00:00:05.000'); // 5
 parseVttTimestamp('01:05.250'); // 65.25
+parseVttTimestamp('1:02:03.000'); // 3723
 parseVttTimestamp('not a timestamp'); // undefined
 
 parseVttCueTiming('00:00:00.000 --> 00:00:05.000'); // { start: 0, end: 5 }
 parseVttCueTiming('00:00:05.000 --> 00:00:10.000 align:start line:0'); // { start: 5, end: 10 }
+parseVttCueTiming('00:00:05.000 --> 00:00:05.000'); // undefined
 ```
-
-Beide geben `undefined` zurück, wenn die Eingabe nicht passt, und werfen nie. So lässt sich eine fehlerhafte Zeile in einer Untertiteldatei überspringen, statt die ganze Auswertung abzubrechen.
 
 ## Hinweise
 

@@ -14,9 +14,9 @@
 
 #### 매개변수
 
-| 매개변수  | 설명                             | 타입     | 기본값 |
-| --------- | -------------------------------- | -------- | ------ |
-| `seconds` | 흘러간 초. 음수는 0으로 맞춥니다 | `number` | 필수   |
+| 매개변수  | 설명                              | 타입     | 기본값 |
+| --------- | --------------------------------- | -------- | ------ |
+| `seconds` | 흘러간 초. 음수는 0 으로 맞춥니다 | `number` | 필수   |
 
 #### Returns
 
@@ -35,11 +35,11 @@ formatDuration(NaN); // ''
 
 ## formatRelative
 
-어떤 시점을 다른 시점에 견주어 풀어 말합니다. 「3일 전」, 「2시간 뒤」 같은 식입니다.
+어떤 시점을 다른 시점에 견주어 풀어 말합니다. 「3 일 전」, 「2 시간 뒤」같은 식입니다.
 
-각 언어에 맞추는 일은 플랫폼의 [`Intl.RelativeTimeFormat`](https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Global_Objects/Intl/RelativeTimeFormat)에 맡깁니다. 2020년부터 주요 브라우저에 모두 들어 있고, 언어마다의 복수형과 어형 변화 규칙을 이미 알고 있기 때문입니다. `formatRelative`가 맡는 것은 `Intl`이 일부러 남겨 둔 부분, 곧 그 차이를 _어느 단위_ 로 말할지 고르는 일뿐입니다.
+각 언어에 맞추는 일은 플랫폼의 [`Intl.RelativeTimeFormat`](https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Global_Objects/Intl/RelativeTimeFormat)에 맡깁니다. 2020 년부터 주요 브라우저에 모두 들어 있고, 언어마다의 복수형과 어형 변화 규칙을 이미 알고 있기 때문입니다. `formatRelative`가 맡는 것은 `Intl`이 일부러 남겨 둔 부분, 곧 그 차이를 _어느 단위_ 로 말할지 고르는 일뿐입니다.
 
-`Intl`이 그렇듯 단위는 **하나만** 알려 줍니다. 3일 6시간의 차이는 「3일 전」이지, 「3일 6시간 전」이 되지 않습니다.
+`Intl`이 그렇듯 단위는 **하나만** 알려 줍니다. 3 일 6 시간의 차이는「3 일 전」이지, 「3 일 6 시간 전」이 되지 않습니다.
 
 #### 매개변수
 
@@ -51,7 +51,7 @@ formatDuration(NaN); // ''
 | 옵션      | 설명                                                                           | 타입                       | 기본값           |
 | --------- | ------------------------------------------------------------------------------ | -------------------------- | ---------------- |
 | `now`     | 무엇을 기준으로 잴지                                                           | `number \| string \| Date` | 현재 시각        |
-| `locale`  | BCP 47 태그(여럿 가능). `compact` 스타일에서는 무시됩니다                      | `string \| string[]`       | 실행 환경의 로캘 |
+| `locale`  | BCP 47 태그 (여럿 가능). `compact` 스타일에서는 무시됩니다                     | `string \| string[]`       | 실행 환경의 로캘 |
 | `style`   | `'long' \| 'short' \| 'narrow' \| 'compact'`                                   | `RelativeStyle`            | `'long'`         |
 | `numeric` | `'auto'`는 `yesterday` 같은 표현으로 바꾸고, `'always'`는 숫자를 그대로 둡니다 | `'always' \| 'auto'`       | `'auto'`         |
 
@@ -84,31 +84,35 @@ formatRelative(Date.now() - 2 * 86_400_000, { style: 'compact' }); // '2d'
 ```
 
 ::: warning 앞뒤 방향은 담기지 않습니다
-`compact`는 크기만 나타내므로, 앞으로의 시각도 지난 시각과 똑같이 보입니다(양쪽 다 `5m`). 이미 일어난 일이 늘어선 피드를 겨냥한 표기입니다. 읽는 사람이 과거와 미래를 가려야 하는 곳에서는 다른 스타일을 쓰세요.
+`compact`는 크기만 나타내므로, 앞으로의 시각도 지난 시각과 똑같이 보입니다 (양쪽 다 `5m`). 이미 일어난 일이 늘어선 피드를 겨냥한 표기입니다. 읽는 사람이 과거와 미래를 가려야 하는 곳에서는 다른 스타일을 쓰세요.
 :::
 
 ## parseVttTimestamp / parseVttCueTiming
 
 WebVTT 자막의 시각, 곧 `.vtt` 파일에 들어 있는 `hh:mm:ss.mmm --> hh:mm:ss.mmm` 줄을 해석합니다.
 
-`parseVttTimestamp`는 시각 하나(`hh:`는 있어도 없어도 됩니다)를 초로 바꿉니다. `parseVttCueTiming`은 큐의 시각 줄 전체, 곧 `-->`로 갈린 양쪽을 `{ start, end }`로 바꾸며, 뒤에 붙는 큐 설정(`align:start line:0` 등)은 흘려보냅니다.
+`parseVttTimestamp`는 시각 하나를 초로 바꿉니다. `parseVttCueTiming`은 `start --> end` 줄 전체를 `{ start, end }`로 바꾸며 (`-->` 양옆에 공백 필요, 뒤쪽 큐 설정은 무시), `end > start`를 요구합니다.
+
+### 무엇을 받나
+
+시각은 문자열 전체를 맞춰 봅니다 (중간만 잘라 쓰지 않음). 분·초는 00–59, 밀리초는 세 자리 (`.` 또는 SRT `,`). 맞지 않으면 `undefined`.
 
 ```js
 import { parseVttTimestamp, parseVttCueTiming } from 'ranuts/utils';
 
 parseVttTimestamp('00:00:05.000'); // 5
 parseVttTimestamp('01:05.250'); // 65.25
+parseVttTimestamp('1:02:03.000'); // 3723
 parseVttTimestamp('not a timestamp'); // undefined
 
 parseVttCueTiming('00:00:00.000 --> 00:00:05.000'); // { start: 0, end: 5 }
 parseVttCueTiming('00:00:05.000 --> 00:00:10.000 align:start line:0'); // { start: 5, end: 10 }
+parseVttCueTiming('00:00:05.000 --> 00:00:05.000'); // undefined
 ```
-
-둘 다 입력이 형식에 맞지 않으면 예외를 던지지 않고 `undefined`를 돌려줍니다. 그래서 자막 파일에 망가진 줄이 하나 있어도 전체 해석을 멈추는 대신 그 줄만 건너뛸 수 있습니다.
 
 ## 참고
 
-1. **단위 고르기**: `formatRelative`는 그 차이가 실제로 채우는 가장 굵은 단위를 골라, 그 안에서 반올림합니다. 반올림한 값이 다음 단위의 문턱에 닿으면(59.6분이 「60분」이 되는 식) 단위를 올려서 「1시간 전」으로 읽히게 합니다.
-2. **부호를 떼고 반올림**: 크기를 먼저 반올림한 다음 부호를 되붙입니다. 자바스크립트에서 `Math.round(-1.5)`가 `-1`이라, 그렇게 하지 않으면 90분 전은 「1시간 전」인데 90분 뒤는 「2시간 뒤」가 되어 버리기 때문입니다.
+1. **단위 고르기**: `formatRelative`는 그 차이가 실제로 채우는 가장 굵은 단위를 골라, 그 안에서 반올림합니다. 반올림한 값이 다음 단위의 문턱에 닿으면 (59.6 분이「60 분」이 되는 식) 단위를 올려서「1 시간 전」으로 읽히게 합니다.
+2. **부호를 떼고 반올림**: 크기를 먼저 반올림한 다음 부호를 되붙입니다. 자바스크립트에서 `Math.round(-1.5)`가 `-1`이라, 그렇게 하지 않으면 90 분 전은「1 시간 전」인데 90 분 뒤는「2 시간 뒤」가 되어 버리기 때문입니다.
 3. **포매터 돌려쓰기**: `Intl.RelativeTimeFormat` 인스턴스는 로캘·스타일·numeric 조합마다 캐시됩니다. 그래서 시각 백 개를 그리는 목록도 포매터를 백 개가 아니라 하나만 만듭니다.
 4. **대비책**: `Intl.RelativeTimeFormat`이 없는 실행 환경에서는 예외를 던지지 않고 간략 표기로 물러납니다.

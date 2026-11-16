@@ -67,7 +67,7 @@ description: 'Overview of ranuts utility functions: functional helpers (debounce
 | ------------------------------------- | ---------------------------------------------- | ---------------------------------------- |
 | formatDuration                        | Convert time in seconds to formatted string    | [formatDuration](./time_format.md)       |
 | formatRelative                        | Describe a time relative to now ("3 days ago") | [formatRelative](./time_format.md)       |
-| parseVttTimestamp / parseVttCueTiming | Parse WebVTT subtitle timing lines             | [parseVttTimestamp](./time_format.md)    |
+| parseVttTimestamp / parseVttCueTiming | Parse WebVTT/SRT cue timestamps into seconds   | [parseVttTimestamp](./time_format.md)    |
 | performanceTime                       | Get high-precision timestamp                   | [performanceTime](./performance_time.md) |
 
 ## Device Detection

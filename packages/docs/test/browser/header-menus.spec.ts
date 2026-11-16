@@ -14,9 +14,6 @@ test.beforeEach(async ({ page }) => {
   );
 });
 
-const chromePanel = (page: import('@playwright/test').Page, text: string) =>
-  page.locator('r-dropdown.ran-chrome-menu[role="listbox"]').filter({ hasText: text });
-
 test('header chrome menus have no chevron and open on hover', async ({ page, browserName }) => {
   test.skip(browserName === 'firefox', 'hover menus need a fine pointer hover path');
   await expect(page.locator('.langs__chevron, details.langs')).toHaveCount(0);
