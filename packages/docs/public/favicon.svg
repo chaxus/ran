@@ -1,18 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
-  <style>
-    .mark { fill: #111113; }
-    .grid { stroke: #f5f5f7; }
-    @media (prefers-color-scheme: dark) {
-      .mark { fill: #f5f5f7; }
-      .grid { stroke: #111113; }
-    }
-  </style>
-  <!-- Soft rounded diamond — same mark, less sharp corners. -->
-  <rect class="mark" x="14" y="14" width="36" height="36" rx="11" transform="rotate(45 32 32)"/>
-  <g class="grid" stroke-width="1.6" stroke-linecap="round">
-    <path d="M32 18v28"/>
-    <path d="M18 32h28"/>
-    <path d="M22.5 22.5l19 19"/>
-    <path d="M41.5 22.5l-19 19"/>
-  </g>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+<style>.mark{fill:#111113}@media (prefers-color-scheme:dark){.mark{fill:#f5f5f7}}</style>
+<mask id="cut"><path d="M32 3.62L60.38 32L32 60.38L3.62 32Z" fill="#fff"/><path d="M58.67 -4.95L9.94 69.26M43.29 -4.95L-5.45 69.26M20.85 -4.95L69.59 69.26M-6.75 -4.95L41.99 69.26M82.32 -4.95L33.58 69.26" stroke="#000" stroke-width="1.17"/></mask>
+<rect class="mark" width="64" height="64" mask="url(#cut)"/>
 </svg>
