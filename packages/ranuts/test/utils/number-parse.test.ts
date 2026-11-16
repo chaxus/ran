@@ -40,6 +40,9 @@ describe('parseChineseNumber', () => {
 
   it('accepts the traditional 萬', () => {
     expect(parseChineseNumber('三萬')).toBe(30000);
+    expect(parseChineseNumber('一萬億')).toBe(1_000_000_000_000);
+    expect(parseChineseNumber('兩千')).toBe(2000);
+    expect(parseChineseNumber('一億兩千萬')).toBe(120_000_000);
   });
 
   it('trims surrounding whitespace', () => {

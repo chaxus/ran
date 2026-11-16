@@ -178,6 +178,7 @@ const CN_DIGITS: Record<string, number> = {
   一: 1,
   二: 2,
   两: 2,
+  兩: 2,
   三: 3,
   四: 4,
   五: 5,
@@ -258,7 +259,7 @@ const parseChineseSections = (text: string, sections: typeof CN_SECTIONS): numbe
  * consecutive digits (「二零二四」), shorthand tens (「廿三」), and common abbreviations
  * (「一百一」→ 110). A bare leading unit means one of that unit (「百」→ 100, 「千万」→ 1e7,
  * 「亿」→ 1e8). Sections stack (「一万亿」→ 1e12). Simplified and traditional alike
- * (万/萬，亿/億); full-width digits are normalised first. Returns null when the input is not
+ * (两/兩，万/萬，亿/億); full-width digits are normalised first. Returns null when the input is not
  * a well-formed numeral: an unrecognised character, a repeated or out-of-order unit
  * (「一百百」「十十」「万万」), or a bare unit after the first character.
  * @param {string} value
