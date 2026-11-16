@@ -29,13 +29,14 @@ function constructorBodies(text: string): string[] {
 // still inside (`ensureShadowRoot`). Writing into it directly puts a second tree beside the
 // painted one; `mountShadowTree` and `hydrateShadowTree` replace or take it over.
 describe('shadow tree mounting', () => {
-  it('reads the component sources', () => {
+  it('reads the component sources and their constructors', () => {
     expect(sources.length).toBeGreaterThan(40);
+    expect(sources.flatMap(({ text }) => constructorBodies(text)).length).toBeGreaterThan(40);
   });
 
   it('mounts every constructor-built tree through mountShadowTree or hydrateShadowTree', () => {
     const direct =
-      /\b(?:_shadowDom|shadowDom|shadowRoot)\s*\.\s*(?:appendChild|append|prepend|insertBefore|replaceChildren)\s*\(/;
+      /\b(?:_shadowDom|shadowDom|shadowRoot)\s*[!?]?\s*\.\s*(?:(?:appendChild|append|prepend|insertBefore|replaceChildren)\s*\(|innerHTML\s*=)/;
     const offenders = sources.flatMap(({ file, text }) =>
       constructorBodies(text)
         .filter((body) => direct.test(body))
