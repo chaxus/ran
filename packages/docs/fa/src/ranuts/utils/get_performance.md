@@ -21,16 +21,16 @@
 | `sslConnect`   | زمان اتصال امن SSL (میلی‌ثانیه)                              | `number`              |
 | `request`      | TTFB؛ زمان درخواست شبکه (میلی‌ثانیه)                         | `number`              |
 | `response`     | زمان انتقال داده (میلی‌ثانیه)                                | `number`              |
-| `parseDomTree` | زمان تجزیهٔ DOM (میلی‌ثانیه)                                 | `number`              |
+| `parseDomTree` | زمان تجزیهٔ DOM (میلی‌ثانیه)                                  | `number`              |
 | `resource`     | زمان بارگذاری منابع (میلی‌ثانیه)                             | `number`              |
 | `domReady`     | زمان تا DOM Ready (میلی‌ثانیه)                               | `number`              |
-| `httpHead`     | اندازهٔ سرآیندهای HTTP (بایت)                                | `number`              |
+| `httpHead`     | اندازهٔ سرآیندهای HTTP (بایت)                                 | `number`              |
 | `interactive`  | زمان تا نخستین تعامل‌پذیری (میلی‌ثانیه)                      | `number`              |
 | `complete`     | زمان تا بارگذاری کامل صفحه (میلی‌ثانیه)                      | `number`              |
 | `redirect`     | شمار تغییر مسیرها                                            | `number`              |
 | `redirectTime` | زمان تغییر مسیرها (میلی‌ثانیه)                               | `number`              |
 | `duration`     | زمان کل درخواست منابع (میلی‌ثانیه)                           | `number`              |
-| `fp`           | زمان تا نخستین ترسیم (مدت صفحهٔ سفید، میلی‌ثانیه)            | `number \| undefined` |
+| `fp`           | زمان تا نخستین ترسیم (مدت صفحهٔ سفید، میلی‌ثانیه)             | `number \| undefined` |
 | `fcp`          | زمان تا نخستین ترسیم محتوایی (پایان نخستین صفحه، میلی‌ثانیه) | `number \| undefined` |
 
 #### پارامترها

@@ -17,7 +17,7 @@
 | ویژگی     | توضیح                | نوع                             |
 | --------- | -------------------- | ------------------------------- |
 | `success` | اینکه کار گرفت یا نه | `boolean`                       |
-| `data`    | دادهٔ Base64         | `string \| ArrayBuffer \| null` |
+| `data`    | دادهٔ Base64          | `string \| ArrayBuffer \| null` |
 | `message` | پیام خطا             | `string`                        |
 
 #### پارامترها

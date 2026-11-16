@@ -46,14 +46,14 @@ getTheme(); // → 'light' | 'dark' | 'system' | ''
 
 ## API
 
-| تابع              | امضا                                                                    | توضیح                                                                                                  |
-| ----------------- | ----------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
+| تابع              | امضا                                                                    | توضیح                                                                                                 |
+| ----------------- | ----------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
 | `initTheme`       | `(target?: ThemeTarget) => void`                                        | پوستهٔ ذخیره‌شده در `localStorage` را برمی‌گرداند. یک بار هنگام بارگذاری صدا بزنید. در SSR بی‌اثر است. |
-| `setTheme`        | `(name: RanThemeName, target?: ThemeTarget) => void`                    | `'light'` \| `'dark'` \| `'system'` را اعمال و ذخیره می‌کند. `'system'` سیستم را زنده دنبال می‌کند.    |
+| `setTheme`        | `(name: RanThemeName, target?: ThemeTarget) => void`                    | `'light'` \| `'dark'` \| `'system'` را اعمال و ذخیره می‌کند. `'system'` سیستم را زنده دنبال می‌کند.   |
 | `getTheme`        | `(target?: ThemeTarget) => RanThemeName \| ''`                          | پوستهٔ فعال را می‌خواند. در حالت سیستمی `'system'` و اگر چیزی تعیین نشده باشد `''` برمی‌گرداند.        |
-| `setThemeToken`   | `(name: string, value: string \| number, target?: HTMLElement) => void` | در زمان اجرا یک توکن را بازنویسی می‌کند (استایل درون‌خطی روی هدف).                                     |
-| `setThemeTokens`  | `(tokens: ThemeTokenMap, target?: HTMLElement) => void`                 | چند توکن را یک‌جا بازنویسی می‌کند. مقدار `null` / `undefined` آن توکن را پاک می‌کند.                   |
-| `clearThemeToken` | `(name: string, target?: HTMLElement) => void`                          | بازنویسی زمان‌اجرای یک توکن را برمی‌دارد.                                                              |
+| `setThemeToken`   | `(name: string, value: string \| number, target?: HTMLElement) => void` | در زمان اجرا یک توکن را بازنویسی می‌کند (استایل درون‌خطی روی هدف).                                    |
+| `setThemeTokens`  | `(tokens: ThemeTokenMap, target?: HTMLElement) => void`                 | چند توکن را یک‌جا بازنویسی می‌کند. مقدار `null` / `undefined` آن توکن را پاک می‌کند.                  |
+| `clearThemeToken` | `(name: string, target?: HTMLElement) => void`                          | بازنویسی زمان‌اجرای یک توکن را برمی‌دارد.                                                             |
 
 **تایپ‌ها**
 

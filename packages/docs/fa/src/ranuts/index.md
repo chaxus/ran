@@ -21,11 +21,11 @@ import { debounce } from 'ranuts/utils';
 
 | import                                            | چه دارد                                            | محیط اجرا       |
 | ------------------------------------------------- | -------------------------------------------------- | --------------- |
-| `ranuts`                                          | بسته ریشه: سطحِ utils به‌همراه visual              | مرورگر + Node   |
+| `ranuts`                                          | بسته ریشه: سطحِ utils به‌همراه visual               | مرورگر + Node   |
 | [`ranuts/utils`](/fa/ranuts/utils/)               | DOM/BOM، رشته، شیء، عدد، رنگ، زمان، ذخیره‌سازی …   | مرورگر + Node\* |
 | [`ranuts/visual`](/fa/ranuts/visual/)             | موتور رسم دوبعدی (Canvas / WebGL / WebGPU)         | **فقط مرورگر**  |
 | [`ranuts/i18n`](/fa/ranuts/i18n/)                 | موتور ترجمه: واژه‌نامه‌های تخت، تعویض در زمان اجرا | مرورگر + Node   |
-| [`ranuts/sw`](/fa/ranuts/sw/)                     | راهبردهای کش و نیمهٔ ورکرِ قرارداد پیش‌کش          | **سرویس‌ورکر**  |
+| [`ranuts/sw`](/fa/ranuts/sw/)                     | راهبردهای کش و نیمهٔ ورکرِ قرارداد پیش‌کش            | **سرویس‌ورکر**  |
 | [`ranuts/vnode`](/fa/ranuts/vnode/)               | DOM مجازی به سبک Snabbdom                          | مرورگر          |
 | [`ranuts/stream`](/fa/ranuts/stream/)             | تحلیل SSE، تاکردن جریان مدل، بودجه توکن            | مرورگر + Node   |
 | [`ranuts/conversation`](/fa/ranuts/conversation/) | گزارش رویدادها ← گره‌های گفت‌وگوی قابل رسم         | مرورگر + Node   |

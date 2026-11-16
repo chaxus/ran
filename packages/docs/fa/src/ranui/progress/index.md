@@ -29,7 +29,7 @@ description: 'کامپوننت Progress در ranui (<r-progress>) پیشرفت �
 | `percent` | `string` | `'0'`       | پیشرفت کنونی؛ عدد یا درصد می‌پذیرد. سقف آن `total` است.     |
 | `total`   | `string` | `'100'`     | کل پیشرفت؛ عدد یا درصد می‌پذیرد.                            |
 | `type`    | `string` | `'primary'` | نوع نوار: `primary` (ایستا) یا `drag` (کلیک‌شدنی / کشیدنی). |
-| `dot`     | `string` | `'true'`    | اینکه دستگیرهٔ کشیدن نشان داده شود: `true` یا `false`.      |
+| `dot`     | `string` | `'true'`    | اینکه دستگیرهٔ کشیدن نشان داده شود: `true` یا `false`.       |
 | `sheet`   | `string` | `''`        | CSS تزریق‌شده به shadow DOM کامپوننت.                       |
 
 ### مقدار پیشرفت `percent`
@@ -123,8 +123,8 @@ description: 'کامپوننت Progress در ranui (<r-progress>) پیشرفت �
 | Part    | توضیح               |
 | ------- | ------------------- |
 | `track` | ریل پیشرفت (زمینه). |
-| `fill`  | بخش پرشدهٔ ریل.     |
-| `dot`   | دستگیرهٔ کشیدن.     |
+| `fill`  | بخش پرشدهٔ ریل.      |
+| `dot`   | دستگیرهٔ کشیدن.      |
 
 ```css
 r-progress::part(fill) {

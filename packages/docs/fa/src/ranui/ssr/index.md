@@ -52,13 +52,13 @@ const html = renderToString(new Button());
 
 ## مرجع API
 
-| خروجی                      | نقطهٔ ورود         | امضا                                       | توضیح                                                  |
-| -------------------------- | ------------------ | ------------------------------------------ | ------------------------------------------------------ |
+| خروجی                      | نقطهٔ ورود          | امضا                                       | توضیح                                                |
+| -------------------------- | ------------------ | ------------------------------------------ | ---------------------------------------------------- |
 | `renderHTMLToString(html)` | `ranui/ssr-stream` | `(html: string) => Promise<string>`        | هر تگ `<r-*>`ِ ثبت‌شده را در یک رشتهٔ HTML باز می‌کند. |
-| `renderToStream(html)`     | `ranui/ssr-stream` | `(html: string) => AsyncGenerator<string>` | همان، تکه‌تکه.                                         |
-| `renderToString(el)`       | `ranui/ssr`        | `(component) => string`                    | یک نمونهٔ کامپوننت را سریال‌سازی می‌کند.               |
-| `RanElement`               | `ranui/ssr`        | کلاس                                       | در مرورگر `HTMLElement`، در Node ماکِت SSR.            |
-| `h(tag, props, …children)` | `ranui/ssr`        | `(tag, props?, ...children) => string`     | ابزار کوچکی برای ساخت دستی نشانه‌گذاری.                |
+| `renderToStream(html)`     | `ranui/ssr-stream` | `(html: string) => AsyncGenerator<string>` | همان، تکه‌تکه.                                       |
+| `renderToString(el)`       | `ranui/ssr`        | `(component) => string`                    | یک نمونهٔ کامپوننت را سریال‌سازی می‌کند.              |
+| `RanElement`               | `ranui/ssr`        | کلاس                                       | در مرورگر `HTMLElement`، در Node ماکِت SSR.           |
+| `h(tag, props, …children)` | `ranui/ssr`        | `(tag, props?, ...children) => string`     | ابزار کوچکی برای ساخت دستی نشانه‌گذاری.              |
 
 ## سرور چه می‌تواند و چه نمی‌تواند
 

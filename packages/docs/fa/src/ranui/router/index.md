@@ -223,7 +223,7 @@ const router = createRouter({
 | `currentRoute`           | `RouteLocation \| null`                                 | شیء موقعیت مسیر جاری                                            |
 | `mode`                   | `'history' \| 'hash'`                                   | حالت تاریخچه                                                    |
 | `base`                   | `string`                                                | پیشوند نشانی پایه                                               |
-| `routes`                 | `RouteConfig[]`                                         | پیکربندی‌های مسیرِ ثبت‌شده                                      |
+| `routes`                 | `RouteConfig[]`                                         | پیکربندی‌های مسیرِ ثبت‌شده                                       |
 
 ```js
 router.push('/users/42');

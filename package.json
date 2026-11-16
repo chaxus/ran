@@ -40,9 +40,9 @@
   "author": "",
   "license": "MIT",
   "devDependencies": {
-    "jscpd": "5.4.2",
-    "oxlint": "1.91.0",
-    "prettier": "3.9.10",
+    "jscpd": "5.4.3",
+    "oxlint": "1.93.0",
+    "prettier": "3.10.1",
     "publint": "0.3.25",
     "typescript": "catalog:",
     "@types/node": "catalog:",

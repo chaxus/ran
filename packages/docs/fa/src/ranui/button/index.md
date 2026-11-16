@@ -29,7 +29,7 @@ description: 'کامپوننت Button در ranui (<r-button>) یک وب‌کام
 | `type`     | `string`  | `'default'` | نوع دکمه: `default`، `primary`، `contrast`، `warning`، `text` |
 | `disabled` | `boolean` | `false`     | اینکه دکمه غیرفعال باشد یا نه                                 |
 | `icon`     | `string`  | `''`        | نام آیکون دکمه                                                |
-| `effect`   | `boolean` | `true`      | اینکه جلوهٔ موجِ کلیک نمایش داده شود یا نه                    |
+| `effect`   | `boolean` | `true`      | اینکه جلوهٔ موجِ کلیک نمایش داده شود یا نه                      |
 
 ### انواع دکمه `type`
 
