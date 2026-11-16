@@ -115,7 +115,7 @@ thumbnail sprite manifests.
 | Hours       | Optional; on a three-part form, one or more digits (browser [collect](https://www.w3.org/TR/webvtt1/#collect-a-webvtt-timestamp) behaviour) |
 | Minutes/sec | Exactly two digits, **00–59** ([authoring syntax](https://www.w3.org/TR/webvtt1/#webvtt-timestamp))                                         |
 | Millis      | Exactly three digits after `.` (WebVTT) or `,` (SRT interchange)                                                                            |
-| Whole input | Must match end-to-end — no prefixes, suffixes or partial matches                                                                            |
+| Whole input | Surrounding whitespace is trimmed; the rest must match end-to-end — no prefixes, suffixes or partial matches                                |
 | Cue line    | `timestamp --> timestamp` with whitespace around `-->`; `end` strictly greater than `start`                                                 |
 
 Whole-string matching is the important one: an unanchored regex can turn `1:02:03.000` into

@@ -2,18 +2,18 @@
 
 The publishable set is **ranuts → @alixex/ranview → ranui**, in dependency order. A release may include any non-empty subset of that set. Other workspaces are not published by this workflow. All workspaces and the published libraries require **Node 24+**. Use pnpm **11.6.0**, pinned in the root `packageManager` field; the release workflow pins npm **11.20.0** for registry operations.
 
-## Published stable release — 2026-11-15
+## Published stable release — 2026-11-16
 
 | Package         | Version | npm tag |
 | --------------- | ------- | ------- |
-| ranuts          | 0.5.5   | latest  |
+| ranuts          | 0.5.6   | latest  |
 | @alixex/ranview | 0.2.4   | latest  |
 | ranui           | 0.5.5   | latest  |
 
-Prepare and publish `ranuts@0.5.5` with the Release libraries workflow on `main` (`publish=true`, channel `latest`, `packages=ranuts`). It follows `ranuts@0.5.4` and fixes `parseChineseNumber` (consecutive digits, abbreviated forms, bare units) and `parseVttTimestamp` (whole-string match, SRT commas, range checks) — see [#548](https://github.com/chaxus/ran/issues/548). Install it directly:
+Prepare and publish `ranuts@0.5.6` with the Release libraries workflow on `main` (`publish=true`, channel `latest`, `packages=ranuts`). It follows `ranuts@0.5.5` and finishes the [#548](https://github.com/chaxus/ran/issues/548) fix: `parseChineseNumber` stacks sections (`一万亿` → 1e12) and returns `null` for repeated or out-of-order units (`一百百`, `十十`) instead of a guess. Install it directly:
 
 ```sh
-npm install ranuts@0.5.5
+npm install ranuts@0.5.6
 # Unchanged companions stay on the previous latest:
 npm install @alixex/ranview@0.2.4
 npm install ranui@0.5.5

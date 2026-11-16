@@ -106,7 +106,7 @@ ranui 播放器的缩略图 sprite 清单也用同一套时间行。
 | 小时   | 可选；三段式时一位及以上（对齐浏览器 [collect](https://www.w3.org/TR/webvtt1/#collect-a-webvtt-timestamp)） |
 | 分/秒  | 恰好两位，**00–59**（[书写语法](https://www.w3.org/TR/webvtt1/#webvtt-timestamp)）                          |
 | 毫秒   | 恰好三位；`.`（WebVTT）或 `,`（SRT 互通）                                                                   |
-| 整串   | 必须从头到尾匹配——不要前缀、后缀或半截匹配                                                                  |
+| 整串   | 先去掉首尾空白，其余必须从头到尾匹配——不要前缀、后缀或半截匹配                                              |
 | cue 行 | `timestamp --> timestamp`，`-->` 两侧有空白；`end` 必须严格大于 `start`                                     |
 
 整串匹配最关键：未锚定的正则会把 `1:02:03.000` 静默解析成 `123`（只吃到 `02:03.000`）。

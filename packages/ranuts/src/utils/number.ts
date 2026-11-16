@@ -193,27 +193,74 @@ const CN_UNITS: Record<string, number> = {
   千: 1000,
 };
 
-/** Section multipliers (万 = 10⁴, 亿 = 10⁸). Additive so「一亿零一万」works. */
-const CN_SECTIONS: Record<string, number> = {
-  万: 10_000,
-  萬: 10_000,
-  亿: 100_000_000,
-  億: 100_000_000,
-};
+/** Section marks, largest first: a section's head is everything before its mark (「一万亿」→ 一万 × 亿). */
+const CN_SECTIONS: readonly (readonly [string, number])[] = [
+  ['亿', 100_000_000],
+  ['万', 10_000],
+];
+
+const CN_VARIANTS: Record<string, string> = { 萬: '万', 億: '亿', 〇: '零' };
 
 /** Shorthand tens: 廿 = 二十，卅 = 三十，卌 = 四十。*/
-const CN_TENS: Record<string, number> = {
-  廿: 2,
-  卅: 3,
-  卌: 4,
+const CN_TENS: Record<string, string> = {
+  廿: '二十',
+  卅: '三十',
+  卌: '四十',
+};
+
+/** Below 万: digits paired with 千 / 百 / 十, each unit once and in descending order. */
+const parseChineseGroup = (group: string): number | null => {
+  let total = 0;
+  let digit: number | null = null;
+  let lastUnit = 10_000;
+  let zero = false;
+  for (const char of group) {
+    const value = CN_DIGITS[char];
+    if (value !== undefined) {
+      // Unit form never has two digits in a row (「一百二零」); 零 only follows a unit.
+      if (digit !== null) return null;
+      if (value === 0) zero = true;
+      else digit = value;
+      continue;
+    }
+    const unit = CN_UNITS[char];
+    if (unit === undefined || unit >= lastUnit) return null;
+    // Only 十 may drop its 一 here (「一百十」); a leading bare 百 / 千 was given its 一 by the caller.
+    if (digit === null && unit !== 10) return null;
+    total += (digit ?? 1) * unit;
+    lastUnit = unit;
+    digit = null;
+    zero = false;
+  }
+  if (digit === null) return total;
+  // 「一百一」omits the next-smaller unit → 110; 「一百零一」keeps ones via 零 → 101.
+  return total + (!zero && lastUnit >= 100 && lastUnit < 10_000 ? (digit * lastUnit) / 10 : digit);
+};
+
+const parseChineseSections = (text: string, sections: typeof CN_SECTIONS): number | null => {
+  if (sections.length === 0) return parseChineseGroup(text);
+  const [[mark, size], ...smaller] = sections;
+  const at = text.indexOf(mark);
+  if (at < 0) return parseChineseSections(text, smaller);
+  const head = parseChineseSections(text.slice(0, at), smaller);
+  if (!head) return null;
+  let tail = text.slice(at + 1);
+  // 「一万五」: a lone digit after the mark is the next-smaller unit → 15000.
+  const lone = tail.length === 1 ? CN_DIGITS[tail] : undefined;
+  if (lone) return head * size + (lone * size) / 10;
+  if (tail.startsWith('零')) tail = tail.slice(1);
+  const rest = parseChineseSections(tail, smaller);
+  return rest === null ? null : head * size + rest;
 };
 
 /**
  * @description: Chinese numerals to Arabic — unit forms (「十五」「一百零三」「三万」「一亿」),
  * consecutive digits (「二零二四」), shorthand tens (「廿三」), and common abbreviations
- * (「一百一」→ 110). A bare unit means one of that unit (「百」→ 100, 「亿」→ 1e8).
- * Simplified and traditional alike (万/萬，亿/億); full-width digits are normalised first.
- * Returns null when an unrecognised character is present.
+ * (「一百一」→ 110). A bare leading unit means one of that unit (「百」→ 100, 「千万」→ 1e7,
+ * 「亿」→ 1e8). Sections stack (「一万亿」→ 1e12). Simplified and traditional alike
+ * (万/萬，亿/億); full-width digits are normalised first. Returns null when the input is not
+ * a well-formed numeral: an unrecognised character, a repeated or out-of-order unit
+ * (「一百百」「十十」「万万」), or a bare unit after the first character.
  * @param {string} value
  * @return {number | null}
  * @example
@@ -223,64 +270,23 @@ const CN_TENS: Record<string, number> = {
  * parseChineseNumber('二零二四'); // 2024
  * parseChineseNumber('一百一'); // 110
  * parseChineseNumber('一亿两千万'); // 120000000
+ * parseChineseNumber('一万亿'); // 1000000000000
+ * parseChineseNumber('一百百'); // null — repeated unit
  * parseChineseNumber('第三章'); // null — contains non-numeral characters, slice the number out first
  * ```
  */
 export const parseChineseNumber = (value: string): number | null => {
-  const text = toHalfWidth(value.trim());
+  let text = toHalfWidth(value.trim());
   if (/^\d+$/.test(text)) return Number.parseInt(text, 10);
+  text = Array.from(text, (char) => CN_TENS[char] ?? CN_VARIANTS[char] ?? char).join('');
   if (text.length === 0) return null;
-  let result = 0;
-  let section = 0;
-  let current = 0;
-  let lastUnit = 0;
-  let digitRun = false;
-  let zeroAfterUnit = false;
-
-  const applyUnit = (unit: number): void => {
-    // Bare「十」「百」「千」count as 1 of that unit (「百」→ 100).
-    section += (current || 1) * unit;
-    current = 0;
-    lastUnit = unit;
-    digitRun = false;
-    zeroAfterUnit = false;
-  };
-
-  const applySection = (multiplier: number): void => {
-    // Bare「万」「亿」is one of that section; otherwise fold section+current and add.
-    const amount = section + current;
-    result += (amount || (result === 0 ? 1 : 0)) * multiplier;
-    section = 0;
-    current = 0;
-    lastUnit = multiplier;
-    digitRun = false;
-    zeroAfterUnit = false;
-  };
-
-  for (const char of text) {
-    if (CN_DIGITS[char] !== undefined) {
-      const digit = CN_DIGITS[char];
-      current = digitRun ? current * 10 + digit : digit;
-      digitRun = true;
-      if (digit === 0 && lastUnit > 0) zeroAfterUnit = true;
-    } else if (CN_TENS[char] !== undefined) {
-      // 「廿」≡「二十」: apply the leading digit, then 十。
-      current = CN_TENS[char];
-      digitRun = false;
-      applyUnit(10);
-    } else if (CN_UNITS[char] !== undefined) {
-      applyUnit(CN_UNITS[char]);
-    } else if (CN_SECTIONS[char] !== undefined) {
-      applySection(CN_SECTIONS[char]);
-    } else {
-      return null;
-    }
+  // 「二零二四」「一二三」: digits alone read positionally.
+  if (Array.from(text).every((char) => CN_DIGITS[char] !== undefined)) {
+    return Array.from(text).reduce((total, char) => total * 10 + CN_DIGITS[char], 0);
   }
-  // 「一百一」omits the next-smaller unit → 110; 「一百零一」keeps ones via 零 → 101.
-  if (current > 0 && current < 10 && lastUnit >= 100 && !zeroAfterUnit) {
-    current *= lastUnit / 10;
-  }
-  return result + section + current;
+  // A leading bare unit stands for one of it: 「百」「千万」「亿」.
+  if (CN_UNITS[text[0]] !== undefined || CN_SECTIONS.some(([mark]) => mark === text[0])) text = `一${text}`;
+  return parseChineseSections(text, CN_SECTIONS);
 };
 
 const ROMAN_VALUES: Record<string, number> = {

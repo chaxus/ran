@@ -87,6 +87,30 @@ describe('parseChineseNumber', () => {
     expect(parseChineseNumber('卌')).toBe(40);
     expect(parseChineseNumber('廿万')).toBe(200_000);
   });
+
+  it('stacks sections (一万亿 → 1e12)', () => {
+    expect(parseChineseNumber('一万亿')).toBe(1_000_000_000_000);
+    expect(parseChineseNumber('一千万亿')).toBe(1_000_000_000_000_000);
+    expect(parseChineseNumber('三万五千亿')).toBe(3_500_000_000_000);
+    expect(parseChineseNumber('百万')).toBe(1_000_000);
+    expect(parseChineseNumber('千万')).toBe(10_000_000);
+    expect(parseChineseNumber('十万')).toBe(100_000);
+    expect(parseChineseNumber('一亿零五')).toBe(100_000_005);
+    expect(parseChineseNumber('九千九百九十九万九千九百九十九')).toBe(99_999_999);
+  });
+
+  it('returns null for repeated or out-of-order units instead of a guess', () => {
+    for (const input of ['一百百', '千千', '十十', '一十十', '万万', '一亿亿', '一十百', '一百二零', '零百']) {
+      expect(parseChineseNumber(input), input).toBeNull();
+    }
+  });
+
+  it('lets only the first character be a bare unit', () => {
+    expect(parseChineseNumber('百五')).toBe(150);
+    expect(parseChineseNumber('一百十')).toBe(110);
+    expect(parseChineseNumber('一千百')).toBeNull();
+    expect(parseChineseNumber('一万千')).toBeNull();
+  });
 });
 
 describe('parseRomanNumber', () => {
