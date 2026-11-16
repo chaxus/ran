@@ -3,8 +3,9 @@ import { Div, View, createRef, EventManager } from '@/utils/builder';
 import {
   ensureShadowRoot,
   getStringAttribute,
-  setStringAttribute,
+  mountShadowTree,
   setBooleanAttribute,
+  setStringAttribute,
   shadowPart,
   syncSheetAttribute,
 } from '@/utils/component';
@@ -153,7 +154,7 @@ export class Markdown extends RanElement {
       .part('markdown')
       .children(Div().class('ran-markdown-body').part('body').ref(bodyRef))
       .build();
-    this._shadowDom.appendChild(this._wrap);
+    mountShadowTree(this._shadowDom, markdownCss, this._wrap);
     this._body = shadowPart(bodyRef, 'body');
   }
 

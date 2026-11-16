@@ -2,7 +2,13 @@ import scratchCss from './index.less?inline';
 import { Div, EventManager, Slot, View } from '@/utils/builder';
 import { RanElement, isDisabled } from '@/utils/index';
 import { defineSSR } from '@/utils/ssr-registry';
-import { ensureShadowRoot, getStringAttribute, setStringAttribute, syncSheetAttribute } from '@/utils/component';
+import {
+  ensureShadowRoot,
+  getStringAttribute,
+  mountShadowTree,
+  setStringAttribute,
+  syncSheetAttribute,
+} from '@/utils/component';
 import { uiText } from '@/utils/ui-text';
 import { scratchText } from './text';
 
@@ -65,7 +71,7 @@ class ScratchTicket extends RanElement {
     const scratchRoot = Div().class('ran-scratch').children(revealButton, scratchTicketContainer, revealStatus).build();
     this.revealButton = revealButton;
     this.revealStatus = revealStatus;
-    this._shadowDom.appendChild(scratchRoot);
+    mountShadowTree(this._shadowDom, scratchCss, scratchRoot);
 
     this.scratchTicketContainer = scratchTicketContainer;
     this.scratchAward = scratchAward;

@@ -5,6 +5,7 @@ import { defineSSR } from '@/utils/ssr-registry';
 import {
   ensureShadowRoot,
   getStringAttribute,
+  mountShadowTree,
   setStringAttribute,
   shadowPart,
   syncSheetAttribute,
@@ -35,7 +36,7 @@ export class DropdownItem extends RanElement {
       .part('item')
       .children(ionDropdownItemContent)
       .build() as HTMLDivElement;
-    this._shadowDom.appendChild(ionDropdownItem);
+    mountShadowTree(this._shadowDom, less, ionDropdownItem);
     this._slot = shadowPart(slotRef, 'slot');
     this.ionDropdownItemContent = shadowPart(contentRef, 'content');
     this.ionDropdownItem = ionDropdownItem;

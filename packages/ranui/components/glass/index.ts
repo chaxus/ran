@@ -1,7 +1,14 @@
 import glassCss from './index.less?inline';
 import { createRef, Div, EventManager, Slot } from '@/utils/builder';
 import { RanElement } from '@/utils/index';
-import { ensureShadowRoot, getStringAttribute, hostInternals, setStringAttribute, shadowPart } from '@/utils/component';
+import {
+  ensureShadowRoot,
+  getStringAttribute,
+  hostInternals,
+  mountShadowTree,
+  setStringAttribute,
+  shadowPart,
+} from '@/utils/component';
 import { defineSSR } from '@/utils/ssr-registry';
 import { isActivationKey } from '@/utils/a11y';
 import { createRimRenderer, type RimRenderer } from './rim';
@@ -94,7 +101,7 @@ export class Glass extends RanElement {
         Slot(),
       )
       .build();
-    this._shadowDom.appendChild(this._glass);
+    mountShadowTree(this._shadowDom, glassCss, this._glass);
     this._specular = shadowPart(specularRef, 'specular layer');
     this._refractionLayer = shadowPart(refractionRef, 'refraction layer');
   }

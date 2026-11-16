@@ -3,7 +3,13 @@ import { uiText } from '@/utils/ui-text';
 import { loadingText } from './text';
 import { RanElement } from '@/utils/index';
 import { Div } from '@/utils/builder';
-import { ensureShadowRoot, getStringAttribute, setStringAttribute, syncSheetAttribute } from '@/utils/component';
+import {
+  ensureShadowRoot,
+  getStringAttribute,
+  mountShadowTree,
+  setStringAttribute,
+  syncSheetAttribute,
+} from '@/utils/component';
 import { adoptStyles } from '@/utils/style';
 import { defineSSR } from '@/utils/ssr-registry';
 import type { LoadingVariant } from './types';
@@ -78,7 +84,7 @@ export class Loading extends RanElement {
     super();
     this._shadowDom = ensureShadowRoot(this, loadingCss);
     const contain = Div().class('ran-loading').attr('aria-hidden', 'true').build() as HTMLDivElement;
-    this._shadowDom.appendChild(contain);
+    mountShadowTree(this._shadowDom, loadingCss, contain);
     this.contain = contain;
   }
   get name(): ICON_NAME_AMP {

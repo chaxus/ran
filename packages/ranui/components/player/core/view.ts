@@ -1,5 +1,6 @@
 import type { Progress } from '@/components/progress';
 import { Div, View } from '@/utils/builder';
+import { mountShadowTree } from '@/utils/component';
 import type { ElementBuilder } from '@/utils/builder';
 import { uiText } from '@/utils/ui-text';
 import { playerText } from '../text';
@@ -130,10 +131,11 @@ export interface PlayerViewRefs {
  */
 export function ensurePlayerView(input: {
   shadowDom: ShadowRoot;
+  cssText: string;
   speedOptions: SpeedOption[];
   onSpeedChange: (e: Event) => void;
 }): PlayerViewRefs {
-  const { shadowDom, speedOptions, onSpeedChange } = input;
+  const { shadowDom, cssText, speedOptions, onSpeedChange } = input;
 
   const container = Div().build() as HTMLDivElement;
   const playerBtn = Div()
@@ -320,7 +322,7 @@ export function ensurePlayerView(input: {
 
   // deferred mount: this is the constructor's own work, extracted into a function —
   // `ensurePlayerView` has exactly one caller, the r-player constructor.
-  shadowDom.appendChild(player);
+  mountShadowTree(shadowDom, cssText, player);
 
   return {
     player,

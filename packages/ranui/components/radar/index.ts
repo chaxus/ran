@@ -4,6 +4,7 @@ import { createRef, Div, RanElement, View } from '@/utils/index';
 import {
   ensureShadowRoot,
   getStringAttribute,
+  mountShadowTree,
   setStringAttribute,
   shadowPart,
   syncSheetAttribute,
@@ -58,7 +59,7 @@ export class RadarChart extends RanElement {
       .class('ran-radar')
       .children(View<HTMLCanvasElement>('canvas').ref(radarChartRef).build())
       .build() as HTMLDivElement;
-    this._shadowDom.appendChild(container);
+    mountShadowTree(this._shadowDom, radarCss, container);
     const radarChart = shadowPart(radarChartRef, 'canvas');
 
     this.abilityRadarChartContainer = container;

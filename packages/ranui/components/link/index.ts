@@ -1,7 +1,13 @@
 import linkCss from './index.less?inline';
 import { EventManager } from '@/utils/builder';
 import { RanElement } from '@/utils/index';
-import { ensureShadowRoot, getStringAttribute, setStringAttribute, syncSheetAttribute } from '@/utils/component';
+import {
+  ensureShadowRoot,
+  getStringAttribute,
+  mountShadowTree,
+  setStringAttribute,
+  syncSheetAttribute,
+} from '@/utils/component';
 import { defineSSR } from '@/utils/ssr-registry';
 import { useRouter } from '@/utils/router';
 
@@ -20,7 +26,7 @@ export class Link extends RanElement {
     const a = document.createElement('a');
     a.appendChild(document.createElement('slot'));
     const anchor = a;
-    this._shadowDom.appendChild(anchor);
+    mountShadowTree(this._shadowDom, linkCss, anchor);
     this._anchor = anchor as HTMLAnchorElement;
   }
 
