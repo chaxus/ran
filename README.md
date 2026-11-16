@@ -6,7 +6,7 @@
 </p>
 
 <h1 align="center">ran</h1>
-<p align="center">Design methods, components and tools for building web products, for developers and coding agents.</p>
+<p align="center"><b>Web components for AI chat and product UI. One <code>&lt;r-*&gt;</code> tag works the same in React, Vue, Svelte or a plain HTML file.</b></p>
 
 <p align="center">
   <a href="https://www.npmjs.com/package/ranui"><img src="https://img.shields.io/npm/v/ranui?label=ranui" alt="ranui on npm"></a>
@@ -18,19 +18,37 @@
 <p align="center"><a href="https://ran.chaxus.com/">Documentation</a> · <a href="https://ran.chaxus.com/ranui/">Components</a> · <a href="https://ran.chaxus.com/agents/">Agents</a></p>
 <p align="center"><b>English</b> · <a href="./README.zh-CN.md">中文</a> · <a href="./README.ja.md">日本語</a> · <a href="./README.es.md">Español</a> · <a href="./README.pt.md">Português</a> · <a href="./README.ko.md">한국어</a> · <a href="./README.de.md">Deutsch</a> · <a href="./README.fa.md">فارسی</a></p>
 
+## By the numbers
+
+|                                              |       ranui | Shoelace | Web Awesome | Material Web |
+| -------------------------------------------- | ----------: | -------: | ----------: | -----------: |
+| One button, all dependencies and theme, gzip | **12.4 kB** |  22.5 kB |     41.1 kB |      14.4 kB |
+| 1,000 buttons created and rendered           |   **32 ms** |    52 ms |       60 ms |       102 ms |
+
+| ranui on its own                                                                |                  |
+| ------------------------------------------------------------------------------- | ---------------: |
+| A five-control form (button, input, checkbox, select, modal), gzip              |          41.3 kB |
+| Server render of 140 elements to Declarative Shadow DOM, Node                   |           1.5 ms |
+| First styled paint, server-rendered vs client-only (Slow 4G, 4× CPU)            | 424 ms vs 662 ms |
+| [ran.chaxus.com](https://ran.chaxus.com/) on Lighthouse mobile: score, LCP, CLS |     97, 2.5 s, 0 |
+
+<details>
+<summary>How these were measured</summary>
+
+- **Head-to-head:** ranui 0.5.5, Shoelace 2.20.1, Web Awesome 3.14.0 (free), Material Web 2.5.0, each from npm. Size is the button entry bundled with `esbuild --bundle --minify --format=esm`, plus the theme stylesheet each library's docs ask for (Material Web needs none), compressed with `gzip -9`. Web Awesome's and Shoelace's buttons pull in their icon and spinner components. Time is the median of 10 fresh pages: create 1,000 buttons, append them, wait one task so Lit-based components finish rendering, and read layout.
+- **Form size:** the five components imported together from a build of `main` (`3f54e43`) and bundled with esbuild, counting every file the browser fetched. Imported one at a time they total 74.4 kB, because they share one runtime.
+- **Server render:** `renderHTMLToString` from `ranui/ssr-stream` on a page of 20 forms, median of 15 samples. The output is 947 kB of HTML (125 kB gzip), because each element carries its own styles.
+- **First styled paint:** the same 20-form page, gzip on, Chromium throttled to Slow 4G and a 4× slower CPU, median of 10 runs. Server-rendered, the styled form is in the first paint; client-only, it is styled once the components load. On upgrade the server-rendered page currently shifts by a CLS of 0.125.
+- **Lighthouse:** Lighthouse 12.8 mobile preset, median of three runs. The button page scores the same (97, LCP 2.3 s, CLS 0).
+
+</details>
+
 ran has three parts, each usable on its own: **ranui**, UI components built as native custom elements; **ranuts**, typed TypeScript utilities; and **Ran Design**, methods for layout, interaction and review that people and coding agents can apply in any stack.
 
 - **Works with any framework, or none.** Every component is an `<r-*>` tag, so React, Vue, Svelte and a plain HTML file use it the same way. There is no adapter or framework runtime, and one script tag is enough.
 - **Building blocks for AI chat interfaces.** A conversation view that follows streaming output, Markdown that renders half-finished text, reasoning and tool-call rows, attachments and voice input. `ranuts/stream` parses the streamed response.
 - **Themes, server rendering and types included.** Light and dark themes through design tokens, SSR helpers and TypeScript declarations ship with the package.
 - **Install only what you use.** Each package and each component has its own entry point.
-
-<p align="center">
-  <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="./.github/assets/readme-home-dark.webp">
-    <img width="800" src="./.github/assets/readme-home.webp" alt="The ran.chaxus.com home page: the headline on the left, and on the right a working ranui form for inviting a teammate, with an email field, a role select, a checkbox and a send button">
-  </picture>
-</p>
 
 ## Packages
 
