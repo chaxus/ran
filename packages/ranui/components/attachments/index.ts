@@ -1,7 +1,13 @@
 import componentCss from './index.less?inline';
 import { ButtonBuilder, Div, EventManager, Span, View } from '@/utils/builder';
 import { RanElement } from '@/utils/index';
-import { ensureShadowRoot, getStringAttribute, setStringAttribute, syncSheetAttribute } from '@/utils/component';
+import {
+  ensureShadowRoot,
+  getStringAttribute,
+  mountShadowTree,
+  setStringAttribute,
+  syncSheetAttribute,
+} from '@/utils/component';
 import { defineSSR } from '@/utils/ssr-registry';
 import { formatBytes } from 'ranuts/utils';
 import { uiText } from '@/utils/ui-text';
@@ -77,7 +83,8 @@ export class Attachments extends RanElement {
     super();
     this._shadowDom = ensureShadowRoot(this, componentCss);
     this._list = Div().class('ran-attachments').attr('part', 'list').attr('role', 'list').build();
-    this._shadowDom.appendChild(this._list);
+    // Replaces the server-rendered snapshot rather than adding a second copy beside it.
+    mountShadowTree(this._shadowDom, componentCss, this._list);
   }
 
   // ── Accessors ──────────────────────────────────────────────────────────

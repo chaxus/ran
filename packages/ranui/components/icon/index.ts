@@ -2,7 +2,13 @@ import iconCss from './index.less?inline';
 import { RanElement } from '@/utils/ssr';
 import { Div, EventManager, View } from '@/utils/builder';
 import { defineSSR } from '@/utils/ssr-registry';
-import { ensureShadowRoot, getStringAttribute, setStringAttribute, syncSheetAttribute } from '@/utils/component';
+import {
+  ensureShadowRoot,
+  getStringAttribute,
+  mountShadowTree,
+  setStringAttribute,
+  syncSheetAttribute,
+} from '@/utils/component';
 
 const isDev = import.meta.env.DEV;
 
@@ -169,7 +175,8 @@ export class Icon extends RanElement {
     super();
     this._shadowDom = ensureShadowRoot(this, iconCss);
     const div = Div().class('ran-icon').part('ran-icon').build();
-    this._shadowDom.appendChild(div);
+    // Replaces the server-rendered snapshot rather than adding a second copy beside it.
+    mountShadowTree(this._shadowDom, iconCss, div);
     this._div = div;
   }
 

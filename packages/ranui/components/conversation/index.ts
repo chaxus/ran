@@ -3,6 +3,7 @@ import { ButtonBuilder, createRef, Div, EventManager, Slot } from '@/utils/build
 import { RanElement } from '@/utils/index';
 import {
   ensureShadowRoot,
+  mountShadowTree,
   getStringAttribute,
   setStringAttribute,
   shadowPart,
@@ -132,7 +133,6 @@ export class Conversation extends RanElement {
         Div().class('ran-conversation-list').ref(list).attr('part', 'list').build(),
       )
       .build();
-    this._shadowDom.appendChild(this._scroll);
     // Outside the scrollport, not inside it: a footer that scrolls with the transcript is a
     // composer that leaves the frame, and one made sticky still floats up under the last
     // message while the transcript is shorter than the frame.
@@ -141,6 +141,10 @@ export class Conversation extends RanElement {
       .attr('part', 'footer')
       .children(Slot().attr('name', 'footer').build())
       .build();
+    // Replaces, not appends: on a server-rendered page the closed root already holds the
+    // Declarative Shadow DOM snapshot, and a second copy above the live one pushes the
+    // transcript out of its own scrollport.
+    mountShadowTree(this._shadowDom, componentCss, this._scroll);
     this._shadowDom.appendChild(this._footer);
     this._list = shadowPart(list, 'list');
     this._older = shadowPart(older, 'older');
