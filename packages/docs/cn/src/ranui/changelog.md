@@ -9,6 +9,18 @@ description: 'ranui 的变更记录——新增、变更、修复与移除及其
 
 ::: v-pre
 
+## [0.5.6] — 2026-11-16
+
+[ranui@0.5.6](https://www.npmjs.com/package/ranui/v/0.5.6) 已正式发布到 npm 的 `latest` 标签。
+
+- **服务端渲染的元素升级更干净。** 每个服务端渲染的元素升级时，都会替换掉自己的 Declarative Shadow DOM 快照，不再在旁边多挂一棵树；保留还是替换快照，所有组件统一在一处判断。服务端输出的 closed shadow root 通过 `ElementInternals` 复用。
+- **首屏和升级后一致。** `r-button`、`r-input` 的图标，以及 `r-input` / `r-select` 的标签，都直接画进服务端 HTML。升级前的尺寸占位改为随各组件放进 `ranui.css`，并跳过已有服务端 shadow root 的宿主，刷新时不再出现双重边框或布局跳动。
+- **新增 `r-menubar` 与 `mountMenubarHandoff`**（从 `ranui/menubar` 引入）：悬停展开的顶栏菜单，在相邻触发器之间平滑切换，从文档站移进组件库。选中高亮横跨整行跟随指针，并在面板出现前就位。
+- `r-select` 面板宽度不小于触发器，打开时高亮已经就位，浮动时忽略面板内部的滚动。
+- `r-scratch` 重新在包入口里注册。
+- `r-button` / `r-input` 的图标单独分包加载，不进首屏包。
+- 打包后的内部依赖使用 `ranuts@0.5.6` 与 `@alixex/ranview@0.2.5`；后者的服务端 DOM 补上了升级流程用到的方法（`replaceChildren`、`insertBefore` 和 `children`）。
+
 ## [0.5.5] — 2026-11-08
 
 [ranui@0.5.5](https://www.npmjs.com/package/ranui/v/0.5.5) 已正式发布到 npm 的 `latest` 标签。

@@ -7,16 +7,15 @@ The publishable set is **ranuts → @alixex/ranview → ranui**, in dependency o
 | Package         | Version | npm tag |
 | --------------- | ------- | ------- |
 | ranuts          | 0.5.6   | latest  |
-| @alixex/ranview | 0.2.4   | latest  |
-| ranui           | 0.5.5   | latest  |
+| @alixex/ranview | 0.2.5   | latest  |
+| ranui           | 0.5.6   | latest  |
 
-Prepare and publish `ranuts@0.5.6` with the Release libraries workflow on `main` (`publish=true`, channel `latest`, `packages=ranuts`). It follows `ranuts@0.5.5` and finishes the [#548](https://github.com/chaxus/ran/issues/548) fix: `parseChineseNumber` stacks sections (`一万亿` → 1e12), reads `兩` and financial numerals, and returns `null` for repeated or out-of-order units and for values past `Number.MAX_SAFE_INTEGER`; the new `parseChineseNumberBigInt` / `parseChineseNumberString` return such values exactly. `parseRomanNumber` accepts only standard forms, and `parseEnglishNumber` returns `null` for unsafe digit strings. Install it directly:
+`ranuts@0.5.6` is already on npm; it finishes the [#548](https://github.com/chaxus/ran/issues/548) fix (`parseChineseNumber` sections, financial numerals, `null` for malformed or unsafe values, and the new `parseChineseNumberBigInt` / `parseChineseNumberString`).
+
+Prepare and publish `@alixex/ranview@0.2.5` and `ranui@0.5.6` together with the Release libraries workflow on `main` (`publish=true`, channel `latest`, `packages=@alixex/ranview,ranui`). ranui's server-rendered elements now replace their Declarative Shadow DOM snapshot on upgrade, and ranview's server DOM gains the `replaceChildren`, `insertBefore` and `children` that path uses, so the two ship together. See the [ranui changelog](../packages/ranui/CHANGELOG.md) for the rest. Install them directly:
 
 ```sh
-npm install ranuts@0.5.6
-# Unchanged companions stay on the previous latest:
-npm install @alixex/ranview@0.2.4
-npm install ranui@0.5.5
+npm install ranui@0.5.6 @alixex/ranview@0.2.5 ranuts@0.5.6
 ```
 
 Bump only the packages that changed. Keep internal dependencies as `workspace:*`: pnpm materializes the exact workspace versions in the archives. A selected package may depend on an already-published companion at that exact version; verification rejects unresolved `workspace:` ranges. Update the lockfile if needed and commit the version/changelog changes before preparing the final artifacts.
