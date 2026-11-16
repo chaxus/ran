@@ -1,6 +1,6 @@
 ---
 title: ranuts API リファレンス
-description: 'ranuts がエクスポートする全シンボル —— 7 個のエントリーポイント、計 433 件のエクスポートを、シグネチャと説明つきで。'
+description: 'ranuts がエクスポートする全シンボル —— 7 個のエントリーポイント、計 435 件のエクスポートを、シグネチャと説明つきで。'
 ---
 
 # ranuts API（自動生成）
@@ -13,11 +13,11 @@ JSDoc をそのまま取り出したものなので英語のままです。ど�
 そのシンボルを持つ**サブパス**から import してください。たとえば `import { debounce } from
 'ranuts/utils'`。ルートの `ranuts` は utils + visual の面を再エクスポートします。
 
-**433 件のエクスポート**、エントリーポイント 7 個。
+**435 件のエクスポート**、エントリーポイント 7 個。
 
 ## エントリーポイント
 
-- [`ranuts/utils`](#ranuts-utils) — ブラウザ向けおよび汎用のユーティリティ · _ブラウザ + node_ · 344 件のエクスポート
+- [`ranuts/utils`](#ranuts-utils) — ブラウザ向けおよび汎用のユーティリティ · _ブラウザ + node_ · 346 件のエクスポート
 - [`ranuts/sw`](#ranuts-sw) — Service Worker のキャッシュ戦略とプリキャッシュのプロトコル · _service worker のみ_ · 9 件のエクスポート
 - [`ranuts/visual`](#ranuts-visual) — 2D レンダリングエンジン（Canvas / WebGL / WebGPU） · _ブラウザのみ_ · 16 件のエクスポート
 - [`ranuts/i18n`](#ranuts-i18n) — フレームワーク非依存の i18n エンジン（ranuts/utils からも再エクスポート） · _ブラウザ + node_ · 9 件のエクスポート
@@ -178,6 +178,8 @@ import { /* … */ } from 'ranuts/utils';
 - `openPortBridge({ targetWindow, targetOrigin, name, }: OpenPortBridgeOptions) => PortBridge` — Initiator: create a MessageChannel, hand one port to the target window and keep the other.
 - `paginateText(text: string, box: TextBox, metrics: TextGridMetrics, options?: PaginateOptions) => PaginateResult` — Cut text into pages that fit `box`, given the type metrics.
 - `parseChineseNumber(value: string) => number | null` — Chinese numerals to Arabic — unit forms (「十五」「一百零三」「三万」「一亿」),
+- `parseChineseNumberBigInt(value: string) => bigint | null` — Chinese numerals to an exact `bigint`, with the same rules as
+- `parseChineseNumberString(value: string) => string | null` — Chinese numerals to an exact decimal string, with the same rules as
 - `parseEnglishNumber(value: string) => number | null` — English ordinals to numbers, tried in order: Arabic digits, number words
 - `parseRomanNumber(value: string) => number | null` — Roman numerals to Arabic (either case, handling subtractive forms such as IV / IX). Returns null for invalid input.
 - `parseVttCueTiming(line: string) => { start: number; end: number; } | undefined` — Parse a WebVTT cue timing line — `<start> --> <end>`, with one or more

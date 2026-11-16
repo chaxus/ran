@@ -8,11 +8,13 @@ parsed in full.
 
 ## API
 
-| Function                    | Accepts                                                                                                                                     |
-| --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
-| `parseChineseNumber(value)` | Digits (half- and full-width), `一二三…`, units `十百千万/萬亿/億`, shorthand `廿卅卌`, financial `壹贰叁…拾佰仟`, simplified + traditional |
-| `parseRomanNumber(value)`   | `IVXLCDM`, any case, subtractive notation (`IV`, `IX`)                                                                                      |
-| `parseEnglishNumber(value)` | Digits, English number words `one`–`twenty`, then Roman numerals                                                                            |
+| Function                          | Accepts                                                                                                                                     |
+| --------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| `parseChineseNumber(value)`       | Digits (half- and full-width), `一二三…`, units `十百千万/萬亿/億`, shorthand `廿卅卌`, financial `壹贰叁…拾佰仟`, simplified + traditional |
+| `parseChineseNumberBigInt(value)` | The same input as `parseChineseNumber`, as an exact `bigint` with no upper bound                                                            |
+| `parseChineseNumberString(value)` | The same, as an exact decimal string (JSON-safe)                                                                                            |
+| `parseRomanNumber(value)`         | `IVXLCDM`, any case, standard form only (`IV`, `IX`, `XCIX`; `M` repeats past 3999)                                                         |
+| `parseEnglishNumber(value)`       | Digits, English number words `one`–`twenty`, then Roman numerals                                                                            |
 
 Related string helpers: `toHalfWidth(value)` / `toFullWidth(value)` normalize full-width
 characters, which `parseChineseNumber` applies for you.
@@ -20,7 +22,14 @@ characters, which `parseChineseNumber` applies for you.
 ## Example
 
 ```js
-import { parseChineseNumber, parseRomanNumber, parseEnglishNumber, toHalfWidth } from 'ranuts';
+import {
+  parseChineseNumber,
+  parseChineseNumberBigInt,
+  parseChineseNumberString,
+  parseRomanNumber,
+  parseEnglishNumber,
+  toHalfWidth,
+} from 'ranuts';
 
 parseChineseNumber('二十三'); // 23
 parseChineseNumber('廿三'); // 23
@@ -34,7 +43,11 @@ parseChineseNumber('一百百'); // null — repeated unit
 parseChineseNumber('三萬'); // 30000
 parseChineseNumber('第三章'); // null — extract the number segment first
 
+parseChineseNumberBigInt('九千九百九十九万九千九百九十九亿九千九百九十九万九千九百九十九'); // 9999999999999999n
+parseChineseNumberString('二零二四'); // '2024'
+
 parseRomanNumber('MCMXCIV'); // 1994
+parseRomanNumber('IC'); // null — write XCIX
 parseEnglishNumber('Three'); // 3
 toHalfWidth('（1）'); // '(1)'
 ```
@@ -54,3 +67,8 @@ toHalfWidth('（1）'); // '(1)'
    (`一百零一` → 101).
 5. **`parseEnglishNumber` tries digits, then words, then Roman.** `twenty-one` and above are
    not covered; extend the word table if you need them.
+6. **Past `Number.MAX_SAFE_INTEGER` (about 9e15) a `number` cannot hold the value exactly**, so
+   `parseChineseNumber` and the digit path of `parseEnglishNumber` return `null` there. Use
+   `parseChineseNumberBigInt` or `parseChineseNumberString` when values can be that large.
+7. **Roman numerals must be in standard form.** `VV`, `IC`, `IIX` and the clock-face `IIII`
+   return `null`, not a guessed value.

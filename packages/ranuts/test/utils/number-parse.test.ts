@@ -1,5 +1,13 @@
 import { describe, expect, it } from 'vitest';
-import { parseChineseNumber, parseEnglishNumber, parseRomanNumber, toFullWidth, toHalfWidth } from '@/utils';
+import {
+  parseChineseNumber,
+  parseChineseNumberBigInt,
+  parseChineseNumberString,
+  parseEnglishNumber,
+  parseRomanNumber,
+  toFullWidth,
+  toHalfWidth,
+} from '@/utils';
 
 describe('toHalfWidth / toFullWidth', () => {
   it('normalizes full-width digits, letters and punctuation', () => {
@@ -125,6 +133,56 @@ describe('parseChineseNumber', () => {
   });
 });
 
+describe('parseChineseNumber beyond Number.MAX_SAFE_INTEGER', () => {
+  const MAX = '九千零七万一千九百九十二亿五千四百七十四万零九百九十一'; // 9007199254740991
+  const OVER = '九千零七万一千九百九十二亿五千四百七十四万零九百九十三'; // 9007199254740993
+
+  it('returns the largest safe integer as a number', () => {
+    expect(parseChineseNumber(MAX)).toBe(Number.MAX_SAFE_INTEGER);
+  });
+
+  it('returns null rather than a rounded number past it', () => {
+    expect(parseChineseNumber(OVER)).toBeNull();
+    expect(parseChineseNumber('12345678901234567890')).toBeNull();
+    expect(parseChineseNumber('九八七六五四三二一零九八七六五四三二一')).toBeNull();
+  });
+});
+
+describe('parseChineseNumberBigInt', () => {
+  it('parses exactly past Number.MAX_SAFE_INTEGER', () => {
+    expect(parseChineseNumberBigInt('九千零七万一千九百九十二亿五千四百七十四万零九百九十三')).toBe(9007199254740993n);
+    expect(parseChineseNumberBigInt('九千九百九十九万九千九百九十九亿九千九百九十九万九千九百九十九')).toBe(
+      9999999999999999n,
+    );
+    expect(parseChineseNumberBigInt('12345678901234567890')).toBe(12345678901234567890n);
+    expect(parseChineseNumberBigInt('九八七六五四三二一零九八七六五四三二一')).toBe(9876543210987654321n);
+  });
+
+  it('follows the same rules as parseChineseNumber', () => {
+    expect(parseChineseNumberBigInt('一百一')).toBe(110n);
+    expect(parseChineseNumberBigInt('百')).toBe(100n);
+    expect(parseChineseNumberBigInt('一万亿')).toBe(1_000_000_000_000n);
+    expect(parseChineseNumberBigInt('壹仟貳佰參拾肆')).toBe(1234n);
+    expect(parseChineseNumberBigInt('一百百')).toBeNull();
+    expect(parseChineseNumberBigInt('第三章')).toBeNull();
+    expect(parseChineseNumberBigInt('')).toBeNull();
+  });
+});
+
+describe('parseChineseNumberString', () => {
+  it('returns the exact decimal string, past Number.MAX_SAFE_INTEGER too', () => {
+    expect(parseChineseNumberString('二零二四')).toBe('2024');
+    expect(parseChineseNumberString('零零七')).toBe('7');
+    expect(parseChineseNumberString('九千零七万一千九百九十二亿五千四百七十四万零九百九十三')).toBe('9007199254740993');
+    expect(parseChineseNumberString('12345678901234567890')).toBe('12345678901234567890');
+  });
+
+  it('returns null for malformed input', () => {
+    expect(parseChineseNumberString('一百百')).toBeNull();
+    expect(parseChineseNumberString('')).toBeNull();
+  });
+});
+
 describe('parseRomanNumber', () => {
   it('parses additive and subtractive notation', () => {
     expect(parseRomanNumber('I')).toBe(1);
@@ -142,6 +200,18 @@ describe('parseRomanNumber', () => {
     expect(parseRomanNumber('XIVZ')).toBeNull();
     expect(parseRomanNumber('')).toBeNull();
   });
+
+  it('returns null for non-standard forms instead of a guess', () => {
+    for (const input of ['VV', 'IC', 'IIX', 'VX', 'IXIX', 'IIIII', 'IIII', 'XM', 'LL', 'DD', 'IL', 'IVI']) {
+      expect(parseRomanNumber(input), input).toBeNull();
+    }
+  });
+
+  it('accepts the largest standard form and repeated M', () => {
+    expect(parseRomanNumber('MMMCMXCIX')).toBe(3999);
+    expect(parseRomanNumber('MMMM')).toBe(4000);
+    expect(parseRomanNumber('XCIX')).toBe(99);
+  });
 });
 
 describe('parseEnglishNumber', () => {
@@ -155,5 +225,11 @@ describe('parseEnglishNumber', () => {
   it('returns null for anything else', () => {
     expect(parseEnglishNumber('thirty')).toBeNull();
     expect(parseEnglishNumber('chapter')).toBeNull();
+    expect(parseEnglishNumber('VV')).toBeNull();
+  });
+
+  it('returns null for a digit string past Number.MAX_SAFE_INTEGER', () => {
+    expect(parseEnglishNumber('9007199254740991')).toBe(Number.MAX_SAFE_INTEGER);
+    expect(parseEnglishNumber('12345678901234567890')).toBeNull();
   });
 });

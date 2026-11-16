@@ -6,11 +6,13 @@
 
 ## API
 
-| 函数                        | 支持                                                                                                  |
-| --------------------------- | ----------------------------------------------------------------------------------------------------- |
-| `parseChineseNumber(value)` | 数字（半角与全角）、`一二三…`、单位 `十百千万/萬亿/億`、简写 `廿卅卌`、大写 `壹贰叁…拾佰仟`，简繁通用 |
-| `parseRomanNumber(value)`   | `IVXLCDM`，大小写皆可，支持减法记法（`IV`、`IX`）                                                     |
-| `parseEnglishNumber(value)` | 数字、英文数词 `one`–`twenty`，再退回罗马数字                                                         |
+| 函数                              | 支持                                                                                                  |
+| --------------------------------- | ----------------------------------------------------------------------------------------------------- |
+| `parseChineseNumber(value)`       | 数字（半角与全角）、`一二三…`、单位 `十百千万/萬亿/億`、简写 `廿卅卌`、大写 `壹贰叁…拾佰仟`，简繁通用 |
+| `parseChineseNumberBigInt(value)` | 输入同 `parseChineseNumber`，返回精确的 `bigint`，没有上限                                            |
+| `parseChineseNumberString(value)` | 同上，返回精确的十进制字符串（可直接 JSON 序列化）                                                    |
+| `parseRomanNumber(value)`         | `IVXLCDM`，大小写皆可，只接受标准写法（`IV`、`IX`、`XCIX`；3999 以上可重复 `M`）                      |
+| `parseEnglishNumber(value)`       | 数字、英文数词 `one`–`twenty`，再退回罗马数字                                                         |
 
 相关字符串工具：`toHalfWidth(value)` / `toFullWidth(value)` 做全半角归一化，
 `parseChineseNumber` 已内置调用。
@@ -18,7 +20,14 @@
 ## 示例
 
 ```js
-import { parseChineseNumber, parseRomanNumber, parseEnglishNumber, toHalfWidth } from 'ranuts';
+import {
+  parseChineseNumber,
+  parseChineseNumberBigInt,
+  parseChineseNumberString,
+  parseRomanNumber,
+  parseEnglishNumber,
+  toHalfWidth,
+} from 'ranuts';
 
 parseChineseNumber('二十三'); // 23
 parseChineseNumber('廿三'); // 23
@@ -32,7 +41,11 @@ parseChineseNumber('一百百'); // null —— 单位重复
 parseChineseNumber('三萬'); // 30000
 parseChineseNumber('第三章'); // null —— 请先截出编号段
 
+parseChineseNumberBigInt('九千九百九十九万九千九百九十九亿九千九百九十九万九千九百九十九'); // 9999999999999999n
+parseChineseNumberString('二零二四'); // '2024'
+
 parseRomanNumber('MCMXCIV'); // 1994
+parseRomanNumber('IC'); // null —— 应写作 XCIX
 parseEnglishNumber('Three'); // 3
 toHalfWidth('（1）'); // '(1)'
 ```
@@ -45,3 +58,7 @@ toHalfWidth('（1）'); // '(1)'
 4. **连续数字位累加**（`二零二四` → 2024）。**省略的尾数**补下一档单位（`一百一` → 110）；个位要写 `零`（`一百零一` → 101）。
 5. **`parseEnglishNumber` 依次尝试数字、数词、罗马数字**。`twenty-one` 及以上未覆盖，
    需要的话自行扩展词表。
+6. **超过 `Number.MAX_SAFE_INTEGER`（约 9e15）后 `number` 无法精确表示**，所以
+   `parseChineseNumber` 和 `parseEnglishNumber` 的纯数字分支在这里返回 `null`。数值可能这么大时，
+   用 `parseChineseNumberBigInt` 或 `parseChineseNumberString`。
+7. **罗马数字必须是标准写法**。`VV`、`IC`、`IIX` 以及钟面上的 `IIII` 都返回 `null`，不会猜一个值。

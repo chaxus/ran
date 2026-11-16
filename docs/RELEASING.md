@@ -10,7 +10,7 @@ The publishable set is **ranuts → @alixex/ranview → ranui**, in dependency o
 | @alixex/ranview | 0.2.4   | latest  |
 | ranui           | 0.5.5   | latest  |
 
-Prepare and publish `ranuts@0.5.6` with the Release libraries workflow on `main` (`publish=true`, channel `latest`, `packages=ranuts`). It follows `ranuts@0.5.5` and finishes the [#548](https://github.com/chaxus/ran/issues/548) fix: `parseChineseNumber` stacks sections (`一万亿` → 1e12) and returns `null` for repeated or out-of-order units (`一百百`, `十十`) instead of a guess. Install it directly:
+Prepare and publish `ranuts@0.5.6` with the Release libraries workflow on `main` (`publish=true`, channel `latest`, `packages=ranuts`). It follows `ranuts@0.5.5` and finishes the [#548](https://github.com/chaxus/ran/issues/548) fix: `parseChineseNumber` stacks sections (`一万亿` → 1e12), reads `兩` and financial numerals, and returns `null` for repeated or out-of-order units and for values past `Number.MAX_SAFE_INTEGER`; the new `parseChineseNumberBigInt` / `parseChineseNumberString` return such values exactly. `parseRomanNumber` accepts only standard forms, and `parseEnglishNumber` returns `null` for unsafe digit strings. Install it directly:
 
 ```sh
 npm install ranuts@0.5.6

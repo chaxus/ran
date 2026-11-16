@@ -212,9 +212,9 @@ const CN_UNITS: Record<string, number> = {
 };
 
 /** Section marks, largest first: a section's head is everything before its mark (「一万亿」→ 一万 × 亿). */
-const CN_SECTIONS: readonly (readonly [string, number])[] = [
-  ['亿', 100_000_000],
-  ['万', 10_000],
+const CN_SECTIONS: readonly (readonly [string, bigint])[] = [
+  ['亿', 100_000_000n],
+  ['万', 10_000n],
 ];
 
 const CN_VARIANTS: Record<string, string> = { 萬: '万', 億: '亿', 〇: '零' };
@@ -255,8 +255,11 @@ const parseChineseGroup = (group: string): number | null => {
   return total + (!zero && lastUnit >= 100 && lastUnit < 10_000 ? (digit * lastUnit) / 10 : digit);
 };
 
-const parseChineseSections = (text: string, sections: typeof CN_SECTIONS): number | null => {
-  if (sections.length === 0) return parseChineseGroup(text);
+const parseChineseSections = (text: string, sections: typeof CN_SECTIONS): bigint | null => {
+  if (sections.length === 0) {
+    const group = parseChineseGroup(text);
+    return group === null ? null : BigInt(group);
+  }
   const [[mark, size], ...smaller] = sections;
   const at = text.indexOf(mark);
   if (at < 0) return parseChineseSections(text, smaller);
@@ -265,20 +268,68 @@ const parseChineseSections = (text: string, sections: typeof CN_SECTIONS): numbe
   let tail = text.slice(at + 1);
   // 「一万五」: a lone digit after the mark is the next-smaller unit → 15000.
   const lone = tail.length === 1 ? CN_DIGITS[tail] : undefined;
-  if (lone) return head * size + (lone * size) / 10;
+  if (lone) return head * size + (BigInt(lone) * size) / 10n;
   if (tail.startsWith('零')) tail = tail.slice(1);
   const rest = parseChineseSections(tail, smaller);
   return rest === null ? null : head * size + rest;
 };
 
 /**
+ * @description: Chinese numerals to an exact `bigint`, with the same rules as
+ * [`parseChineseNumber`](#parsechinesenumber) and no upper bound: use it for values that may
+ * exceed `Number.MAX_SAFE_INTEGER` (about 9e15). Returns null when the input is not a
+ * well-formed numeral.
+ * @param {string} value
+ * @return {bigint | null}
+ * @example
+ * ```ts
+ * parseChineseNumberBigInt('一万亿'); // 1000000000000n
+ * parseChineseNumberBigInt('九千九百九十九万九千九百九十九亿九千九百九十九万九千九百九十九'); // 9999999999999999n
+ * parseChineseNumberBigInt('一百百'); // null
+ * ```
+ */
+export const parseChineseNumberBigInt = (value: string): bigint | null => {
+  let text = toHalfWidth(value.trim());
+  if (/^\d+$/.test(text)) return BigInt(text);
+  text = Array.from(text, (char) => CN_TENS[char] ?? CN_VARIANTS[char] ?? char).join('');
+  if (text.length === 0) return null;
+  // 「二零二四」「一二三」: digits alone read positionally.
+  if (Array.from(text).every((char) => CN_DIGITS[char] !== undefined)) {
+    return Array.from(text).reduce((total, char) => total * 10n + BigInt(CN_DIGITS[char]), 0n);
+  }
+  // A leading bare unit stands for one of it: 「百」「千万」「亿」.
+  if (CN_UNITS[text[0]] !== undefined || CN_SECTIONS.some(([mark]) => mark === text[0])) text = `一${text}`;
+  return parseChineseSections(text, CN_SECTIONS);
+};
+
+/**
+ * @description: Chinese numerals to an exact decimal string, with the same rules as
+ * [`parseChineseNumber`](#parsechinesenumber) and no upper bound. Unlike a `bigint`, the result
+ * goes through `JSON.stringify` and into text as is. Returns null when the input is not a
+ * well-formed numeral.
+ * @param {string} value
+ * @return {string | null}
+ * @example
+ * ```ts
+ * parseChineseNumberString('二零二四'); // '2024'
+ * parseChineseNumberString('九千九百九十九万九千九百九十九亿九千九百九十九万九千九百九十九'); // '9999999999999999'
+ * parseChineseNumberString('一百百'); // null
+ * ```
+ */
+export const parseChineseNumberString = (value: string): string | null =>
+  parseChineseNumberBigInt(value)?.toString() ?? null;
+
+/**
  * @description: Chinese numerals to Arabic — unit forms (「十五」「一百零三」「三万」「一亿」),
  * consecutive digits (「二零二四」), shorthand tens (「廿三」), and common abbreviations
  * (「一百一」→ 110). A bare leading unit means one of that unit (「百」→ 100, 「千万」→ 1e7,
  * 「亿」→ 1e8). Sections stack (「一万亿」→ 1e12). Simplified and traditional alike
- * (两/兩，万/萬，亿/億), financial forms too (「壹佰贰拾」「貳萬」); full-width digits are normalised first. Returns null when the input is not
- * a well-formed numeral: an unrecognised character, a repeated or out-of-order unit
- * (「一百百」「十十」「万万」), or a bare unit after the first character.
+ * (两/兩，万/萬，亿/億), financial forms too (「壹佰贰拾」「貳萬」); full-width digits are
+ * normalised first. Returns null when the input is not a well-formed numeral (an unrecognised
+ * character, a repeated or out-of-order unit such as 「一百百」「十十」「万万」, or a bare unit
+ * after the first character) and when the value exceeds `Number.MAX_SAFE_INTEGER`, where a
+ * `number` can no longer hold it exactly — use
+ * [`parseChineseNumberBigInt`](#parsechinesenumberbigint) for those.
  * @param {string} value
  * @return {number | null}
  * @example
@@ -295,18 +346,17 @@ const parseChineseSections = (text: string, sections: typeof CN_SECTIONS): numbe
  * ```
  */
 export const parseChineseNumber = (value: string): number | null => {
-  let text = toHalfWidth(value.trim());
-  if (/^\d+$/.test(text)) return Number.parseInt(text, 10);
-  text = Array.from(text, (char) => CN_TENS[char] ?? CN_VARIANTS[char] ?? char).join('');
-  if (text.length === 0) return null;
-  // 「二零二四」「一二三」: digits alone read positionally.
-  if (Array.from(text).every((char) => CN_DIGITS[char] !== undefined)) {
-    return Array.from(text).reduce((total, char) => total * 10 + CN_DIGITS[char], 0);
-  }
-  // A leading bare unit stands for one of it: 「百」「千万」「亿」.
-  if (CN_UNITS[text[0]] !== undefined || CN_SECTIONS.some(([mark]) => mark === text[0])) text = `一${text}`;
-  return parseChineseSections(text, CN_SECTIONS);
+  const exact = parseChineseNumberBigInt(value);
+  return exact === null || exact > BigInt(Number.MAX_SAFE_INTEGER) ? null : Number(exact);
 };
+
+/** A digit string as a number, or null when it is past Number.MAX_SAFE_INTEGER. */
+const safeInteger = (digits: string): number | null => {
+  const value = BigInt(digits);
+  return value > BigInt(Number.MAX_SAFE_INTEGER) ? null : Number(value);
+};
+
+const ROMAN_STANDARD = /^M*(CM|CD|D?C{0,3})(XC|XL|L?X{0,3})(IX|IV|V?I{0,3})$/;
 
 const ROMAN_VALUES: Record<string, number> = {
   I: 1,
@@ -320,17 +370,21 @@ const ROMAN_VALUES: Record<string, number> = {
 
 /**
  * @description: Roman numerals to Arabic (either case, handling subtractive forms such as IV / IX). Returns null for invalid input.
+ * Only the standard form is accepted: each of C / X / I repeats at most three times, V / L / D
+ * at most once, and only IV / IX / XL / XC / CD / CM subtract; M may repeat for 4000 and up.
+ * Anything else (「VV」「IC」「IIX」「IIII」) returns null instead of a guessed value.
  * @param {string} value
  * @return {number | null}
  * @example
  * ```ts
  * parseRomanNumber('XIV'); // 14
  * parseRomanNumber('mcmxciv'); // 1994
+ * parseRomanNumber('IC'); // null — write XCIX for 99
  * ```
  */
 export const parseRomanNumber = (value: string): number | null => {
   const text = value.trim().toUpperCase();
-  if (!/^[IVXLCDM]+$/.test(text)) return null;
+  if (text.length === 0 || !ROMAN_STANDARD.test(text)) return null;
   let result = 0;
   for (let i = 0; i < text.length; i++) {
     const current = ROMAN_VALUES[text[i]];
@@ -369,7 +423,8 @@ const EN_NUMBER_WORDS: Record<string, number> = {
 
 /**
  * @description: English ordinals to numbers, tried in order: Arabic digits, number words
- * (one–twenty), then Roman numerals. Returns null when none match.
+ * (one–twenty), then Roman numerals. Returns null when none match, and for a digit string past
+ * `Number.MAX_SAFE_INTEGER`, which a `number` cannot hold exactly.
  * @param {string} value
  * @return {number | null}
  * @example
@@ -380,7 +435,7 @@ const EN_NUMBER_WORDS: Record<string, number> = {
  */
 export const parseEnglishNumber = (value: string): number | null => {
   const text = value.trim().toLowerCase();
-  if (/^\d+$/.test(text)) return Number.parseInt(text, 10);
+  if (/^\d+$/.test(text)) return safeInteger(text);
   if (EN_NUMBER_WORDS[text] !== undefined) return EN_NUMBER_WORDS[text];
   return parseRomanNumber(text);
 };

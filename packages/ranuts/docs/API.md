@@ -8,11 +8,11 @@ constraints, conventions) read [../CLAUDE.md](../CLAUDE.md) first.
 Import from the **subpath** that owns the symbol, e.g. `import { debounce } from
 'ranuts/utils'`. The root `ranuts` barrel re-exports the utils + visual surface.
 
-**433 exports** across 7 entry points.
+**435 exports** across 7 entry points.
 
 ## Entry points
 
-- [`ranuts/utils`](#ranuts-utils) — Browser and general-purpose utilities · _browser + node_ · 344 exports
+- [`ranuts/utils`](#ranuts-utils) — Browser and general-purpose utilities · _browser + node_ · 346 exports
 - [`ranuts/sw`](#ranuts-sw) — Service Worker caching strategies and the precache protocol · _service worker only_ · 9 exports
 - [`ranuts/visual`](#ranuts-visual) — 2D rendering engine (Canvas / WebGL / WebGPU) · _browser only_ · 16 exports
 - [`ranuts/i18n`](#ranuts-i18n) — Framework-agnostic i18n engine (also re-exported from ranuts/utils) · _browser + node_ · 9 exports
@@ -173,6 +173,8 @@ import { /* … */ } from 'ranuts/utils';
 - `openPortBridge({ targetWindow, targetOrigin, name, }: OpenPortBridgeOptions) => PortBridge` — Initiator: create a MessageChannel, hand one port to the target window and keep the other.
 - `paginateText(text: string, box: TextBox, metrics: TextGridMetrics, options?: PaginateOptions) => PaginateResult` — Cut text into pages that fit `box`, given the type metrics.
 - `parseChineseNumber(value: string) => number | null` — Chinese numerals to Arabic — unit forms (「十五」「一百零三」「三万」「一亿」),
+- `parseChineseNumberBigInt(value: string) => bigint | null` — Chinese numerals to an exact `bigint`, with the same rules as
+- `parseChineseNumberString(value: string) => string | null` — Chinese numerals to an exact decimal string, with the same rules as
 - `parseEnglishNumber(value: string) => number | null` — English ordinals to numbers, tried in order: Arabic digits, number words
 - `parseRomanNumber(value: string) => number | null` — Roman numerals to Arabic (either case, handling subtractive forms such as IV / IX). Returns null for invalid input.
 - `parseVttCueTiming(line: string) => { start: number; end: number; } | undefined` — Parse a WebVTT cue timing line — `<start> --> <end>`, with one or more
