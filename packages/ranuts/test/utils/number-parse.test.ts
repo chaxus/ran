@@ -108,6 +108,15 @@ describe('parseChineseNumber', () => {
     }
   });
 
+  it('parses financial forms, simplified and traditional', () => {
+    expect(parseChineseNumber('壹仟贰佰叁拾肆')).toBe(1234);
+    expect(parseChineseNumber('壹仟貳佰參拾肆')).toBe(1234);
+    expect(parseChineseNumber('伍萬零陆')).toBe(50_006);
+    expect(parseChineseNumber('玖億捌仟柒佰萬')).toBe(987_000_000);
+    expect(parseChineseNumber('拾')).toBe(10);
+    expect(parseChineseNumber('佰佰')).toBeNull();
+  });
+
   it('lets only the first character be a bare unit', () => {
     expect(parseChineseNumber('百五')).toBe(150);
     expect(parseChineseNumber('一百十')).toBe(110);

@@ -6,11 +6,11 @@
 
 ## API
 
-| 函数                        | 支持                                                                            |
-| --------------------------- | ------------------------------------------------------------------------------- |
-| `parseChineseNumber(value)` | 数字（半角与全角）、`一二三…`、单位 `十百千万/萬亿/億`、简写 `廿卅卌`，简繁通用 |
-| `parseRomanNumber(value)`   | `IVXLCDM`，大小写皆可，支持减法记法（`IV`、`IX`）                               |
-| `parseEnglishNumber(value)` | 数字、英文数词 `one`–`twenty`，再退回罗马数字                                   |
+| 函数                        | 支持                                                                                                  |
+| --------------------------- | ----------------------------------------------------------------------------------------------------- |
+| `parseChineseNumber(value)` | 数字（半角与全角）、`一二三…`、单位 `十百千万/萬亿/億`、简写 `廿卅卌`、大写 `壹贰叁…拾佰仟`，简繁通用 |
+| `parseRomanNumber(value)`   | `IVXLCDM`，大小写皆可，支持减法记法（`IV`、`IX`）                                                     |
+| `parseEnglishNumber(value)` | 数字、英文数词 `one`–`twenty`，再退回罗马数字                                                         |
 
 相关字符串工具：`toHalfWidth(value)` / `toFullWidth(value)` 做全半角归一化，
 `parseChineseNumber` 已内置调用。
@@ -27,6 +27,7 @@ parseChineseNumber('一百一'); // 110
 parseChineseNumber('百'); // 100
 parseChineseNumber('一亿两千万'); // 120000000
 parseChineseNumber('一万亿'); // 1000000000000
+parseChineseNumber('壹仟贰佰叁拾肆'); // 1234
 parseChineseNumber('一百百'); // null —— 单位重复
 parseChineseNumber('三萬'); // 30000
 parseChineseNumber('第三章'); // null —— 请先截出编号段

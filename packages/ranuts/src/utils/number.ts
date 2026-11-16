@@ -186,12 +186,29 @@ const CN_DIGITS: Record<string, number> = {
   七: 7,
   八: 8,
   九: 9,
+  // Financial (大写) forms, simplified and traditional.
+  壹: 1,
+  贰: 2,
+  貳: 2,
+  叁: 3,
+  參: 3,
+  叄: 3,
+  肆: 4,
+  伍: 5,
+  陆: 6,
+  陸: 6,
+  柒: 7,
+  捌: 8,
+  玖: 9,
 };
 
 const CN_UNITS: Record<string, number> = {
   十: 10,
   百: 100,
   千: 1000,
+  拾: 10,
+  佰: 100,
+  仟: 1000,
 };
 
 /** Section marks, largest first: a section's head is everything before its mark (「一万亿」→ 一万 × 亿). */
@@ -259,7 +276,7 @@ const parseChineseSections = (text: string, sections: typeof CN_SECTIONS): numbe
  * consecutive digits (「二零二四」), shorthand tens (「廿三」), and common abbreviations
  * (「一百一」→ 110). A bare leading unit means one of that unit (「百」→ 100, 「千万」→ 1e7,
  * 「亿」→ 1e8). Sections stack (「一万亿」→ 1e12). Simplified and traditional alike
- * (两/兩，万/萬，亿/億); full-width digits are normalised first. Returns null when the input is not
+ * (两/兩，万/萬，亿/億), financial forms too (「壹佰贰拾」「貳萬」); full-width digits are normalised first. Returns null when the input is not
  * a well-formed numeral: an unrecognised character, a repeated or out-of-order unit
  * (「一百百」「十十」「万万」), or a bare unit after the first character.
  * @param {string} value
@@ -272,6 +289,7 @@ const parseChineseSections = (text: string, sections: typeof CN_SECTIONS): numbe
  * parseChineseNumber('一百一'); // 110
  * parseChineseNumber('一亿两千万'); // 120000000
  * parseChineseNumber('一万亿'); // 1000000000000
+ * parseChineseNumber('壹仟贰佰叁拾肆'); // 1234
  * parseChineseNumber('一百百'); // null — repeated unit
  * parseChineseNumber('第三章'); // null — contains non-numeral characters, slice the number out first
  * ```

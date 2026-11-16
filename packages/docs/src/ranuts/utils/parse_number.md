@@ -8,11 +8,11 @@ parsed in full.
 
 ## API
 
-| Function                    | Accepts                                                                                                          |
-| --------------------------- | ---------------------------------------------------------------------------------------------------------------- |
-| `parseChineseNumber(value)` | Digits (half- and full-width), `一二三…`, units `十百千万/萬亿/億`, shorthand `廿卅卌`, simplified + traditional |
-| `parseRomanNumber(value)`   | `IVXLCDM`, any case, subtractive notation (`IV`, `IX`)                                                           |
-| `parseEnglishNumber(value)` | Digits, English number words `one`–`twenty`, then Roman numerals                                                 |
+| Function                    | Accepts                                                                                                                                     |
+| --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| `parseChineseNumber(value)` | Digits (half- and full-width), `一二三…`, units `十百千万/萬亿/億`, shorthand `廿卅卌`, financial `壹贰叁…拾佰仟`, simplified + traditional |
+| `parseRomanNumber(value)`   | `IVXLCDM`, any case, subtractive notation (`IV`, `IX`)                                                                                      |
+| `parseEnglishNumber(value)` | Digits, English number words `one`–`twenty`, then Roman numerals                                                                            |
 
 Related string helpers: `toHalfWidth(value)` / `toFullWidth(value)` normalize full-width
 characters, which `parseChineseNumber` applies for you.
@@ -29,6 +29,7 @@ parseChineseNumber('一百一'); // 110
 parseChineseNumber('百'); // 100
 parseChineseNumber('一亿两千万'); // 120000000
 parseChineseNumber('一万亿'); // 1000000000000
+parseChineseNumber('壹仟贰佰叁拾肆'); // 1234
 parseChineseNumber('一百百'); // null — repeated unit
 parseChineseNumber('三萬'); // 30000
 parseChineseNumber('第三章'); // null — extract the number segment first
