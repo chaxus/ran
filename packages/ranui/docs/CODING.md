@@ -64,11 +64,16 @@ rules it encodes:
   cannot leak in, and nothing outside can look in. On upgrade, reuse the closed root via
   `hostInternals` / `ElementInternals.shadowRoot` — calling `attachShadow` again throws or
   wipes first paint.
-- **Build the tree once, in the constructor**, with the ranview builder and `.ref()`. Cold
-  path: `mountShadowTree`. When Declarative Shadow DOM already painted content, **keep it**
-  (`paintedShadowChild` + bind by builder child order) — remounting with `replaceChildren`
-  is the refresh flash. Never `querySelector` / class strings to re-bind. A second build
-  from `connectedCallback` still duplicates on reconnect.
+- **Build the tree once, in the constructor**, with the ranview builder and `.ref()`, and
+  mount it only through `mountShadowTree` or `hydrateShadowTree` — never `appendChild` into
+  the root: on a server-rendered page it already holds the Declarative Shadow DOM snapshot,
+  and an append leaves two trees in one root. `hydrateShadowTree` is the one place that
+  decides: its `bind` takes the painted tree over by builder child order (keeping it avoids
+  the refresh flash of a remount), and its `build` replaces a root it does not recognise.
+  `mountShadowTree` alone replaces. Never `querySelector` / class strings to re-bind. A
+  second build from `connectedCallback` still duplicates on reconnect.
+  `test/unit/shadow-mount.contract.test.ts` and `test/e2e/ssr-upgrade.spec.ts` hold every
+  component to this.
 - **SSR `adoptStyles` must reach the DSD snapshot.** Under Node, push CSS text onto the
   mock's `adoptedStyleSheets` so serialization emits `<style>` inside
   `<template shadowrootmode>`. Structure without styles still flashes unstyled → upgraded.
@@ -189,11 +194,11 @@ Events are the outward half of the contract, so treat a change to one as a break
 
 Not every element needs DSD keep or a sliding wash. Apply by class of problem:
 
-| Class               | When                                               | Components (docs / library)                                                                     | Treatment                                                                                                                                                                                  |
-| ------------------- | -------------------------------------------------- | ----------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| First-paint control | Visible before the client bundle upgrades the host | Every fixed-size control (`r-button`, `r-input`, `r-select`, switches, `r-progress`, …)         | Component owns `fouc.less` (aggregated into `ranui.css`); host SSR via `renderHTMLToString` stamps closed DSD + `data-ran-dsd` so plates skip; keep tree on upgrade (`paintedShadowChild`) |
-| List cursor         | Glass / nav row hover and selection                | `r-select` menus, `r-menubar` viewport, `r-tabs` header fill, host sidebar / header tool washes | One sliding fill; **snap** on first place (`data-instant` → `transition: none`); ease only when moving                                                                                     |
-| Deferred / overlay  | Loaded near viewport or opened by the reader       | `r-player`, `r-markdown`, `r-modal`, `r-message`, hide-until-open content                       | Hide rule or FOUC plate in the component's `fouc.less` / `theme/undefined.less`; no wash requirement                                                                                       |
+| Class               | When                                               | Components (docs / library)                                                                     | Treatment                                                                                                                                                                                        |
+| ------------------- | -------------------------------------------------- | ----------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| First-paint control | Visible before the client bundle upgrades the host | Every fixed-size control (`r-button`, `r-input`, `r-select`, switches, `r-progress`, …)         | Component owns `fouc.less` (aggregated into `ranui.css`); host SSR via `renderHTMLToString` stamps closed DSD + `data-ran-dsd` so plates skip; keep tree on upgrade (`hydrateShadowTree` `bind`) |
+| List cursor         | Glass / nav row hover and selection                | `r-select` menus, `r-menubar` viewport, `r-tabs` header fill, host sidebar / header tool washes | One sliding fill; **snap** on first place (`data-instant` → `transition: none`); ease only when moving                                                                                           |
+| Deferred / overlay  | Loaded near viewport or opened by the reader       | `r-player`, `r-markdown`, `r-modal`, `r-message`, hide-until-open content                       | Hide rule or FOUC plate in the component's `fouc.less` / `theme/undefined.less`; no wash requirement                                                                                             |
 
 Do **not** add entrance motion or a wash to every control — that invents noise. Fix flash where first paint is empty; fix wash where a list cursor already exists.
 

@@ -3,6 +3,7 @@ import {
   ensureShadowRoot,
   getStringAttribute,
   hostInternals,
+  hydrateShadowTree,
   mountShadowTree,
   paintedShadowChild,
   setBooleanAttribute,
@@ -66,6 +67,51 @@ describe('utils/component helpers', () => {
     expect(root.querySelector('.dsd')).toBeNull();
     expect(root.firstElementChild).toBe(live);
     expect(root.querySelector('style')?.textContent).toContain('.mounted {}');
+  });
+
+  it('mountShadowTree mounts several top-level nodes in order', () => {
+    const root = document.createElement('div').attachShadow({ mode: 'closed' });
+    root.appendChild(document.createElement('span')).className = 'dsd';
+    const header = document.createElement('header');
+    const body = document.createElement('section');
+
+    mountShadowTree(root, '', header, body);
+
+    expect([...root.children].filter((child) => child.tagName !== 'STYLE')).toEqual([header, body]);
+  });
+
+  it('hydrateShadowTree keeps a painted tree that bind recognises', () => {
+    const root = document.createElement('div').attachShadow({ mode: 'closed' });
+    const painted = root.appendChild(document.createElement('div'));
+    painted.className = 'painted';
+    const build = vi.fn(() => document.createElement('div'));
+
+    hydrateShadowTree(root, '', { bind: (node) => node.className === 'painted', build });
+
+    expect(root.querySelector('.painted')).toBe(painted);
+    expect(build).not.toHaveBeenCalled();
+  });
+
+  it('hydrateShadowTree replaces a painted tree that bind does not recognise', () => {
+    const root = document.createElement('div').attachShadow({ mode: 'closed' });
+    root.appendChild(document.createElement('div')).className = 'stale';
+    const live = document.createElement('div');
+
+    hydrateShadowTree(root, '', { bind: () => false, build: () => live });
+
+    expect(root.querySelector('.stale')).toBeNull();
+    expect([...root.children].filter((child) => child.tagName !== 'STYLE')).toEqual([live]);
+  });
+
+  it('hydrateShadowTree builds into an empty root without asking bind', () => {
+    const root = document.createElement('div').attachShadow({ mode: 'closed' });
+    const bind = vi.fn(() => true);
+    const nodes = [document.createElement('header'), document.createElement('section')];
+
+    hydrateShadowTree(root, '', { bind, build: () => nodes });
+
+    expect(bind).not.toHaveBeenCalled();
+    expect([...root.children].filter((child) => child.tagName !== 'STYLE')).toEqual(nodes);
   });
 
   it('paintedShadowChild skips style tags and returns the first content element', () => {

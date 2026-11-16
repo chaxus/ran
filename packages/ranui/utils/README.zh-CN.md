@@ -21,7 +21,8 @@ import {
 | `ensureShadowRoot(host, cssText?, options?, internals?)`   | 创建或复用缓存 / Declarative Shadow Root，并应用组件 CSS；不要直接调用 `attachShadow()`。 |
 | `hostInternals(host)`                                      | 创建或复用 `ElementInternals`（封闭 DSD + 表单关联）。                                    |
 | `paintedShadowChild(root)`                                 | shadow 根里第一个非 `<style>` 元素（检测 DSD 快照）。                                     |
-| `mountShadowTree(root, cssText, node)`                     | 冷路径 `replaceChildren`；有 DSD 时按结构接管，避免 remount 闪动。                        |
+| `mountShadowTree(root, cssText, ...nodes)`                 | 用构建出的节点替换 root 的全部内容（替换掉 DSD 快照，而不是在旁边再加一份）。             |
+| `hydrateShadowTree(root, cssText, { bind, build })`        | `bind` 认出预渲染结构时接管它，否则挂载 `build` 返回的节点。                              |
 | `shadowPart(ref, name)`                                    | 取出 builder 用 `.ref()` 捕获的元素；从未捕获时抛错并指出是哪个字段。                     |
 | `getStringAttribute(element, name, fallback?)`             | 读取属性，并在属性不存在时返回字符串兜底值。                                              |
 | `setStringAttribute(element, name, value, options?)`       | 设置字符串属性；`removeEmpty: true` 会移除空值。                                          |
@@ -366,7 +367,7 @@ const html = renderToString(btn);
 // 输出：<r-button effect="true"><template shadowrootmode="closed">...</template></r-button>
 ```
 
-组件构造函数应使用 `ensureShadowRoot`，这样浏览器初始化时可以复用已存在的 Declarative Shadow DOM root。封闭根通过 `hostInternals(host)` → `ElementInternals.shadowRoot` 取回（不要二次 `attachShadow`）。表单关联字段把同一份 internals 传入 `ensureShadowRoot`，保证 `attachInternals` 只调用一次。已有 DSD 内容时用 `paintedShadowChild` + 结构接管保留首屏；仅冷路径使用 `mountShadowTree`。
+组件构造函数应使用 `ensureShadowRoot`，这样浏览器初始化时可以复用已存在的 Declarative Shadow DOM root。封闭根通过 `hostInternals(host)` → `ElementInternals.shadowRoot` 取回（不要二次 `attachShadow`）。表单关联字段把同一份 internals 传入 `ensureShadowRoot`，保证 `attachInternals` 只调用一次。构造函数里建好的树只能通过 `hydrateShadowTree`（`bind` 认出预渲染结构时保留首屏）或 `mountShadowTree`（替换）挂载，不要 `appendChild`，否则服务端渲染的 root 里会出现两套结构。
 
 `RanElement` 从 `utils/index.ts` 导出：
 

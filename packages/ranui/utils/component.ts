@@ -104,16 +104,36 @@ export const paintedShadowChild = (root: ShadowRoot): Element | null => {
 };
 
 /**
- * Mount a cold-path builder tree into an empty shadow root.
+ * Mount builder nodes as the whole content of a shadow root, replacing whatever it holds.
  *
- * When Declarative Shadow DOM already painted content, do **not** call this —
- * replacing that snapshot is the refresh flash. Bind the painted nodes by
- * structure instead and keep refs from that bind (or from `.ref()` on a fresh
- * build). Styles are re-applied so the `<style>` fallback path stays intact.
+ * Replacing is what keeps a server-rendered root from holding two trees: `ensureShadowRoot`
+ * hands back a Declarative Shadow DOM root with its painted snapshot still inside. Replacing
+ * that snapshot can flash, so a component whose painted tree it can take over goes through
+ * {@link hydrateShadowTree} instead. Styles are re-applied so the `<style>` fallback path
+ * stays intact.
  */
-export const mountShadowTree = (root: ShadowRoot, cssText: string, node: Node): void => {
-  root.replaceChildren(node);
+export const mountShadowTree = (root: ShadowRoot, cssText: string, ...nodes: Node[]): void => {
+  root.replaceChildren(...nodes);
   adoptStyles(root, withReducedMotion(cssText));
+};
+
+/**
+ * Take over a server-rendered shadow tree, or build and mount a fresh one.
+ *
+ * The one place that decides between keeping Declarative Shadow DOM and replacing it.
+ * `bind` receives the first painted element and returns true when it recognised the
+ * structure and captured its refs; anything else — no snapshot, or one it does not
+ * recognise — falls through to `build`, whose nodes replace the root's content.
+ */
+export const hydrateShadowTree = (
+  root: ShadowRoot,
+  cssText: string,
+  mount: { bind: (painted: Element) => boolean; build: () => Node | readonly Node[] },
+): void => {
+  const painted = paintedShadowChild(root);
+  if (painted && mount.bind(painted)) return;
+  const nodes = mount.build();
+  mountShadowTree(root, cssText, ...(Array.isArray(nodes) ? nodes : [nodes as Node]));
 };
 
 /**

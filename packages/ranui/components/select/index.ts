@@ -13,10 +13,9 @@ import type { Placement } from '@/utils/placement';
 import { createRef, Div, EventManager, InputBuilder, Label, Slot, Span, View } from '@/utils/builder';
 import {
   ensureShadowRoot,
+  hydrateShadowTree,
   getStringAttribute,
   hostInternals,
-  mountShadowTree,
-  paintedShadowChild,
   setBooleanAttribute,
   setStringAttribute,
   shadowPart,
@@ -199,59 +198,60 @@ export class Select extends RanElement {
     this._optionValueMapLabel = new Map();
 
     this._shadowDom = ensureShadowRoot(this, selectCss, { mode: 'closed' }, this._internals);
-    // Keep a Declarative Shadow DOM snapshot when present — replaceChildren here
-    // is the refresh flash. Bind by builder child order (no CSS selectors).
-    const painted = paintedShadowChild(this._shadowDom);
-    // Avoid `instanceof HTMLElement` — undefined under Node SSR mocks.
-    if (painted && this._bindPaintedTree(painted as HTMLElement)) return;
-
-    const selectionRef = createRef<HTMLDivElement>();
-    const selectorRef = createRef<HTMLDivElement>();
-    const iconRef = createRef<HTMLElement>();
-    const textRef = createRef<HTMLSpanElement>();
-    const searchRef = createRef<HTMLInputElement>();
-    const slotRef = createRef<HTMLSlotElement>();
-    const wrap = Div()
-      .class('ran-select')
-      .part('select')
-      .children(
-        Div()
-          .class('selection')
-          .ref(selectionRef)
-          .part('selection')
+    // Keep a Declarative Shadow DOM snapshot when present — replacing it is the refresh flash.
+    // Bind by builder child order (no CSS selectors); avoid `instanceof HTMLElement`, which
+    // is undefined under Node SSR mocks.
+    hydrateShadowTree(this._shadowDom, selectCss, {
+      bind: (painted) => this._bindPaintedTree(painted as HTMLElement),
+      build: () => {
+        const selectionRef = createRef<HTMLDivElement>();
+        const selectorRef = createRef<HTMLDivElement>();
+        const iconRef = createRef<HTMLElement>();
+        const textRef = createRef<HTMLSpanElement>();
+        const searchRef = createRef<HTMLInputElement>();
+        const slotRef = createRef<HTMLSlotElement>();
+        const wrap = Div()
+          .class('ran-select')
+          .part('select')
           .children(
-            View('r-icon')
-              .class('icon')
-              .ref(iconRef)
-              .part('icon')
-              .attr('name', 'chevron-down')
-              .attr('color', 'var(--ran-color-text-secondary)')
-              .attr('size', '16'),
             Div()
-              .class('selection-value')
-              .ref(selectorRef)
+              .class('selection')
+              .ref(selectionRef)
+              .part('selection')
               .children(
-                Span().class('selection-item').ref(textRef).part('selection-item'),
-                InputBuilder()
-                  .class('selection-search')
-                  .ref(searchRef)
-                  .part('search')
-                  .attr('type', 'search')
-                  .attr('autocomplete', 'off'),
+                View('r-icon')
+                  .class('icon')
+                  .ref(iconRef)
+                  .part('icon')
+                  .attr('name', 'chevron-down')
+                  .attr('color', 'var(--ran-color-text-secondary)')
+                  .attr('size', '16'),
+                Div()
+                  .class('selection-value')
+                  .ref(selectorRef)
+                  .children(
+                    Span().class('selection-item').ref(textRef).part('selection-item'),
+                    InputBuilder()
+                      .class('selection-search')
+                      .ref(searchRef)
+                      .part('search')
+                      .attr('type', 'search')
+                      .attr('autocomplete', 'off'),
+                  ),
               ),
-          ),
-        Slot().ref(slotRef).class('slot'),
-      )
-      .build() as HTMLDivElement;
-    mountShadowTree(this._shadowDom, selectCss, wrap);
-
-    this._select = wrap;
-    this._selection = shadowPart(selectionRef, 'selection');
-    this._selector = shadowPart(selectorRef, 'selector');
-    this._icon = shadowPart(iconRef, 'icon');
-    this._text = shadowPart(textRef, 'selection item');
-    this._search = shadowPart(searchRef, 'selection search');
-    this._slot = shadowPart(slotRef, 'slot');
+            Slot().ref(slotRef).class('slot'),
+          )
+          .build() as HTMLDivElement;
+        this._select = wrap;
+        this._selection = shadowPart(selectionRef, 'selection');
+        this._selector = shadowPart(selectorRef, 'selector');
+        this._icon = shadowPart(iconRef, 'icon');
+        this._text = shadowPart(textRef, 'selection item');
+        this._search = shadowPart(searchRef, 'selection search');
+        this._slot = shadowPart(slotRef, 'slot');
+        return wrap;
+      },
+    });
   }
 
   /** Wire refs from a DSD snapshot that matches the builder child order. */
