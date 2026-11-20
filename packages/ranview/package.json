@@ -7,7 +7,10 @@
     ".": "./src/index.ts",
     "./signal": "./src/signal.ts",
     "./mocks": "./src/mocks.ts",
-    "./static": "./src/static.ts"
+    "./static": "./src/static.ts",
+    "./host": "./src/hosts.ts",
+    "./host/memory": "./src/host-memory.ts",
+    "./host/web": "./src/host-web.ts"
   },
   "repository": {
     "type": "git",
@@ -73,6 +76,18 @@
       "./static": {
         "types": "./dist/static.d.ts",
         "import": "./dist/static.js"
+      },
+      "./host": {
+        "types": "./dist/host.d.ts",
+        "import": "./dist/host.js"
+      },
+      "./host/memory": {
+        "types": "./dist/host-memory.d.ts",
+        "import": "./dist/host-memory.js"
+      },
+      "./host/web": {
+        "types": "./dist/host-web.d.ts",
+        "import": "./dist/host-web.js"
       }
     }
   }

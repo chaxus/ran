@@ -1,8 +1,17 @@
 import { isSSR } from './env';
+import { createWebHost } from './host-web';
+import type { Host, HostNode } from './host';
 import { DocumentFragmentMock, HTMLElementMock, ShadowRootMock } from './mocks';
 import type { EventManager } from './events';
 import type { Child, Ref } from './core';
 type Getter<T> = () => T;
+
+/** Client builders share one web host per realm (lazy so SSR never touches `document`). */
+let sharedWebHost: Host | null = null;
+const clientHost = (): Host => {
+  sharedWebHost ??= createWebHost();
+  return sharedWebHost;
+};
 
 export interface BuilderRuntime {
   bind<V>(value: V | Getter<V>, apply: (value: V) => void): void;
@@ -91,6 +100,8 @@ const SVG_ONLY_TAGS = new Set([
 
 export class ElementBuilder<T extends HTMLElement = HTMLElement> {
   private el: T;
+  /** Set on the client: attribute/text/listener updates go through the Host. */
+  private host: Host | null = null;
 
   /**
    * @param tag element name
@@ -109,15 +120,26 @@ export class ElementBuilder<T extends HTMLElement = HTMLElement> {
     private runtime: BuilderRuntime = staticRuntime,
   ) {
     const ns = namespace ?? (SVG_ONLY_TAGS.has(tag) ? SVG_NAMESPACE : undefined);
-    this.el = (isSSR
-      ? new HTMLElementMock(tag)
-      : ns
-        ? document.createElementNS(ns, tag)
-        : document.createElement(tag)) as unknown as T;
+    if (isSSR) {
+      this.el = new HTMLElementMock(tag) as unknown as T;
+    } else {
+      this.host = clientHost();
+      this.el = this.host.createElement(tag, ns ? { namespace: ns } : undefined) as unknown as T;
+    }
+  }
+
+  private hostNode(): HostNode {
+    return this.el as unknown as HostNode;
+  }
+
+  private setHostProp(name: string, value: unknown): void {
+    if (this.host) this.host.setProp(this.hostNode(), name, value);
+    else if (value == null || value === false) this.el.removeAttribute(name);
+    else this.el.setAttribute(name, value === true ? '' : String(value));
   }
 
   id(value: string): this {
-    this.el.setAttribute('id', value);
+    this.setHostProp('id', value);
     return this;
   }
 
@@ -143,7 +165,7 @@ export class ElementBuilder<T extends HTMLElement = HTMLElement> {
   class(name: string | Getter<string>): this {
     this.bind(name, (n) => {
       if (isSSR) (this.el as unknown as HTMLElementMock).attributes.set('class', n);
-      else this.el.setAttribute('class', n);
+      else this.setHostProp('class', n);
     });
     return this;
   }
@@ -159,22 +181,22 @@ export class ElementBuilder<T extends HTMLElement = HTMLElement> {
   }
 
   attr(name: string, value: string | Getter<string>): this {
-    this.bind(value, (v) => this.el.setAttribute(name, v));
+    this.bind(value, (v) => this.setHostProp(name, v));
     return this;
   }
 
   attrs(values: Record<string, string | number | boolean | null | undefined>): this {
     Object.entries(values).forEach(([name, value]) => {
       if (value == null) return;
-      this.el.setAttribute(name, String(value));
+      this.setHostProp(name, value);
     });
     return this;
   }
 
   boolAttr(name: string, value: boolean | Getter<boolean>, enabledValue = ''): this {
     this.bind(value, (v) => {
-      if (v) this.el.setAttribute(name, enabledValue);
-      else this.el.removeAttribute(name);
+      if (v) this.setHostProp(name, enabledValue);
+      else this.setHostProp(name, false);
     });
     return this;
   }
@@ -189,7 +211,12 @@ export class ElementBuilder<T extends HTMLElement = HTMLElement> {
 
   style(keyOrMap: string | Record<string, string>, value?: string | Getter<string>): this {
     if (typeof keyOrMap === 'string') {
-      this.bind(value ?? '', (v) => this.el.style.setProperty(keyOrMap, v));
+      this.bind(value ?? '', (v) => {
+        if (this.host?.setStyle) this.host.setStyle(this.hostNode(), { [keyOrMap]: v });
+        else this.el.style.setProperty(keyOrMap, v);
+      });
+    } else if (this.host?.setStyle) {
+      this.host.setStyle(this.hostNode(), keyOrMap);
     } else {
       Object.entries(keyOrMap).forEach(([k, v]) => this.el.style.setProperty(k, v));
     }
@@ -238,7 +265,11 @@ export class ElementBuilder<T extends HTMLElement = HTMLElement> {
     listener: (this: T, ev: HTMLElementEventMap[K]) => any,
     options?: boolean | AddEventListenerOptions,
   ): this {
-    this.el.addEventListener(type, listener as EventListener, options);
+    if (this.host && options == null) {
+      this.host.addListener(this.hostNode(), type, listener as (...args: unknown[]) => void);
+    } else {
+      this.el.addEventListener(type, listener as EventListener, options);
+    }
     return this;
   }
 
@@ -295,7 +326,8 @@ export class ElementBuilder<T extends HTMLElement = HTMLElement> {
 
   text(value: string | Getter<string>): this {
     this.bind(value, (v) => {
-      this.el.textContent = v;
+      if (this.host) this.host.setText(this.hostNode(), v);
+      else this.el.textContent = v;
     });
     return this;
   }

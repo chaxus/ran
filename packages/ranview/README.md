@@ -57,6 +57,7 @@ console.log(Div().text('Hello').serialize()); // <div>Hello</div>
 - [Ownership](#3-ownership--the-key-to-leak-free-apps-and-mpas) — disposal and page scopes
 - [EventManager](#4-web-component-listeners--eventmanager) — listener lifecycle
 - [Static DOM and SSR](#static-dom-and-ssr--ssg-snapshots) — one-shot snapshots
+- [Hosts](./docs/hosts.md) — Host protocol (web today; NSH later)
 
 > **Principle: build once, update in place.** A view function runs once; state
 > changes flow through fine-grained bindings, never by re-running the view. Pick
